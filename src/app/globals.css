@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Сюда можно добавить ваши глобальные стили, если нужно */
