@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import { BottomHeader } from "./BottomHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <main className="min-h-[calc(100vh-300px)]">
             {children}
           </main>
+          <BottomHeader />
           <Footer />
         </Providers>
       </body>

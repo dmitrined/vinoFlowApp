@@ -6,51 +6,43 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
-  Link,
   Button,
 } from '@heroui/react';
-import { Wine, Heart } from 'lucide-react';
+import { Wine, User } from 'lucide-react';
 import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type Language = 'en' | 'de' | 'ru';
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>('de');
+  const pathname = usePathname();
 
   const navigationItems = [
     { label: 'SR Rechner auf/in', path: '/sr-rechner-auf-in' },
     { label: 'Alkohol-Umrechner', path: '/alkohol-umrechner' },
-    { label: 'SR Verschnitt Rechner', path: '/sr-verschnitt-rechner' },
+    { label: 'SR Verschnitt', path: '/sr-verschnitt-rechner' },
     { label: 'Mehrfach-Verschnitt', path: '/mehrfach-verschnitt' },
   ];
 
   return (
-    <>
+    <div className="sticky top-0 z-50 w-full">
       {/* Top Promo Bar */}
-      <div className="bg-zinc-100 dark:bg-zinc-900 text-tiny py-2 px-4 border-b border-divider">
+      <div className="bg-zinc-100 dark:bg-zinc-900 text-[10px] sm:text-tiny py-2 px-4 border-b border-divider">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Wine className="w-4 h-4 text-red-700" />
-            <span className="text-orange-500 font-medium mr-2">Dmitri Nedioglo</span>
-            <span className="text-yellow-600 hidden sm:inline">Fellbacher Weingärtner</span>
+            <Wine className="w-3 sm:w-4 h-3 sm:h-4 text-red-700" />
+            <span className="text-orange-500 font-bold mr-1 sm:mr-2">Dmitri Nedioglo</span>
           </div>
           
-          {/* Language Switcher (Simple Local State Version) */}
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {(['en', 'de', 'ru'] as Language[]).map((lang) => (
               <button
                 key={lang}
                 onClick={() => setCurrentLanguage(lang)}
-                className={`uppercase font-bold text-xs transition-colors ${
-                  currentLanguage === lang
-                    ? 'text-primary'
-                    : 'text-zinc-400 hover:text-zinc-600'
+                className={`uppercase font-black text-[10px] tracking-widest transition-all ${
+                  currentLanguage === lang ? 'text-primary scale-110' : 'text-zinc-400'
                 }`}
-                disabled={currentLanguage === lang}
               >
                 {lang}
               </button>
@@ -59,75 +51,54 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Main Navbar */}
       <Navbar 
-        onMenuOpenChange={setIsMenuOpen} 
         maxWidth="xl" 
         isBordered 
+        className="h-16"
         classNames={{
-            item: [
-              "flex",
-              "relative",
-              "h-full",
-              "items-center",
-              "data-[active=true]:after:content-['']",
-              "data-[active=true]:after:absolute",
-              "data-[active=true]:after:bottom-0",
-              "data-[active=true]:after:left-0",
-              "data-[active=true]:after:right-0",
-              "data-[active=true]:after:h-[2px]",
-              "data-[active=true]:after:rounded-[2px]",
-              "data-[active=true]:after:bg-primary",
-            ],
-          }}
+          item: [
+            "flex", "relative", "h-full", "items-center",
+            "data-[active=true]:after:content-['']",
+            "data-[active=true]:after:absolute",
+            "data-[active=true]:after:bottom-0",
+            "data-[active=true]:after:left-0",
+            "data-[active=true]:after:right-0",
+            "data-[active=true]:after:h-[3px]",
+            "data-[active=true]:after:rounded-t-[2px]",
+            "data-[active=true]:after:bg-primary",
+          ],
+        }}
       >
-        <NavbarContent>
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="sm:hidden"
-          />
-          <NavbarBrand>
-            <NextLink href="/" className="flex items-center gap-2">
-                <p className="font-serif font-bold text-2xl text-inherit">Wine Calculator</p>
-            </NextLink>
-          </NavbarBrand>
-        </NavbarContent>
+        <NavbarBrand>
+          <NextLink href="/" className="flex items-center gap-2">
+            <p className="font-serif font-black text-xl sm:text-2xl tracking-tighter italic">
+              Vino<span className="text-primary not-italic font-sans uppercase ml-1">Flow</span>
+            </p>
+          </NextLink>
+        </NavbarBrand>
 
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        {/* Desktop Menu - Показывается только на больших экранах */}
+        <NavbarContent className="hidden sm:flex gap-8" justify="center">
           {navigationItems.map((item) => (
-            <NavbarItem key={item.path}>
-              <Link color="foreground" as={NextLink} href={item.path}>
+            <NavbarItem key={item.path} isActive={pathname === item.path}>
+              <NextLink 
+                href={item.path}
+                className={`text-sm font-bold transition-colors ${
+                  pathname === item.path ? "text-primary" : "text-foreground hover:text-primary"
+                }`}
+              >
                 {item.label}
-              </Link>
+              </NextLink>
             </NavbarItem>
           ))}
         </NavbarContent>
 
         <NavbarContent justify="end">
-          <NavbarItem>
-            <Button isIconOnly variant="light" aria-label="Like">
-              <Heart className="text-default-500" />
-            </Button>
-          </NavbarItem>
+           <Button isIconOnly variant="flat" radius="full" size="sm">
+              <User size={18} />
+           </Button>
         </NavbarContent>
-
-        <NavbarMenu>
-          {navigationItems.map((item, index) => (
-            <NavbarMenuItem key={`${item.label}-${index}`}>
-              <Link
-                color="foreground"
-                className="w-full"
-                as={NextLink}
-                href={item.path}
-                size="lg"
-                onPress={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </NavbarMenu>
       </Navbar>
-    </>
+    </div>
   );
 };
