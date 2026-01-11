@@ -1,0 +1,112 @@
+{
+    "Layout": {
+        "title": "VinoFlow",
+        "developer": "Dmitri Nedioglo",
+        "menu": {
+            "home": "Home",
+            "more": "More",
+            "sr-auf-in": "Sugar Calc (on/in)",
+            "alkohol": "Alcohol Converter",
+            "sr-verschnitt": "Sugar Blending",
+            "mehrfach": "Multiple Blending"
+        },
+        "footer": {
+            "app-name": "Wine Calculator App",
+            "rights": "All rights reserved."
+        }
+    },
+    "HomePage": {
+        "title": "VinoFlow",
+        "description": "Precise oenological calculations for your cellar. Fast, reliable, and always at hand.",
+        "tools": {
+            "sr-rechner": "Sugar Calculator",
+            "sr-rechner-desc": "Quick calculation of residual sugar in wine.",
+            "alkohol": "Alcohol Converter",
+            "alkohol-desc": "Conversion between g/l and % vol. alcohol.",
+            "sr-verschnitt": "Sugar Blending",
+            "sr-verschnitt-desc": "Calculation of sugar blending using mixing rules.",
+            "mehrfach": "Multiple Blending",
+            "mehrfach-desc": "Assemblage of any number of wine batches."
+        }
+    },
+    "Calculators": {
+        "results": "Results",
+        "formula": {
+            "show": "Show Formulas",
+            "hide": "Hide Formulas",
+            "title": "Mathematical Formulas",
+            "legend": "Legend",
+            "unit": "Unit",
+            "precision": "Precision calculation",
+            "standard": "Oenological Standard"
+        },
+        "errors": {
+            "invalid": "Invalid value! Please enter a number.",
+            "invalid-number": "Invalid number",
+            "sr-max": "% SR must be < 100",
+            "range": "Target must be between wine and sugar"
+        },
+        "sr-rechner": {
+            "title": "SR Calculator",
+            "subtitle": "Precise calculation of sugar reserve for wine technologists",
+            "input-sr": "% Sugar (SR)",
+            "input-liter": "Liter Wine (Basis)",
+            "auf": "SR % on",
+            "auf-desc": "Calculated from based wine volume",
+            "in": "SR % in",
+            "in-desc": "Proportion in the finished mixed volume",
+            "legend-lsr": "Required volume of sugar (liters).",
+            "legend-psr": "The desired sugar percentage.",
+            "legend-lw": "Available base wine volume (liters).",
+            "formula-auf": "Percentage based on the volume of base wine.",
+            "formula-in": "Percentage of the finished total volume."
+        },
+        "alkohol": {
+            "title": "Alcohol Converter",
+            "subtitle": "Conversion between g/l and % vol.",
+            "input-gl": "Grams per Liter",
+            "input-vol": "Percent Volume",
+            "result-gl": "Result: Grams per Liter",
+            "result-vol": "Result: Alcohol Content",
+            "formula-gl-vol": "1. Grams/Liter to % Volume",
+            "formula-vol-gl": "2. % Volume to Grams/Liter",
+            "footer-tag": "Standard conversion factor for winemaking"
+        },
+        "sr-verschnitt": {
+            "title": "Sugar Blending",
+            "input-sr-sugar": "Sugar in additive (g/l)",
+            "input-wein-sugar": "Sugar in wine (g/l)",
+            "input-wein-vol": "Volume wine (L)",
+            "input-ziel-sugar": "Target sugar (g/l)",
+            "result-add": "Sugar addition",
+            "result-total": "Total volume",
+            "formula-desc": "Mixing rule (alligation)",
+            "formula-usage": "Determination of the required sugar volume",
+            "legend-lsr": "Required volume of sugar.",
+            "legend-lw": "Available base wine volume.",
+            "legend-gsr": "Sugar content in additive.",
+            "legend-gw": "Sugar content in base wine.",
+            "legend-gz": "Target sugar content."
+        },
+        "mehrfach": {
+            "title": "Multiple Blending",
+            "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
+            "add-wine": "Add another batch",
+            "total-vol": "Total volume",
+            "avg-sugar": "Ø Sugar content",
+            "avg-alcohol": "Ø Alcohol content",
+            "input-vol": "Volume",
+            "input-sugar": "Sugar",
+            "input-alcohol": "Alcohol",
+            "formula-title": "Mathematics of Assemblage",
+            "formula-type": "Weighted average (n-batches)",
+            "formula-desc": "Calculation of final sugar and alcohol parameters",
+            "formula-logic": "Calculation logic",
+            "formula-logic-desc": "The total mass is divided by the total volume of all batches.",
+            "formula-swipe": "← Swipe to view whole formula →",
+            "legend-l": "Batch volume",
+            "legend-p": "Parameter (sugar/alcohol)",
+            "legend-n": "Number of involved wines"
+        }
+    }
+}

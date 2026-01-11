@@ -1,0 +1,112 @@
+{
+    "Layout": {
+        "title": "VinoFlow",
+        "developer": "Dmitri Nedioglo",
+        "menu": {
+            "home": "Home",
+            "more": "Mehr",
+            "sr-auf-in": "SR Rechner auf/in",
+            "alkohol": "Alkohol-Umrechner",
+            "sr-verschnitt": "SR Verschnitt",
+            "mehrfach": "Mehrfach-Verschnitt"
+        },
+        "footer": {
+            "app-name": "Wine Calculator App",
+            "rights": "Alle Rechte vorbehalten."
+        }
+    },
+    "HomePage": {
+        "title": "VinoFlow",
+        "description": "Präzise önologische Berechnungen für Ihren Keller. Schnell, zuverlässig und immer griffbereit.",
+        "tools": {
+            "sr-rechner": "SR Rechner auf/in",
+            "sr-rechner-desc": "Schnelle Berechnung der Süßreserve in Wein.",
+            "alkohol": "Alkohol-Umrechner",
+            "alkohol-desc": "Umrechnung von Volumen- и Gewichtsprozent.",
+            "sr-verschnitt": "SR Verschnitt",
+            "sr-verschnitt-desc": "Berechnung der Süßreserve nach der Mischungsregel.",
+            "mehrfach": "Mehrfach-Verschnitt",
+            "mehrfach-desc": "Assemblage von beliebig vielen Weinpartien."
+        }
+    },
+    "Calculators": {
+        "results": "Ergebnisse",
+        "formula": {
+            "show": "Formeln anzeigen",
+            "hide": "Formeln verbergen",
+            "title": "Mathematische Formeln",
+            "legend": "Legende",
+            "unit": "Einheit",
+            "precision": "Präzise Berechnung",
+            "standard": "Önologischer Standard"
+        },
+        "errors": {
+            "invalid": "Ungültiger Wert! Bitte Zahl eingeben.",
+            "invalid-number": "Ungültige Zahl",
+            "sr-max": "% SR muss < 100 sein",
+            "range": "Ziel muss zwischen Wein и SR liegen"
+        },
+        "sr-rechner": {
+            "title": "SR Rechner",
+            "subtitle": "Präzise Berechnung der Süßreserve für Weintechnologen",
+            "input-sr": "% Süßreserve",
+            "input-liter": "Liter Wein (Basis)",
+            "auf": "SR % auf",
+            "auf-desc": "Berechnet vom Grundwein (Zusatz)",
+            "in": "SR % in",
+            "in-desc": "Anteil im fertigen Mischvolumen",
+            "legend-lsr": "Benötigtes Volumen der Süßreserve (Liter).",
+            "legend-psr": "Der gewünschte Prozentsatz.",
+            "legend-lw": "Verfügbares Grundwein-Volumen (Liter).",
+            "formula-auf": "Prozentsatz vom Grundweinvolumen.",
+            "formula-in": "Prozentsatz im fertigen Gesamtvolumen."
+        },
+        "alkohol": {
+            "title": "Alkohol-Umrechner",
+            "subtitle": "Konvertierung zwischen g/l и % Vol.",
+            "input-gl": "Gramm pro Liter",
+            "input-vol": "Prozent Volumen",
+            "result-gl": "Ergebnis: Gramm pro Liter",
+            "result-vol": "Ergebnis: Alkoholgehalt",
+            "formula-gl-vol": "1. Gramm/Liter in % Volumen",
+            "formula-vol-gl": "2. % Volumen in Gramm/Liter",
+            "footer-tag": "Standard-Konvertierungsfaktor für Kellerwirtschaft"
+        },
+        "sr-verschnitt": {
+            "title": "SR-Verschnitt",
+            "input-sr-sugar": "Zuckergehalt SR (g/l)",
+            "input-wein-sugar": "Zuckergehalt Wein (g/l)",
+            "input-wein-vol": "Volumen Wein (L)",
+            "input-ziel-sugar": "Ziel-Zucker (g/l)",
+            "result-add": "Süßreserve Zugabe",
+            "result-total": "Gesamtmenge",
+            "formula-desc": "Mischungsregel (Alligation)",
+            "formula-usage": "Bestimmung des benötigten Volumens der Süßreserve",
+            "legend-lsr": "Benötigtes Volumen der Süßreserve.",
+            "legend-lw": "Verfügbares Volumen des Grundweins.",
+            "legend-gsr": "Zuckergehalt der Süßreserve.",
+            "legend-gw": "Zuckergehalt основного вина.",
+            "legend-gz": "Angestrebter Ziel-Zuckergehalt."
+        },
+        "mehrfach": {
+            "title": "Multi-Verschnitt",
+            "subtitle": "Kalkulation von Zucker и Alkohol für beliebig viele Weinpartien",
+            "add-wine": "Weitere Partie hinzufügen",
+            "total-vol": "Gesamtvolumen",
+            "avg-sugar": "Ø Zuckergehalt",
+            "avg-alcohol": "Ø Alkoholgehalt",
+            "input-vol": "Volumen",
+            "input-sugar": "Zucker",
+            "input-alcohol": "Alkohol",
+            "formula-title": "Mathematik der Assemblage",
+            "formula-type": "Gewichtetes Mittel (n-Partien)",
+            "formula-desc": "Berechnung der Endparameter für Zucker и Alkohol",
+            "formula-logic": "Logik der Berechnung",
+            "formula-logic-desc": "Die Gesamtmasse wird durch das Gesamtvolumen всех партий geteilt.",
+            "formula-swipe": "← Swipe für ganze Formel →",
+            "legend-l": "Volumen der Partie",
+            "legend-p": "Parameter (Zucker/Alkohol)",
+            "legend-n": "Anzahl der beteiligten Weine"
+        }
+    }
+}
