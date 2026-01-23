@@ -31,6 +31,7 @@ export const Header = () => {
     { label: t('menu.alkohol'), path: '/alkohol-umrechner' },
     { label: t('menu.sr-verschnitt'), path: '/sr-verschnitt-rechner' },
     { label: t('menu.mehrfach'), path: '/mehrfach-verschnitt' },
+    { label: t('menu.so2-rechner'), path: '/so2-rechner' },
   ];
 
   const handleLanguageChange = (newLocale: string) => {

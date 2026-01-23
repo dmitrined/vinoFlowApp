@@ -8,7 +8,8 @@
             "sr-auf-in": "SR Rechner auf/in",
             "alkohol": "Alkohol-Umrechner",
             "sr-verschnitt": "SR Verschnitt",
-            "mehrfach": "Mehrfach-Verschnitt"
+            "mehrfach": "Mehrfach-Verschnitt",
+            "so2-rechner": "SO2-Rechner"
         },
         "footer": {
             "app-name": "Wine Calculator App",
@@ -26,7 +27,9 @@
             "sr-verschnitt": "SR Verschnitt",
             "sr-verschnitt-desc": "Berechnung der Süßreserve nach der Mischungsregel.",
             "mehrfach": "Mehrfach-Verschnitt",
-            "mehrfach-desc": "Assemblage von beliebig vielen Weinpartien."
+            "mehrfach-desc": "Assemblage von beliebig vielen Weinpartien.",
+            "so2-rechner": "SO2-Rechner",
+            "so2-rechner-desc": "Berechnung der Schwefelgabe (SO2) für den Wein."
         }
     },
     "Calculators": {
@@ -107,6 +110,23 @@
             "legend-l": "Volumen der Partie",
             "legend-p": "Parameter (Zucker/Alkohol)",
             "legend-n": "Anzahl der beteiligten Weine"
+        },
+        "so2-calc": {
+            "title": "SO2-Rechner",
+            "subtitle": "Berechnung der benötigten SO2-Menge für die Schwefelung",
+            "input-volume": "Wein-Volumen (l)",
+            "input-delta": "SO2-Gabe (mg/l)",
+            "input-powder-conc": "Konzentration (%)",
+            "input-liquid-conc": "Konzentration (g/l)",
+            "gas": "Gas",
+            "powder": "Kaliumbisulfit (50%)",
+            "liquid": "Flüssigschwefel",
+            "result": "Benötigte Menge",
+            "unit-g": "Gramm",
+            "unit-ml": "ml",
+            "formula-gas": "Reines SO2-Gas (100% Gehalt)",
+            "formula-powder": "Kaliumdisulfit (Pulver ~50% SO2)",
+            "formula-liquid": "Schweflige Säure (Flüssiglösung)"
         }
     }
 }

@@ -77,3 +77,38 @@ export const calcMultiBlended = (entries: { liter: number, parameter: number }[]
 
     return totalVolume > 0 ? totalMass / totalVolume : 0;
 };
+
+/**
+ * Расчет добавки SO2
+ * @param volume Объем вина (л)
+ * @param deltaSO2 Желаемое повышение SO2 (мг/л)
+ * @param productType Тип продукта ('gas', 'powder', 'liquid')
+ * @param concentration Концентрация (для 'liquid' в г/л, для 'powder' обычно 50, для 'gas' 100)
+ * @returns Количество продукта (г или мл)
+ * Формула: M(g) = (V(l) * ΔSO2(mg/l)) / (1000 * (Концентрация / 100)) для порошка/газа
+ * Формула: V(ml) = (V(l) * ΔSO2(mg/l)) / Концентрация(g/l) для жидкости
+ */
+export const calcSO2Addition = (
+    volume: number,
+    deltaSO2: number,
+    productType: 'gas' | 'powder' | 'liquid',
+    concentration: number
+): number => {
+    if (isNaN(volume) || isNaN(deltaSO2) || isNaN(concentration) || volume <= 0 || deltaSO2 <= 0 || concentration <= 0) {
+        return 0;
+    }
+
+    if (productType === 'liquid') {
+        // concentration в г/л (например 150 г/л)
+        // M(mg) = V(l) * ΔSO2(mg/l)
+        // V(ml) = M(mg) / concentration(mg/ml)
+        // concentration(mg/ml) = concentration(g/l)
+        return (volume * deltaSO2) / concentration;
+    }
+
+    // concentration в % (например 50 для порошка, 100 для газа)
+    // M(mg) = V(l) * ΔSO2(mg/l)
+    // M(g) = M(mg) / 1000
+    // M_product(g) = M(g) / (concentration / 100)
+    return (volume * deltaSO2) / (10 * concentration);
+};

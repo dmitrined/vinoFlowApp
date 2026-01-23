@@ -14,7 +14,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "@heroui/react";
-import { Home, Grid, ChevronUp, Beaker, Layers, Droplets, Calculator } from "lucide-react";
+import { Home, Grid, ChevronUp, Beaker, Layers, Droplets, Calculator, FlaskConical } from "lucide-react";
 import { useRouter, usePathname, Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 
@@ -28,6 +28,7 @@ export const BottomHeader = () => {
     { label: t('menu.alkohol'), path: '/alkohol-umrechner', icon: <Beaker size={18} /> },
     { label: t('menu.sr-verschnitt'), path: '/sr-verschnitt-rechner', icon: <Droplets size={18} /> },
     { label: t('menu.mehrfach'), path: '/mehrfach-verschnitt', icon: <Layers size={18} /> },
+    { label: t('menu.so2-rechner'), path: '/so2-rechner', icon: <FlaskConical size={18} /> },
   ];
 
   return (

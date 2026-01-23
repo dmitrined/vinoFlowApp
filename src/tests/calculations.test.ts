@@ -5,7 +5,8 @@ import {
     calcSR_Auf,
     calcSR_In,
     calcSRVerschnitt,
-    calcMultiBlended
+    calcMultiBlended,
+    calcSO2Addition
 } from '../lib/calculations';
 
 describe('Enological Calculations', () => {
@@ -59,6 +60,28 @@ describe('Enological Calculations', () => {
             // total: 300L, mass: 5000. avg: 5000 / 300 = 16.67
             expect(calcMultiBlended(wines)).toBeCloseTo(16.67, 2);
         });
-    });
 
+        describe('SO2 Addition Calculation', () => {
+            it('should calculate gas (100%) addition correctly', () => {
+                // 1000L, +30mg/L, 100% -> (1000 * 30) / (10 * 100) = 30000 / 1000 = 30g
+                expect(calcSO2Addition(1000, 30, 'gas', 100)).toBe(30);
+            });
+
+            it('should calculate powder (50%) addition correctly', () => {
+                // 1000L, +30mg/L, 50% -> (1000 * 30) / (10 * 50) = 30000 / 500 = 60g
+                expect(calcSO2Addition(1000, 30, 'powder', 50)).toBe(60);
+            });
+
+            it('should calculate liquid (150g/l) addition correctly', () => {
+                // 1000L, +30mg/L, 150g/l -> (1000 * 30) / 150 = 30000 / 150 = 200ml
+                expect(calcSO2Addition(1000, 30, 'liquid', 150)).toBe(200);
+            });
+
+            it('should return 0 for invalid inputs', () => {
+                expect(calcSO2Addition(-100, 30, 'gas', 100)).toBe(0);
+                expect(calcSO2Addition(1000, -30, 'gas', 100)).toBe(0);
+                expect(calcSO2Addition(1000, 30, 'gas', 0)).toBe(0);
+            });
+        });
+    });
 });

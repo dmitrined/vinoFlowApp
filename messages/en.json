@@ -8,7 +8,8 @@
             "sr-auf-in": "Sugar Calc (on/in)",
             "alkohol": "Alcohol Converter",
             "sr-verschnitt": "Sugar Blending",
-            "mehrfach": "Multiple Blending"
+            "mehrfach": "Multiple Blending",
+            "so2-rechner": "SO2 Calculator"
         },
         "footer": {
             "app-name": "Wine Calculator App",
@@ -26,7 +27,9 @@
             "sr-verschnitt": "Sugar Blending",
             "sr-verschnitt-desc": "Calculation of sugar blending using mixing rules.",
             "mehrfach": "Multiple Blending",
-            "mehrfach-desc": "Assemblage of any number of wine batches."
+            "mehrfach-desc": "Assemblage of any number of wine batches.",
+            "so2-rechner": "SO2 Calculator",
+            "so2-rechner-desc": "Calculation of sulfur (SO2) addition for wine."
         }
     },
     "Calculators": {
@@ -107,6 +110,23 @@
             "legend-l": "Batch volume",
             "legend-p": "Parameter (sugar/alcohol)",
             "legend-n": "Number of involved wines"
+        },
+        "so2-calc": {
+            "title": "SO2 Calculator",
+            "subtitle": "Calculation of required SO2 amount for sulfitation",
+            "input-volume": "Wine Volume (l)",
+            "input-delta": "SO2 Addition (mg/l)",
+            "input-powder-conc": "Concentration (%)",
+            "input-liquid-conc": "Concentration (g/l)",
+            "gas": "Gas",
+            "powder": "Potassium Bisulfite (50%)",
+            "liquid": "Liquid SO2",
+            "result": "Required Amount",
+            "unit-g": "grams",
+            "unit-ml": "ml",
+            "formula-gas": "Pure SO2 gas (100% content)",
+            "formula-powder": "Potassium metabisulfite (powder ~50% SO2)",
+            "formula-liquid": "Sulfurous acid (liquid solution)"
         }
     }
 }

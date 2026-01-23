@@ -46,6 +46,13 @@ export default function Home() {
             href: "/mehrfach-verschnitt",
             color: "hover:border-indigo-500"
         },
+        {
+            title: t('tools.so2-rechner'),
+            description: t('tools.so2-rechner-desc'),
+            icon: <Droplets className="text-teal-500" size={24} />,
+            href: "/so2-rechner",
+            color: "hover:border-teal-500"
+        },
     ];
 
     const containerVariants = {
