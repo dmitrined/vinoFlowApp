@@ -17,8 +17,9 @@
         }
     },
     "HomePage": {
-        "title": "VinoFlow",
-        "description": "Precise oenological calculations for your cellar. Fast, reliable, and always at hand.",
+        "title": "VinoFlow - Winemaker Tools",
+        "description": "Professional calculators for oenology, blending and cellar management.",
+        "tool-label": "Tool",
         "tools": {
             "sr-rechner": "Sugar Calculator",
             "sr-rechner-desc": "Quick calculation of residual sugar in wine.",
@@ -40,8 +41,21 @@
             "title": "Mathematical Formulas",
             "legend": "Legend",
             "unit": "Unit",
+            "unit-label": "Unit:",
             "precision": "Precision calculation",
-            "standard": "Oenological Standard"
+            "standard": "Oenological Standard",
+            "example": "Example",
+            "logic": "Calculation Logic",
+            "swipe": "← Swipe to view whole formula →",
+            "mass-calc": "Mass Calculation",
+            "vol-calc": "Volume Calculation"
+        },
+        "standards": {
+            "enology": "Oenological Standards",
+            "precision": "Precision calculation",
+            "vinology": "Vinology Standard",
+            "si": "SI Standard",
+            "intl-unit": "International Oenology Unit"
         },
         "errors": {
             "invalid": "Invalid value! Please enter a number.",
@@ -109,7 +123,9 @@
             "formula-swipe": "← Swipe to view whole formula →",
             "legend-l": "Batch volume",
             "legend-p": "Parameter (sugar/alcohol)",
-            "legend-n": "Number of involved wines"
+            "legend-n": "Number of involved wines",
+            "logic-tag": "PRECISE ASSEMBLAGE IN THE CELLAR",
+            "footer-tag": "Mathematically Precise Weighted Average"
         },
         "so2-calc": {
             "title": "SO2 Calculator",

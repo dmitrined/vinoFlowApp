@@ -3,7 +3,6 @@
  * ЗАВИСИМОСТИ: FormulSo2Calc, next-intl
  */
 import React from 'react';
-import { useTranslations } from 'next-intl';
 import FormulSo2Calc from './FormulSo2Calc';
 
 export default function So2CalcPage() {

@@ -3,32 +3,36 @@
 import React from 'react';
 import { Card, CardHeader, CardBody, Divider, Chip } from "@heroui/react";
 import { Calculator, ArrowRightLeft, GlassWater, Milestone } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 /**
  * Компонент для отображения формул конвертации спирта (g/l <-> % Vol.)
  * Адаптирован под мобильные устройства с использованием HeroUI.
  */
+// Вспомогательный компонент для визуальной дроби
+const FractionDisplay: React.FC<{ numerator: React.ReactNode; denominator: React.ReactNode }> = ({ numerator, denominator }) => (
+    <div className="flex flex-col items-center mx-2 shrink-0">
+        <div className="pb-1 border-b-2 sm:border-b-4 border-default-900 dark:border-default-100 w-full text-center">
+            <span className="text-xl sm:text-3xl font-mono">
+                {numerator}
+            </span>
+        </div>
+        <div className="pt-1 w-full text-center">
+            <span className="text-xl sm:text-3xl font-mono text-default-500">
+                {denominator}
+            </span>
+        </div>
+    </div>
+);
+
 const FormulAlcCalculation: React.FC = () => {
-    
+    const t = useTranslations('Calculators.alkohol');
+    const commonT = useTranslations('Calculators');
+
     const conversionFactor = 0.1267;
     const unit_GL = <span className="text-primary-600 dark:text-primary-400 font-bold">g/l</span>;
     const unit_VOL = <span className="text-secondary-600 dark:text-secondary-400 font-bold">% Vol.</span>;
 
-    // Вспомогательный компонент для визуальной дроби
-    const FractionDisplay: React.FC<{ numerator: React.ReactNode; denominator: React.ReactNode }> = ({ numerator, denominator }) => (
-        <div className="flex flex-col items-center mx-2 shrink-0">
-            <div className="pb-1 border-b-2 sm:border-b-4 border-default-900 dark:border-default-100 w-full text-center">
-                <span className="text-xl sm:text-3xl font-mono">
-                    {numerator}
-                </span>
-            </div>
-            <div className="pt-1 w-full text-center">
-                <span className="text-xl sm:text-3xl font-mono text-default-500">
-                    {denominator}
-                </span>
-            </div>
-        </div>
-    );
 
     return (
         <Card className="w-full max-w-2xl mx-auto my-6 border-none shadow-xl" radius="lg">
@@ -37,19 +41,19 @@ const FormulAlcCalculation: React.FC = () => {
                     <Calculator size={24} />
                 </div>
                 <div className="flex flex-col text-left">
-                    <h2 className="text-xl sm:text-2xl font-black">Alkohol-Konvertierung</h2>
+                    <h2 className="text-xl sm:text-2xl font-black">{t('title')}</h2>
                     <div className="flex items-center gap-2">
-                         <Chip size="sm" variant="flat" color="primary" className="h-5 text-[10px] font-bold">
+                        <Chip size="sm" variant="flat" color="primary" className="h-5 text-[10px] font-bold">
                             Faktor: {conversionFactor}
-                         </Chip>
+                        </Chip>
                     </div>
                 </div>
             </CardHeader>
-            
+
             <Divider />
 
             <CardBody className="p-4 sm:p-8 space-y-6">
-                
+
                 {/* Секция 1: g/l -> % Vol. */}
                 <Card shadow="sm" className="bg-default-50/50 border border-default-100 overflow-hidden">
                     <CardBody className="p-4 sm:p-6">
@@ -58,7 +62,7 @@ const FormulAlcCalculation: React.FC = () => {
                                 <Milestone size={18} />
                             </div>
                             <h3 className="text-sm sm:text-lg font-bold text-default-700">
-                                1. Gramm/Liter in % Volumen
+                                {t('formula-gl-vol')}
                             </h3>
                         </div>
 
@@ -88,7 +92,7 @@ const FormulAlcCalculation: React.FC = () => {
                                 <GlassWater size={18} />
                             </div>
                             <h3 className="text-sm sm:text-lg font-bold text-default-700">
-                                2. % Volumen in Gramm/Liter
+                                {t('formula-vol-gl')}
                             </h3>
                         </div>
 
@@ -106,7 +110,7 @@ const FormulAlcCalculation: React.FC = () => {
 
             <div className="bg-default-50 dark:bg-default-100/10 p-4 text-center">
                 <p className="text-[11px] sm:text-xs text-default-400 font-medium uppercase tracking-widest">
-                    Standard-Konvertierungsfaktor für Kellerwirtschaft
+                    {t('footer-tag')}
                 </p>
             </div>
         </Card>

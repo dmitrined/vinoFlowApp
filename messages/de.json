@@ -17,13 +17,14 @@
         }
     },
     "HomePage": {
-        "title": "VinoFlow",
-        "description": "Präzise önologische Berechnungen für Ihren Keller. Schnell, zuverlässig und immer griffbereit.",
+        "title": "VinoFlow - Winzer-Werkzeuge",
+        "description": "Professionelle Rechner für Önologie, Verschnitt und Kellerwirtschaft.",
+        "tool-label": "Werkzeug",
         "tools": {
             "sr-rechner": "SR Rechner auf/in",
             "sr-rechner-desc": "Schnelle Berechnung der Süßreserve in Wein.",
             "alkohol": "Alkohol-Umrechner",
-            "alkohol-desc": "Umrechnung von Volumen- и Gewichtsprozent.",
+            "alkohol-desc": "Umrechnung von Volumen- und Gewichtsprozent.",
             "sr-verschnitt": "SR Verschnitt",
             "sr-verschnitt-desc": "Berechnung der Süßreserve nach der Mischungsregel.",
             "mehrfach": "Mehrfach-Verschnitt",
@@ -40,8 +41,21 @@
             "title": "Mathematische Formeln",
             "legend": "Legende",
             "unit": "Einheit",
+            "unit-label": "Einheit:",
             "precision": "Präzise Berechnung",
-            "standard": "Önologischer Standard"
+            "standard": "Önologischer Standard",
+            "example": "Beispiel",
+            "logic": "Logik der Berechnung",
+            "swipe": "← Swipe für ganze Formel →",
+            "mass-calc": "Massenberechnung",
+            "vol-calc": "Volumenberechnung"
+        },
+        "standards": {
+            "enology": "Önologische Standards",
+            "precision": "Präzise Berechnung",
+            "vinology": "Kellerwirtschaft-Standard",
+            "si": "SI Standard",
+            "intl-unit": "Internationale önologische Einheit"
         },
         "errors": {
             "invalid": "Ungültiger Wert! Bitte Zahl eingeben.",
@@ -88,7 +102,7 @@
             "legend-lsr": "Benötigtes Volumen der Süßreserve.",
             "legend-lw": "Verfügbares Volumen des Grundweins.",
             "legend-gsr": "Zuckergehalt der Süßreserve.",
-            "legend-gw": "Zuckergehalt основного вина.",
+            "legend-gw": "Zuckergehalt des Grundweins.",
             "legend-gz": "Angestrebter Ziel-Zuckergehalt."
         },
         "mehrfach": {
@@ -103,13 +117,15 @@
             "input-alcohol": "Alkohol",
             "formula-title": "Mathematik der Assemblage",
             "formula-type": "Gewichtetes Mittel (n-Partien)",
-            "formula-desc": "Berechnung der Endparameter für Zucker и Alkohol",
+            "formula-desc": "Berechnung der Endparameter für Zucker und Alkohol в Gramm pro Liter (g/l).",
             "formula-logic": "Logik der Berechnung",
-            "formula-logic-desc": "Die Gesamtmasse wird durch das Gesamtvolumen всех партий geteilt.",
+            "formula-logic-desc": "Die Gesamtmasse wird durch das Gesamtvolumen aller Partien geteilt.",
             "formula-swipe": "← Swipe für ganze Formel →",
             "legend-l": "Volumen der Partie",
             "legend-p": "Parameter (Zucker/Alkohol)",
-            "legend-n": "Anzahl der beteiligten Weine"
+            "legend-n": "Anzahl der beteiligten Weine",
+            "logic-tag": "PRÄZISE ASSEMBLAGE IM WEINKELLER",
+            "footer-tag": "Mathematisch präziser gewichteter Durchschnitt"
         },
         "so2-calc": {
             "title": "SO2-Rechner",

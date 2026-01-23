@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Модульные тесты для энологических расчетов
+ * ЗАВИСИМОСТИ: vitest, @/lib/calculations
+ * ОСОБЕННОСТИ: Тестирование конвертации алкоголя, добавки SR и расчетов SO2
+ */
+
 import { describe, it, expect } from 'vitest';
 import {
     convertGLToVol,

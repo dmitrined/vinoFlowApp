@@ -18,10 +18,7 @@ import {
   Tooltip
 } from "@heroui/react";
 import {
-  Calculator,
   Layers,
-  Droplet,
-  Percent,
   Beaker,
   Eye,
   EyeOff,

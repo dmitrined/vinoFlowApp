@@ -15,7 +15,7 @@ import {
   DropdownItem
 } from "@heroui/react";
 import { Home, Grid, ChevronUp, Beaker, Layers, Droplets, Calculator, FlaskConical } from "lucide-react";
-import { useRouter, usePathname, Link } from '@/i18n/routing';
+import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 
 export const BottomHeader = () => {

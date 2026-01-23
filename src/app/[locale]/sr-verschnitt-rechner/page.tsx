@@ -13,8 +13,7 @@ import {
   CardBody,
   Input,
   Button,
-  Divider,
-  Tooltip
+  Divider
 } from "@heroui/react";
 import {
   Calculator,
@@ -22,8 +21,7 @@ import {
   Target,
   Droplets,
   Eye,
-  EyeOff,
-  AlertCircle
+  EyeOff
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
@@ -67,7 +65,7 @@ const SrCalc: React.FC = () => {
       }
     }
     return errs;
-  }, [values]);
+  }, [values, commonT]);
 
   // Расчет результата
   const results = useMemo(() => {

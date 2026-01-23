@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Корневой слой приложения с поддержкой i18n и провайдерами
+ * ЗАВИСИМОСТИ: next-intl, @/components/layout, @/providers
+ * ОСОБЕННОСТИ: Динамическая подгрузка сообщений, настройка шрифтов Geist
+ */
+
 import React from 'react';
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -55,7 +61,7 @@ export default async function LocaleLayout({
     const { locale } = await params;
 
     // Ensure that the incoming `locale` is valid
-    if (!routing.locales.includes(locale as any)) {
+    if (!routing.locales.includes(locale as 'en' | 'de' | 'ru')) {
         notFound();
     }
 

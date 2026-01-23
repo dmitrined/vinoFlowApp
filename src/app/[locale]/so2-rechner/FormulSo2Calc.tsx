@@ -7,7 +7,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Card, CardHeader, CardBody, Input, Tabs, Tab, Divider, Chip, Button } from "@heroui/react";
+import { Card, CardHeader, CardBody, Input, Tabs, Tab, Divider, Button } from "@heroui/react";
 import { FlaskConical, Beaker, Wind, Calculator, Info, Eye, EyeOff } from "lucide-react";
 import { calcSO2Addition } from '@/lib/calculations';
 import { motion, AnimatePresence } from "framer-motion";

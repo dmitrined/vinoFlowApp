@@ -1,6 +1,12 @@
+/**
+ * НАЗНАЧЕНИЕ: Главная страница приложения с выбором инструментов
+ * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, framer-motion
+ * ОСОБЕННОСТИ: Адаптивная сетка, i18n, анимация появления компонентов
+ */
+
 'use client';
 
-import { Button, Card, CardBody, CardHeader, Image } from "@heroui/react";
+import { Card, CardBody, CardHeader, Image } from "@heroui/react";
 import NextImage from "next/image";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from 'next-intl';
@@ -9,7 +15,6 @@ import {
     Calculator,
     Layers,
     Droplets,
-    ArrowRight,
     Beaker
 } from "lucide-react";
 
@@ -75,7 +80,7 @@ export default function Home() {
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-12">
-            {/* Hero Section */}
+            {/* Основная секция */}
             <motion.section
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -125,7 +130,7 @@ export default function Home() {
                                 </div>
                                 <div className="flex flex-col text-left">
                                     <p className="text-md font-bold">{tool.title}</p>
-                                    <p className="text-small text-default-500 font-medium italic">Tool</p>
+                                    <p className="text-small text-default-500 font-medium italic">{t('tool-label')}</p>
                                 </div>
                             </CardHeader>
                             <Divider />

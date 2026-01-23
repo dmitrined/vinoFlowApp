@@ -30,6 +30,13 @@ import { motion } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
 
+interface ResultCardProps {
+  label: string;
+  value: number;
+  description: string;
+  color: 'primary' | 'secondary';
+}
+
 const PercentSRCalc = () => {
   const t = useTranslations('Calculators.sr-rechner');
   const commonT = useTranslations('Calculators');
@@ -47,7 +54,7 @@ const PercentSRCalc = () => {
   const resultAuf = useMemo(() => (areInputsValid ? calcSR_Auf(P, L) : 0), [P, L, areInputsValid]);
   const resultIn = useMemo(() => (areInputsValid ? calcSR_In(P, L) : 0), [P, L, areInputsValid]);
 
-  const ResultCard = ({ label, value, description, color }: any) => {
+  const ResultCard = ({ label, value, description, color }: ResultCardProps) => {
     const [isLabelVisible, setIsLabelVisible] = useState(false);
 
     return (

@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Конфигурация маршрутизации и i18n навигации
+ * ЗАВИСИМОСТИ: next-intl
+ * ОСОБЕННОСТИ: Определение локалей ('en', 'de', 'ru') и экспорт типизированных методов навигации
+ */
+
 import { defineRouting } from 'next-intl/routing';
 import { createNavigation } from 'next-intl/navigation';
 
