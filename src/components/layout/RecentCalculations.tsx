@@ -22,7 +22,8 @@ import {
     FlaskConical
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useHistoryStore, CalculationType } from '@/lib/store/useHistoryStore';
+import { useHistoryStore } from '@/lib/store/useHistoryStore';
+import { CalculationType } from '@/types/calculations';
 
 const getIcon = (type: CalculationType) => {
     switch (type) {

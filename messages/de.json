@@ -20,6 +20,14 @@
     "HomePage": {
         "title": "VinoFlow - Winzer-Werkzeuge",
         "description": "Professionelle Rechner für Önologie, Verschnitt und Kellerwirtschaft.",
+        "hero-chip": "Präzisions-Önologie-Plattform",
+        "hero-desc": "Professionelle Werkzeuge für Winzer.",
+        "hero-desc-2": "Berechnungen neu definiert – schnell und präzise.",
+        "cta-start": "Jetzt starten",
+        "cta-docs": "Dokumentation",
+        "tools-heading": "Önologie-Werkzeuge",
+        "promo-title": "Bleiben Sie präzise",
+        "promo-subtitle": "Kellerwirtschaft Pro",
         "tool-label": "Werkzeug",
         "recent-calculations": "Letzte Berechnungen",
         "empty-history": "Noch keine Berechnungen",
@@ -40,6 +48,7 @@
     },
     "Calculators": {
         "results": "Ergebnisse",
+        "saved": "In Historie gespeichert",
         "formula": {
             "show": "Formeln anzeigen",
             "hide": "Formeln verbergen",

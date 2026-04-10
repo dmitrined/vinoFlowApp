@@ -7,19 +7,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from "@heroui/react";
+import { Button, Image } from "@heroui/react";
 import { 
   Home, 
-  Grid, 
-  ChevronUp, 
   Beaker, 
   Layers, 
   Droplets, 
   Calculator, 
   FlaskConical,
+  Wine,
   X,
-  Zap,
-  Cpu
 } from "lucide-react";
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -36,7 +33,7 @@ export const BottomHeader = () => {
     { label: t('menu.alkohol'), path: '/alkohol-umrechner', icon: <Beaker size={20} /> },
     { label: t('menu.sr-verschnitt'), path: '/sr-verschnitt-rechner', icon: <Droplets size={20} /> },
     { label: t('menu.mehrfach'), path: '/mehrfach-verschnitt', icon: <Layers size={20} /> },
-    { label: t('menu.so2-rechner'), path: '/so2-rechner', icon: <Cpu size={20} /> },
+    { label: t('menu.so2-rechner'), path: '/so2-rechner', icon: <FlaskConical size={20} /> },
   ];
 
   return (
@@ -48,13 +45,13 @@ export const BottomHeader = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="sm:hidden fixed inset-0 z-[998] bg-slate-950/20 backdrop-blur-sm"
+            className="lg:hidden fixed inset-0 z-[998] bg-slate-950/20 backdrop-blur-sm"
           />
         )}
       </AnimatePresence>
 
-      <div className="sm:hidden fixed bottom-8 left-0 right-0 z-[999] px-8 pointer-events-none">
-        <div className="max-w-xs mx-auto relative pointer-events-auto">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[999] pointer-events-none">
+        <div className="w-full relative pointer-events-auto">
           
           {/* Меню инструментов - SaaS Floating Panel */}
           <AnimatePresence>
@@ -63,7 +60,7 @@ export const BottomHeader = () => {
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                className="absolute bottom-20 left-0 right-0 glass-modern rounded-[2.5rem] p-3 shadow-2xl z-[1000] border-brand-500/10 mb-2 neon-glow bg-white dark:bg-zinc-900"
+                className="absolute bottom-16 left-0 right-0 glass-modern p-3 shadow-2xl z-[1000] border-brand-500/10 mb-0 neon-glow bg-white dark:bg-zinc-900"
               >
                 <div className="flex flex-col gap-1">
                   {menuItems.map((item) => (
@@ -91,7 +88,7 @@ export const BottomHeader = () => {
           </AnimatePresence>
 
           {/* Основная панель навигации - Clean Tech Glass */}
-          <div className="glass-modern rounded-full flex justify-around items-center p-2 shadow-2xl relative z-[1001] border-none bg-white/90 dark:bg-zinc-900/90">
+          <div className="glass-modern rounded-none flex justify-around items-center p-2 shadow-2xl relative z-[1001] border-none border-t border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95">
             
             {/* Главная */}
             <Button
@@ -126,7 +123,7 @@ export const BottomHeader = () => {
                   <X size={22} className="text-brand-600" />
                 ) : (
                   <div className="relative">
-                    <Grid size={22} />
+                    <Wine size={22} className="text-brand-600" />
                   </div>
                 )}
                 <span className="text-[8px] font-black uppercase tracking-widest">

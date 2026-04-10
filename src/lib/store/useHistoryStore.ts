@@ -7,15 +7,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type CalculationType = 'sr-rechner' | 'alkohol' | 'sr-verschnitt' | 'mehrfach' | 'so2-calc';
-
-export interface CalculationRecord {
-    id: string;
-    type: CalculationType;
-    date: number;
-    result: string;
-    unit?: string;
-}
+import { CalculationType, CalculationRecord } from '@/types/calculations';
 
 interface HistoryState {
     records: CalculationRecord[];

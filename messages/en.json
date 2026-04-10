@@ -20,6 +20,14 @@
     "HomePage": {
         "title": "VinoFlow - Winemaker Tools",
         "description": "Professional calculators for oenology, blending and cellar management.",
+        "hero-chip": "Precision Enology Platform",
+        "hero-desc": "Professional-grade tools for winemakers.",
+        "hero-desc-2": "Calculations redefined for speed and accuracy.",
+        "cta-start": "Get Started",
+        "cta-docs": "View Documentation",
+        "tools-heading": "Enology Tools",
+        "promo-title": "Stay Precise",
+        "promo-subtitle": "Cellar Management Pro",
         "tool-label": "Tool",
         "recent-calculations": "Recent Calculations",
         "empty-history": "No calculation history yet",
@@ -40,6 +48,7 @@
     },
     "Calculators": {
         "results": "Results",
+        "saved": "Saved to history",
         "formula": {
             "show": "Show Formulas",
             "hide": "Hide Formulas",

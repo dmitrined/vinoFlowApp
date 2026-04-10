@@ -28,38 +28,38 @@ export default function Home() {
     const tools = [
         {
             title: t('tools.sr-rechner'),
+            desc: t('tools.sr-rechner-desc'),
             icon: <Calculator className="text-blue-500" size={24} />,
             href: "/sr-rechner-auf-in",
             className: "md:col-span-2 md:row-span-1",
-            color: "brand"
         },
         {
             title: t('tools.alkohol'),
+            desc: t('tools.alkohol-desc'),
             icon: <Beaker className="text-purple-500" size={24} />,
             href: "/alkohol-umrechner",
             className: "md:col-span-1 md:row-span-1",
-            color: "secondary"
         },
         {
             title: t('tools.so2-rechner'),
+            desc: t('tools.so2-rechner-desc'),
             icon: <Cpu className="text-emerald-500" size={24} />,
             href: "/so2-rechner",
             className: "md:col-span-1 md:row-span-1",
-            color: "success"
         },
         {
             title: t('tools.sr-verschnitt'),
+            desc: t('tools.sr-verschnitt-desc'),
             icon: <Droplets className="text-cyan-500" size={24} />,
             href: "/sr-verschnitt-rechner",
             className: "md:col-span-1 md:row-span-1",
-            color: "primary"
         },
         {
             title: t('tools.mehrfach'),
+            desc: t('tools.mehrfach-desc'),
             icon: <Layers className="text-orange-500" size={24} />,
             href: "/mehrfach-verschnitt",
             className: "md:col-span-1 md:row-span-1",
-            color: "warning"
         },
     ];
 
@@ -95,7 +95,7 @@ export default function Home() {
                         startContent={<Zap size={14} />}
                         className="bg-brand-500/10 text-brand-600 font-black border-none uppercase text-[10px] py-4 px-4 px-6 neon-glow"
                     >
-                        Precision Enology Platform
+                        {t('hero-chip')}
                     </Chip>
                 </motion.div>
                 
@@ -104,8 +104,8 @@ export default function Home() {
                 </h1>
                 
                 <p className="text-lg md:text-xl text-zinc-500 max-w-2xl font-medium leading-relaxed mb-10 px-4">
-                    Professional-grade tools for winemakers. <br/>
-                    <span className="text-zinc-400 font-normal">Calculations redefined for speed and accuracy.</span>
+                    {t('hero-desc')} <br/>
+                    <span className="text-zinc-400 font-normal">{t('hero-desc-2')}</span>
                 </p>
 
                 <div className="flex gap-4">
@@ -115,14 +115,14 @@ export default function Home() {
                         className="bg-tech-primary font-bold px-8 h-12"
                         radius="full"
                     >
-                        Get Started
+                        {t('cta-start')}
                     </Button>
                     <Button 
                         variant="light"
                         className="font-bold text-zinc-500"
                         radius="full"
                     >
-                        View Documentation
+                        {t('cta-docs')}
                     </Button>
                 </div>
             </motion.section>
@@ -133,7 +133,7 @@ export default function Home() {
             {/* Bento Grid Tools */}
             <div className="mb-8 flex items-center gap-2 px-2">
                 <TrendingUp size={20} className="text-brand-500" />
-                <h2 className="text-2xl font-black tracking-tight uppercase italic opacity-80">Enology Tools</h2>
+                <h2 className="text-2xl font-black tracking-tight uppercase italic opacity-80">{t('tools-heading')}</h2>
             </div>
 
             <motion.div
@@ -164,7 +164,7 @@ export default function Home() {
                                         {tool.title}
                                     </h3>
                                     <p className="text-sm text-zinc-500 font-medium leading-relaxed">
-                                        Professional tool for precise vinification parameters.
+                                        {tool.desc}
                                     </p>
                                 </div>
                             </CardBody>
@@ -178,8 +178,8 @@ export default function Home() {
                         <div className="mb-4 p-4 bg-white/20 rounded-full animate-pulse">
                             <Zap size={32} />
                         </div>
-                        <h3 className="text-xl font-black italic mb-2 tracking-tight">Stay Precise</h3>
-                        <p className="text-xs text-white/70 font-bold uppercase tracking-widest">Cellar Management Pro</p>
+                        <h3 className="text-xl font-black italic mb-2 tracking-tight">{t('promo-title')}</h3>
+                        <p className="text-xs text-white/70 font-bold uppercase tracking-widest">{t('promo-subtitle')}</p>
                     </CardBody>
                 </Card>
             </motion.div>

@@ -1,7 +1,17 @@
+import { ProductType } from '@/types/calculations';
+
 /**
- * НАЗНАЧЕНИЕ: Математические функции для расчетов (энология)
  * ОСОБЕННОСТИ: Экспортированные функции для чистого тестирования
  */
+
+export const WINE_CONSTANTS = {
+    ALCOHOL_CONVERSION_FACTOR: 0.1267,
+    SO2_DEFAULTS: {
+        gas: 100,
+        powder: 50,
+        liquid: 150
+    }
+} as const;
 
 /**
  * Конвертация г/л в % об.
@@ -10,7 +20,7 @@
  */
 export const convertGLToVol = (gl: number): number => {
     if (isNaN(gl) || gl < 0) return 0;
-    return gl * 0.1267;
+    return gl * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
 };
 
 /**
@@ -20,7 +30,7 @@ export const convertGLToVol = (gl: number): number => {
  */
 export const convertVolToGL = (vol: number): number => {
     if (isNaN(vol) || vol < 0) return 0;
-    return vol / 0.1267;
+    return vol / WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
 };
 
 /**
@@ -91,7 +101,7 @@ export const calcMultiBlended = (entries: { liter: number, parameter: number }[]
 export const calcSO2Addition = (
     volume: number,
     deltaSO2: number,
-    productType: 'gas' | 'powder' | 'liquid',
+    productType: ProductType,
     concentration: number
 ): number => {
     if (isNaN(volume) || isNaN(deltaSO2) || isNaN(concentration) || volume <= 0 || deltaSO2 <= 0 || concentration <= 0) {

@@ -8,11 +8,14 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Tabs, Tab, Divider, Button } from "@heroui/react";
-import { FlaskConical, Beaker, Wind, Calculator, Info, Eye, EyeOff, Cpu, Zap } from "lucide-react";
-import { calcSO2Addition } from '@/lib/calculations';
+import { FlaskConical, Beaker, Wind, Info, Eye, EyeOff, Zap, Wine } from "lucide-react";
+import ProductTypeSelector from '@/components/ui/ProductTypeSelector';
+import SaveFeedback from '@/components/ui/SaveFeedback';
+import { calcSO2Addition, WINE_CONSTANTS } from '@/lib/calculations';
 import { motion, AnimatePresence } from "framer-motion";
 import FormulSo2Math from './FormulSo2Math';
-import { useHistoryStore } from '@/lib/store/useHistoryStore';
+import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
+import { ProductType } from '@/types/calculations';
 
 const FormulSo2Calc: React.FC = () => {
     const t = useTranslations('Calculators.so2-calc');
@@ -21,16 +24,15 @@ const FormulSo2Calc: React.FC = () => {
     const [showFormula, setShowFormula] = useState<boolean>(false);
     const [volume, setVolume] = useState<string>('1000');
     const [deltaSO2, setDeltaSO2] = useState<string>('30');
-    const [productType, setProductType] = useState<'gas' | 'powder' | 'liquid'>('gas');
-    const [concentration, setConcentration] = useState<string>('100');
+    const [productType, setProductType] = useState<ProductType>('gas');
+    const [concentration, setConcentration] = useState<string>(WINE_CONSTANTS.SO2_DEFAULTS.gas.toString());
 
-    // Автоматическая установка концентрации при смене типа
     const handleTypeChange = (key: React.Key) => {
-        const type = key as 'gas' | 'powder' | 'liquid';
+        const type = key as ProductType;
         setProductType(type);
-        if (type === 'gas') setConcentration('100');
-        else if (type === 'powder') setConcentration('50');
-        else if (type === 'liquid') setConcentration('150');
+        if (type === 'gas') setConcentration(WINE_CONSTANTS.SO2_DEFAULTS.gas.toString());
+        else if (type === 'powder') setConcentration(WINE_CONSTANTS.SO2_DEFAULTS.powder.toString());
+        else if (type === 'liquid') setConcentration(WINE_CONSTANTS.SO2_DEFAULTS.liquid.toString());
     };
 
     const result = useMemo(() => {
@@ -41,22 +43,18 @@ const FormulSo2Calc: React.FC = () => {
     }, [volume, deltaSO2, productType, concentration]);
 
     const unit = productType === 'liquid' ? t('unit-ml') : t('unit-g');
+    const formattedResult = result > 0 ? result.toLocaleString(undefined, { maximumFractionDigits: 1 }) : '0';
 
-    // Авто-сохранение в историю через 2 секунды после изменения результата
-    const { addRecord } = useHistoryStore();
-    React.useEffect(() => {
-        if (result <= 0) return;
-
-        const timer = setTimeout(() => {
-            addRecord({
-                type: 'so2-calc',
-                result: result.toLocaleString(undefined, { maximumFractionDigits: 1 }),
-                unit: unit
-            });
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [result, unit, addRecord]);
+    // Авто-сохранение в историю через хук (задержка 3с)
+    const { showFeedback } = useHistoryAutoSave(
+        {
+            type: 'so2-calc',
+            result: formattedResult,
+            unit: unit
+        },
+        result > 0 ? result : null,
+        3000
+    );
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
@@ -68,7 +66,7 @@ const FormulSo2Calc: React.FC = () => {
                 <Card className="bento-card border-none shadow-none">
                     <CardHeader className="flex gap-5 p-8">
                         <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
-                            <Cpu size={32} />
+                            <Wine size={32} />
                         </div>
                         <div className="flex flex-col text-left">
                             <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">{t('title')}</h1>
@@ -78,40 +76,12 @@ const FormulSo2Calc: React.FC = () => {
                     
                     <CardBody className="p-8 space-y-10">
                         {/* Тип продукта - Modern Toggle */}
+                        {/* Тип продукта - Modern Toggle */}
                         <div className="flex flex-col gap-4">
-                            <Tabs
-                                fullWidth
-                                radius="full"
-                                color="primary"
-                                variant="bordered"
+                            <ProductTypeSelector 
                                 selectedKey={productType}
                                 onSelectionChange={handleTypeChange}
-                                classNames={{
-                                    tabList: "bg-zinc-100 dark:bg-zinc-800/50 p-1 border-none",
-                                    cursor: "bg-white dark:bg-zinc-700 shadow-sm",
-                                    tab: "h-10",
-                                    tabContent: "group-data-[selected=true]:text-brand-600 font-black uppercase tracking-tighter text-[10px] sm:text-xs"
-                                }}
-                            >
-                                <Tab key="gas" title={
-                                    <div className="flex items-center gap-2">
-                                        <Wind size={16} />
-                                        <span>{t('gas')}</span>
-                                    </div>
-                                } />
-                                <Tab key="powder" title={
-                                    <div className="flex items-center gap-2">
-                                        <Beaker size={16} />
-                                        <span>{t('powder')}</span>
-                                    </div>
-                                } />
-                                <Tab key="liquid" title={
-                                    <div className="flex items-center gap-2">
-                                        <FlaskConical size={16} />
-                                        <span>{t('liquid')}</span>
-                                    </div>
-                                } />
-                            </Tabs>
+                            />
                         </div>
 
                         {/* Поля ввода - Clean Modern Style */}
@@ -224,6 +194,8 @@ const FormulSo2Calc: React.FC = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <SaveFeedback show={showFeedback} />
         </div>
     );
 };

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
-import { Calculator, Info, Beaker, ChevronRight, Cpu } from "lucide-react";
+import { Calculator, Info, Beaker, ChevronRight, Wine } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const FormulaVariable: React.FC<{
@@ -65,7 +65,7 @@ const FormulSRCalc: React.FC = () => {
         <Card className="bento-card border-none shadow-none mt-6" radius="lg">
             <CardHeader className="flex gap-4 p-8 sm:p-10">
                 <div className="p-3 bg-brand-500/10 rounded-xl text-brand-600">
-                    <Cpu size={24} />
+                    <Wine size={24} />
                 </div>
                 <div className="flex flex-col text-left">
                     <h2 className="text-xl font-black tracking-tight uppercase italic opacity-80">{commonT('formula.title')}</h2>

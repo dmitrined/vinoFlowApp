@@ -12,7 +12,9 @@ const withPWA = withPWAInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactCompiler: true,
+  experimental: {
+    reactCompiler: true,
+  },
 };
 
 export default withNextIntl(withPWA(nextConfig));

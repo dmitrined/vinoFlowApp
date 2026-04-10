@@ -28,12 +28,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "VinoFlow - Продвинутые расчеты для виноделия",
-    description: "Профессиональные инструменты для энологических расчетов в вашем погребе. SR Rechner, Alkohol-Konvertierung и многое другое.",
+    title: "VinoFlow",
+    description: "Профессиональные инструменты для энологических расчетов в вашем погребе.",
     keywords: ["виноделие", "расчеты", "энология", "алкоголь", "сахар", "VinoFlow"],
     manifest: "/manifest.json",
     openGraph: {
-        title: "VinoFlow - Продвинутые расчеты для виноделия",
+        title: "VinoFlow",
         description: "Профессиональные инструменты для энологических расчетов.",
         url: "https://vinoflow.app",
         siteName: "VinoFlow",
@@ -42,8 +42,15 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "VinoFlow App",
+        title: "VinoFlow",
         description: "Your wine tracking application",
+    },
+    icons: {
+        icon: [
+            { url: "/icon-192x192.png?v=2", sizes: "192x192", type: "image/png" },
+        ],
+        shortcut: "/icon-192x192.png?v=2",
+        apple: "/icon-192x192.png?v=2",
     },
 };
 
