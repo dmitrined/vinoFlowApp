@@ -1,33 +1,38 @@
+/**
+ * НАЗНАЧЕНИЕ: Компонент для отображения формул SR Rechner в стиле Tech SaaS
+ * ЗАВИСИМОСТИ: HeroUI, Lucide, next-intl
+ * ОСОБЕННОСТИ: Профессиональный технический дизайн, использование символов и дробей
+ */
 'use client';
 
 import React from 'react';
-import { Card, CardHeader, CardBody, Divider, Chip } from "@heroui/react";
-import { Calculator, Info, Beaker, Percent } from "lucide-react";
+import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
+import { Calculator, Info, Beaker, Percent, Cpu } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const VariableDisplay: React.FC<{ symbol: React.ReactNode; description: string; icon: React.ReactNode }> = ({ symbol, description, icon }) => (
-    <div className="flex items-start sm:items-center p-3 sm:p-4 bg-default-50 dark:bg-default-100/50 rounded-xl border border-default-200 transition-hover hover:border-primary-500/50">
-        <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-white dark:bg-default-200 shadow-sm mr-3 sm:mr-4 text-primary shrink-0">
-            {React.cloneElement(icon as React.ReactElement,)}
+    <div className="flex items-center p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-3xl border border-zinc-100 dark:border-zinc-800/50 transition-all hover:border-brand-500/30 group">
+        <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-zinc-800 shadow-sm mr-5 text-brand-600 transition-transform group-hover:scale-110 group-hover:rotate-12">
+            {icon}
         </div>
-        <div className="flex-none w-14 sm:w-20 text-lg sm:text-xl font-bold text-primary-600 dark:text-primary-400">
+        <div className="flex-none w-16 text-xl font-black italic tracking-tighter text-brand-600">
             {symbol}
         </div>
-        <p className="text-default-700 dark:text-default-300 text-[13px] sm:text-base font-medium leading-tight">
+        <p className="text-zinc-500 dark:text-zinc-400 text-xs font-black uppercase tracking-tight leading-tight">
             {description}
         </p>
     </div>
 );
 
 const FractionDisplay: React.FC<{ numerator: React.ReactNode; denominator: React.ReactNode }> = ({ numerator, denominator }) => (
-    <div className="flex flex-col items-center mx-1 sm:mx-4 shrink-0">
-        <div className="pb-1 border-b-2 sm:border-b-4 border-default-900 dark:border-default-100 w-full text-center">
-            <span className="text-xl sm:text-4xl font-mono text-secondary-600 dark:text-secondary-400 leading-none">
+    <div className="flex flex-col items-center mx-4 shrink-0">
+        <div className="pb-1 border-b-2 border-zinc-900 dark:border-zinc-100 w-full text-center">
+            <span className="text-2xl sm:text-4xl font-black italic tracking-tighter text-indigo-600">
                 {numerator}
             </span>
         </div>
         <div className="pt-1 w-full text-center">
-            <span className="text-xl sm:text-4xl font-mono text-secondary-600 dark:text-secondary-400 leading-none">
+            <span className="text-2xl sm:text-4xl font-black italic tracking-tighter text-zinc-400">
                 {denominator}
             </span>
         </div>
@@ -38,101 +43,88 @@ const FormulPercentSRCalc: React.FC = () => {
     const t = useTranslations('Calculators.sr-rechner');
     const commonT = useTranslations('Calculators');
 
-    const L_SR = <span className="font-mono">L<sub>SR</sub></span>;
-    const L_W = <span className="font-mono">L<sub>W</sub></span>;
-    const P_SR = <span className="font-mono">%<sub>SR</sub></span>;
-
+    const L_SR = <span>L<sub>SR</sub></span>;
+    const L_W = <span>L<sub>W</sub></span>;
+    const P_SR = <span>%<sub>SR</sub></span>;
 
     return (
-        <Card className="w-full max-w-4xl mx-auto my-4 sm:my-8 border-none shadow-xl" radius="lg">
-            <CardHeader className="flex gap-3 bg-primary-50/50 dark:bg-primary-900/10 p-4 sm:p-6">
-                <Calculator className="text-primary shrink-0" size={24} />
-                <div className="flex flex-col">
-                    <h2 className="text-lg sm:text-2xl font-bold leading-tight">{commonT('formula.title')}</h2>
-                    <p className="text-[11px] sm:text-small text-default-500">{t('subtitle')}</p>
+        <Card className="bento-card border-none shadow-none mt-6" radius="lg">
+            <CardHeader className="flex gap-4 p-8">
+                <div className="p-3 bg-brand-500/10 rounded-xl text-brand-600">
+                    <Cpu size={24} />
+                </div>
+                <div className="flex flex-col text-left">
+                    <h2 className="text-xl font-black tracking-tight uppercase italic opacity-80">{commonT('formula.title')}</h2>
+                    <p className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest opacity-60">{t('subtitle')}</p>
                 </div>
             </CardHeader>
 
-            <Divider />
-
-            <CardBody className="p-4 sm:p-8 space-y-10 sm:space-y-12 overflow-x-hidden">
-
+            <CardBody className="p-8 space-y-12 pt-0">
                 {/* --- Секция 1: SR % auf --- */}
-                <section>
-                    <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                        <Chip color="primary" variant="flat" size="sm" className="h-5 text-[10px] uppercase font-bold">{t('auf')}</Chip>
-                        <h3 className="text-md sm:text-xl font-bold text-default-800 dark:text-default-100">
-                            {t('auf')}
-                        </h3>
+                <section className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                        <Chip variant="flat" className="bg-brand-500/10 text-brand-600 font-black uppercase text-[9px] border-none h-6">{t('auf')}</Chip>
                     </div>
-
-                    <p className="text-default-500 mb-6 text-[12px] sm:text-base italic leading-snug">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 opacity-60">
                         {t('formula-auf')}
                     </p>
-
-                    <div className="flex justify-center items-center py-6 sm:py-10 px-2 bg-default-50 dark:bg-black/20 rounded-2xl border-2 border-dashed border-default-200 overflow-x-auto">
-                        <div className="flex items-center text-2xl sm:text-5xl font-bold">
+                    <div className="flex justify-center items-center py-10 bg-zinc-50 dark:bg-zinc-900/50 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800/50">
+                        <div className="flex items-center text-3xl sm:text-5xl font-black italic tracking-tighter">
                             {L_SR}
-                            <span className="mx-2 sm:mx-3 text-default-400">=</span>
+                            <span className="mx-4 text-zinc-300 dark:text-zinc-700 font-normal">=</span>
                             <FractionDisplay numerator={P_SR} denominator="100" />
-                            <span className="mx-1 sm:mx-4 text-default-400">⋅</span>
+                            <span className="mx-4 text-zinc-300 dark:text-zinc-700 font-normal">⋅</span>
                             {L_W}
                         </div>
                     </div>
                 </section>
 
                 {/* --- Секция 2: SR % in --- */}
-                <section>
-                    <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                        <Chip color="secondary" variant="flat" size="sm" className="h-5 text-[10px] uppercase font-bold">{t('in')}</Chip>
-                        <h3 className="text-md sm:text-xl font-bold text-default-800 dark:text-default-100">
-                            {t('in')}
-                        </h3>
+                <section className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                        <Chip variant="flat" className="bg-indigo-500/10 text-indigo-600 font-black uppercase text-[9px] border-none h-6">{t('in')}</Chip>
                     </div>
-
-                    <p className="text-default-500 mb-6 text-[12px] sm:text-base italic leading-snug">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 opacity-60">
                         {t('formula-in')}
                     </p>
-
-                    <div className="flex justify-center items-center py-6 sm:py-10 px-2 bg-default-50 dark:bg-black/20 rounded-2xl border-2 border-dashed border-default-200 overflow-x-auto">
-                        <div className="flex items-center text-2xl sm:text-5xl font-bold">
+                    <div className="flex justify-center items-center py-10 bg-zinc-50 dark:bg-zinc-900/50 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800/50">
+                        <div className="flex items-center text-3xl sm:text-5xl font-black italic tracking-tighter">
                             {L_SR}
-                            <span className="mx-2 sm:mx-3 text-default-400">=</span>
+                            <span className="mx-4 text-zinc-300 dark:text-zinc-700 font-normal">=</span>
                             <FractionDisplay numerator={P_SR} denominator={<span>100 - {P_SR}</span>} />
-                            <span className="mx-1 sm:mx-4 text-default-400">⋅</span>
+                            <span className="mx-4 text-zinc-300 dark:text-zinc-700 font-normal">⋅</span>
                             {L_W}
                         </div>
                     </div>
                 </section>
 
                 {/* --- Легенда --- */}
-                <section className="pt-4 border-t border-default-100">
-                    <div className="flex items-center gap-2 mb-5">
-                        <Info className="text-primary shrink-0" size={18} />
-                        <h4 className="font-bold text-sm sm:text-lg uppercase tracking-wider text-default-600">
+                <section className="pt-8 border-t border-zinc-100 dark:border-zinc-800/50">
+                    <div className="flex items-center gap-3 mb-6 px-1">
+                        <Info className="text-brand-600 opacity-60" size={18} />
+                        <h4 className="font-black text-xs uppercase tracking-[0.2em] text-zinc-400">
                             {commonT('formula.legend')}
                         </h4>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="grid grid-cols-1 gap-4">
                         <VariableDisplay
                             symbol={L_SR}
-                            icon={<Beaker />}
+                            icon={<Beaker size={20} />}
                             description={t('legend-lsr')}
                         />
                         <VariableDisplay
                             symbol={P_SR}
-                            icon={<Percent />}
+                            icon={<Percent size={20} />}
                             description={t('legend-psr')}
                         />
                         <VariableDisplay
                             symbol={L_W}
-                            icon={<Beaker className="rotate-180" />}
+                            icon={<Beaker size={20} className="rotate-180" />}
                             description={t('legend-lw')}
                         />
                     </div>
                 </section>
-
             </CardBody>
         </Card>
     );

@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Редактор Süßreserve (SR) - расчеты "на" и "в".
+ * НАЗНАЧЕНИЕ: Редактор Süßreserve (SR) - расчеты "на" и "в" в стиле Tech SaaS
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, framer-motion, @/lib/calculations
- * ОСОБЕННОСТИ: i18n, Mobile-first, анимации Framer Motion
+ * ОСОБЕННОСТИ: i18n, Mobile-first, Tech UI дизайн.
  */
 
 'use client';
@@ -23,10 +23,12 @@ import {
   Eye,
   EyeOff,
   Info,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Zap,
+  Cpu
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
 import { useHistoryStore } from "@/lib/store/useHistoryStore";
@@ -70,37 +72,29 @@ const PercentSRCalc = () => {
   }, [resultAuf, addRecord]);
 
   const ResultCard = ({ label, value, description, color }: ResultCardProps) => {
-    const [isLabelVisible, setIsLabelVisible] = useState(false);
-
     return (
       <Card
-        isPressable
-        onPress={() => setIsLabelVisible(!isLabelVisible)}
-        shadow="sm"
-        className="border-none bg-default-50 dark:bg-zinc-800/50 hover:bg-default-100 transition-colors"
+        className="border-none glass-modern shadow-none group overflow-hidden"
       >
-        <CardBody className="flex flex-row justify-between items-center p-3 sm:p-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-1 mb-1">
-              <p className="text-[10px] sm:text-xs text-default-500 font-black uppercase tracking-widest">
+        <CardBody className="p-5 flex flex-row justify-between items-center">
+          <div className="flex-1 text-left">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider">
                 {label}
-              </p>
+              </span>
               <Tooltip content={description} placement="top">
-                <Info size={14} className="text-default-400 hidden sm:block" />
+                <Info size={14} className="text-zinc-400 opacity-40 hover:opacity-100 cursor-help" />
               </Tooltip>
             </div>
-            <p className={`text-xl sm:text-2xl font-black ${color === 'primary' ? 'text-wine-600' : 'text-secondary-600'}`}>
-              {value > 0 ? value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
-              <span className="text-sm font-medium ml-1">L</span>
-            </p>
-            {isLabelVisible && (
-              <p className="text-[10px] text-default-400 mt-1 sm:hidden animate-in fade-in slide-in-from-top-1">
-                {description}
-              </p>
-            )}
+            <div className="flex items-baseline gap-2">
+              <span className={`text-3xl font-black tracking-tighter ${color === 'primary' ? 'text-brand-600 dark:text-brand-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                {value > 0 ? value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
+              </span>
+              <span className="text-sm font-black text-zinc-500 uppercase italic">L</span>
+            </div>
           </div>
-          <div className={`p-2 rounded-full ${color === 'primary' ? 'bg-wine-500/10' : 'bg-secondary-500/10'}`}>
-            <ArrowRightLeft className={color === 'primary' ? 'text-wine-600' : 'text-secondary-600'} size={18} />
+          <div className={`p-3 rounded-2xl transition-all group-hover:scale-110 ${color === 'primary' ? 'bg-brand-500/10 text-brand-600' : 'bg-indigo-500/10 text-indigo-600'}`}>
+            <ArrowRightLeft size={20} />
           </div>
         </CardBody>
       </Card>
@@ -108,75 +102,78 @@ const PercentSRCalc = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-3 sm:p-6 md:p-8 flex flex-col items-center">
+    <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl"
       >
-        <Card className="shadow-2xl mb-4 sm:mb-6 border-none" radius="lg">
-          <CardHeader className="flex flex-col gap-1 p-6 sm:p-8 text-center bg-wine-600/10">
-            <div className="bg-wine-600 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white mb-2 mx-auto shadow-lg shadow-wine-600/30">
-              <Calculator size={24} />
+        <Card className="bento-card border-none shadow-none mb-8">
+          <CardHeader className="flex gap-5 p-8 sm:p-10">
+            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
+              <Cpu size={32} />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{t('title')}</h1>
-            <p className="text-default-500 text-[12px] sm:text-small max-w-xs sm:max-w-none mx-auto leading-tight font-medium">
-              {t('subtitle')}
-            </p>
+            <div className="flex flex-col text-left">
+              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+                {t('title')}
+              </h1>
+              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+                {t('subtitle')}
+              </p>
+            </div>
           </CardHeader>
 
-          <Divider />
-
-          <CardBody className="p-5 sm:p-10 space-y-6 sm:space-y-8">
-            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-5 sm:gap-6">
+          <CardBody className="p-8 sm:p-10 space-y-10 pt-0">
+            {/* Поля ввода */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Input
                 label={t('input-sr')}
                 placeholder="0,0"
-                labelPlacement="outside"
-                startContent={<Percent size={18} className="text-default-400 shrink-0" />}
                 value={percentSR}
                 onValueChange={setPercentSR}
-                type="text"
-                inputMode="decimal"
-                variant="bordered"
+                labelPlacement="outside"
                 size="lg"
-                color={P >= 100 ? "danger" : "default"}
+                radius="lg"
+                variant="flat"
+                inputMode="decimal"
                 isInvalid={P >= 100}
                 errorMessage={P >= 100 && t('sr-max')}
+                startContent={<Percent size={18} className="text-zinc-400" />}
                 classNames={{
-                  label: "font-black text-default-700 text-[11px] uppercase tracking-widest",
-                  input: "text-lg font-mono font-bold",
-                  inputWrapper: "h-14 border-2 focus-within:!border-wine-600"
+                  inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                  label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                 }}
               />
 
               <Input
                 label={t('input-liter')}
                 placeholder="0"
-                labelPlacement="outside"
-                startContent={<Droplets size={18} className="text-default-400 shrink-0" />}
                 value={literWein}
                 onValueChange={setLiterWein}
-                type="text"
-                inputMode="decimal"
-                variant="bordered"
+                labelPlacement="outside"
                 size="lg"
-                color="default"
-                endContent={<span className="text-default-400 font-bold text-sm">L</span>}
+                radius="lg"
+                variant="flat"
+                inputMode="decimal"
+                startContent={<Droplets size={18} className="text-zinc-400" />}
+                endContent={<span className="text-zinc-400 font-black text-[10px]">L</span>}
                 classNames={{
-                  label: "font-black text-default-700 text-[11px] uppercase tracking-widest",
-                  input: "text-lg font-mono font-bold",
-                  inputWrapper: "h-14 border-2 focus-within:!border-wine-600"
+                  inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                  label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                 }}
               />
             </div>
 
-            <div className="space-y-3 sm:space-y-4 pt-2">
-              <h3 className="text-[11px] uppercase font-black tracking-[0.2em] text-default-400 flex items-center gap-2 px-1">
-                {commonT('results')}
-              </h3>
-              <div className="grid grid-cols-1 gap-3 sm:gap-4">
+            {/* Результаты */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-2 px-1">
+                <Zap size={14} className="text-brand-500" />
+                <h3 className="text-[10px] uppercase font-black tracking-widest text-zinc-400">
+                  {commonT('results')}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-5">
                 <ResultCard
                   label={t('auf')}
                   value={resultAuf}
@@ -191,33 +188,33 @@ const PercentSRCalc = () => {
                 />
               </div>
             </div>
+          </CardBody>
 
-            <Divider />
-
-            <div className="flex justify-center pb-2">
-              <Button
-                variant="light"
-                color="danger"
-                onPress={() => setShowFormula(!showFormula)}
-                startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
-                className="font-black uppercase text-xs tracking-widest w-full sm:w-auto"
-              >
-                {showFormula ? commonT('formula.hide') : commonT('formula.show')}
-              </Button>
-            </div>
+          <CardBody className="px-8 pb-8 pt-0 flex flex-col items-center">
+            <Button
+              variant="light"
+              onPress={() => setShowFormula(!showFormula)}
+              startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
+              className="font-black uppercase tracking-widest text-[10px] text-zinc-400 hover:text-brand-600 w-full h-12 rounded-2xl"
+            >
+              {showFormula ? commonT('formula.hide') : commonT('formula.show')}
+            </Button>
           </CardBody>
         </Card>
       </motion.div>
 
-      {showFormula && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-2xl origin-top"
-        >
-          <FormulPercentSRCalc />
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {showFormula && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full max-w-2xl"
+          >
+            <FormulPercentSRCalc />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

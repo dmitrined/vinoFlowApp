@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Конвертер спирта (г/л <-> % об.)
+ * НАЗНАЧЕНИЕ: Конвертер спирта (г/л <-> % об.) в стиле Tech SaaS
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, @/lib/calculations
- * ОСОБЕННОСТИ: Двухсторонний расчет, i18n, Mobile-first
+ * ОСОБЕННОСТИ: Двухсторонний расчет, i18n, Tech UI дизайн.
  */
 
 'use client';
@@ -24,10 +24,12 @@ import {
   FlaskConical,
   Eye,
   EyeOff,
-  AlertCircle
+  AlertCircle,
+  Zap,
+  ArrowRightLeft
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { convertGLToVol, convertVolToGL } from '@/lib/calculations';
 import FormulAlcCalculation from './FormulAlcCalculation';
 import { useHistoryStore } from '@/lib/store/useHistoryStore';
@@ -84,37 +86,40 @@ const AlcCalculation = () => {
   }, [resultGL, addRecord]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-3 sm:p-8 flex flex-col items-center">
+    <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg"
       >
-        <Card className="shadow-2xl mb-6 border-none" radius="lg">
-          <CardHeader className="flex flex-col gap-1 p-6 text-center bg-wine-600/10">
-            <div className="bg-wine-600 w-12 h-12 rounded-full flex items-center justify-center text-white mb-2 mx-auto shadow-lg shadow-wine-600/20">
-              <RefreshCcw size={24} />
+        <Card className="bento-card border-none shadow-none mb-8">
+          <CardHeader className="flex gap-5 p-8">
+            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
+              <RefreshCcw size={32} />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-wine-600 dark:text-wine-400">
-              {t('title')}
-            </h1>
-            <p className="text-default-500 text-xs sm:text-small font-medium">
-              {t('subtitle')}
-            </p>
+            <div className="flex flex-col text-left">
+              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+                {t('title')}
+              </h1>
+              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+                {t('subtitle')}
+              </p>
+            </div>
           </CardHeader>
 
-          <CardBody className="p-4 sm:p-8">
+          <CardBody className="p-8 space-y-10 pt-0">
             <Tabs
               fullWidth
               aria-label="Umrechnungs-Optionen"
-              color="danger"
-              variant="underlined"
+              color="primary"
+              variant="bordered"
+              radius="full"
               classNames={{
-                tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
-                cursor: "w-full bg-wine-600",
-                tab: "max-w-fit px-0 h-12",
-                tabContent: "group-data-[selected=true]:text-wine-600 font-bold"
+                tabList: "bg-zinc-100 dark:bg-zinc-800/50 p-1 border-none",
+                cursor: "bg-white dark:bg-zinc-700 shadow-sm",
+                tab: "h-10",
+                tabContent: "group-data-[selected=true]:text-brand-600 font-black uppercase tracking-tighter text-[10px] sm:text-xs"
               }}
             >
               {/* ТАБ 1: g/l to % Vol. */}
@@ -122,47 +127,50 @@ const AlcCalculation = () => {
                 key="gl-to-vol"
                 title={
                   <div className="flex items-center space-x-2">
-                    <FlaskConical size={18} />
+                    <FlaskConical size={16} />
                     <span>g/l ➔ % Vol.</span>
                   </div>
                 }
               >
-                <div className="space-y-6 pt-6">
+                <div className="space-y-8 pt-6">
                   <Input
                     label={t('input-gl')}
                     placeholder="0,00"
                     labelPlacement="outside"
                     size="lg"
-                    variant="bordered"
+                    radius="lg"
+                    variant="flat"
                     value={inputGL}
                     onValueChange={setInputGL}
                     inputMode="decimal"
-                    endContent={<span className="text-default-400 font-bold">g/l</span>}
-                  />
-
-                  <div className="relative py-2 flex justify-center">
-                    <div className="absolute inset-0 flex items-center">
-                      <Divider />
-                    </div>
-                    <div className="relative bg-background px-2 text-wine-600">
-                      <Calculator size={20} />
-                    </div>
-                  </div>
-
-                  <Input
-                    isReadOnly
-                    label={t('result-vol')}
-                    labelPlacement="outside"
-                    size="lg"
-                    variant="flat"
-                    color="success"
-                    value={resultVOL}
                     classNames={{
-                      input: "text-2xl font-mono font-bold text-success-600",
-                      label: "font-semibold text-default-700"
+                        inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                        label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                     }}
-                    endContent={<span className="text-success-600 font-bold">% Vol.</span>}
+                    endContent={<span className="text-zinc-400 font-black text-[10px]">G/L</span>}
                   />
+
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                    <Card className="relative bg-zinc-950 text-white border-none overflow-hidden h-40 flex items-center justify-center rounded-[2.5rem]" shadow="none">
+                      <CardBody className="p-0 flex flex-col items-center justify-center relative z-10">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-3 ml-[0.3em]">
+                          {t('result-vol')}
+                        </span>
+                        <div className="flex items-baseline gap-3">
+                          <span className="text-6xl font-black tracking-tighter text-white">
+                            {resultVOL || '0,00'}
+                          </span>
+                          <span className="text-xl font-black text-brand-500 uppercase italic">
+                            % Vol.
+                          </span>
+                        </div>
+                      </CardBody>
+                      <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Zap size={80} />
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               </Tab>
 
@@ -171,69 +179,69 @@ const AlcCalculation = () => {
                 key="vol-to-gl"
                 title={
                   <div className="flex items-center space-x-2">
-                    <GlassWater size={18} />
+                    <GlassWater size={16} />
                     <span>% Vol. ➔ g/l</span>
                   </div>
                 }
               >
-                <div className="space-y-6 pt-6">
+                <div className="space-y-8 pt-6">
                   <Input
                     label={t('input-vol')}
                     placeholder="0,00"
                     labelPlacement="outside"
                     size="lg"
-                    variant="bordered"
+                    radius="lg"
+                    variant="flat"
                     value={inputVOL}
                     onValueChange={setInputVOL}
                     inputMode="decimal"
-                    endContent={<span className="text-default-400 font-bold">% Vol.</span>}
-                  />
-
-                  <div className="relative py-2 flex justify-center">
-                    <div className="absolute inset-0 flex items-center">
-                      <Divider />
-                    </div>
-                    <div className="relative bg-background px-2 text-wine-600">
-                      <Calculator size={20} />
-                    </div>
-                  </div>
-
-                  <Input
-                    isReadOnly
-                    label={t('result-gl')}
-                    labelPlacement="outside"
-                    size="lg"
-                    variant="flat"
-                    color="success"
-                    value={resultGL}
                     classNames={{
-                      input: "text-2xl font-mono font-bold text-success-600",
-                      label: "font-semibold text-default-700"
+                        inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                        label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                     }}
-                    endContent={<span className="text-success-600 font-bold">g/l</span>}
+                    endContent={<span className="text-zinc-400 font-black text-[10px]">% VOL.</span>}
                   />
+
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                    <Card className="relative bg-zinc-950 text-white border-none overflow-hidden h-40 flex items-center justify-center rounded-[2.5rem]" shadow="none">
+                      <CardBody className="p-0 flex flex-col items-center justify-center relative z-10">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-3 ml-[0.3em]">
+                          {t('result-gl')}
+                        </span>
+                        <div className="flex items-baseline gap-3">
+                          <span className="text-6xl font-black tracking-tighter text-white">
+                            {resultGL || '0,00'}
+                          </span>
+                          <span className="text-xl font-black text-brand-500 uppercase italic">
+                            g/l
+                          </span>
+                        </div>
+                      </CardBody>
+                      <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Zap size={80} />
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               </Tab>
             </Tabs>
 
             {/* Валидация ошибки */}
             {((inputGL && isNaN(parseFloat(inputGL.replace(',', '.')))) || (inputVOL && isNaN(parseFloat(inputVOL.replace(',', '.'))))) && (
-              <div className="mt-4 flex items-center gap-2 text-danger animate-pulse">
-                <AlertCircle size={16} />
-                <span className="text-xs font-bold">{commonT('errors.invalid')}</span>
+              <div className="mt-4 flex items-center gap-3 p-4 rounded-2xl bg-danger-50 text-danger border border-danger-100 animate-pulse">
+                <AlertCircle size={20} />
+                <span className="text-xs font-black uppercase tracking-wider">{commonT('errors.invalid')}</span>
               </div>
             )}
           </CardBody>
 
-          <Divider />
-
-          <CardBody className="p-4 flex flex-col items-center">
+          <CardBody className="px-8 pb-8 pt-0 flex flex-col items-center">
             <Button
               variant="light"
-              color="danger"
               onPress={() => setShowFormula(!showFormula)}
               startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
-              className="font-bold w-full"
+              className="font-black uppercase tracking-widest text-[10px] text-zinc-400 hover:text-brand-600 w-full h-12 rounded-2xl"
             >
               {showFormula ? commonT('formula.hide') : commonT('formula.title')}
             </Button>
@@ -241,15 +249,18 @@ const AlcCalculation = () => {
         </Card>
       </motion.div>
 
-      {showFormula && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-lg"
-        >
-          <FormulAlcCalculation />
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {showFormula && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full max-w-lg"
+          >
+            <FormulAlcCalculation />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

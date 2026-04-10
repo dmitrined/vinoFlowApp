@@ -96,6 +96,8 @@
         },
         "sr-verschnitt": {
             "title": "SR-Verschnitt",
+            "subtitle": "Präzise Berechnung der Verschnittmenge",
+            "total-volume": "Gesamtvolumen",
             "input-sr-sugar": "Zuckergehalt SR (g/l)",
             "input-wein-sugar": "Zuckergehalt Wein (g/l)",
             "input-wein-vol": "Volumen Wein (L)",

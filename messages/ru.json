@@ -96,6 +96,8 @@
         },
         "sr-verschnitt": {
             "title": "Купаж сахара",
+            "subtitle": "Точный расчет купажирования сахара",
+            "total-volume": "Общий объем",
             "input-sr-sugar": "Сахар в добавке (г/л)",
             "input-wein-sugar": "Сахар в вине (г/л)",
             "input-wein-vol": "Объем вина (л)",

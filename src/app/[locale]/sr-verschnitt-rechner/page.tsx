@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Расчет купажа сахара (SR-Verschnitt)
+ * НАЗНАЧЕНИЕ: Расчет купажа сахара (SR-Verschnitt) в стиле Tech SaaS
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, framer-motion, @/lib/calculations
- * ОСОБЕННОСТИ: Валидация диапазонов, i18n, Mobile-first
+ * ОСОБЕННОСТИ: Валидация диапазонов, i18n, Tech UI дизайн.
  */
 
 'use client';
@@ -21,10 +21,13 @@ import {
   Target,
   Droplets,
   Eye,
-  EyeOff
+  EyeOff,
+  Cpu,
+  Zap,
+  Info
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { calcSRVerschnitt } from '@/lib/calculations';
 import FormulSRCalc from './FormulSRCalc';
 import { useHistoryStore } from '@/lib/store/useHistoryStore';
@@ -99,106 +102,151 @@ const SrCalc: React.FC = () => {
   }, [results, addRecord]);
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-8 flex flex-col items-center">
+    <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
       <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl"
       >
-        <Card className="shadow-2xl border-none" radius="lg">
-          <CardHeader className="flex flex-col gap-2 p-6 bg-wine-600 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3 relative z-10">
-              <Calculator size={32} />
-              <h1 className="text-2xl sm:text-3xl font-black italic tracking-tight uppercase">{t('title')}</h1>
+        <Card className="bento-card border-none shadow-none mb-8">
+          <CardHeader className="flex gap-5 p-8 sm:p-10">
+            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
+              <Cpu size={32} />
+            </div>
+            <div className="flex flex-col text-left">
+              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+                {t('title')}
+              </h1>
+              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+                Professional Blend Optimization
+              </p>
             </div>
           </CardHeader>
 
-          <CardBody className="p-4 sm:p-8 space-y-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <CardBody className="p-8 sm:p-10 space-y-10 pt-0">
+            {/* Поля ввода */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Input
                 label={t('input-sr-sugar')}
                 placeholder="0,00"
-                variant="bordered"
-                color={errors.gl_SR ? "danger" : "default"}
-                isInvalid={!!errors.gl_SR}
-                errorMessage={errors.gl_SR}
                 value={values.gl_SR}
                 onValueChange={(v) => setValues({ ...values, gl_SR: v })}
-                startContent={<Droplets className="text-wine-500" size={18} />}
-                classNames={{ inputWrapper: "border-2 focus-within:!border-wine-600" }}
+                labelPlacement="outside"
+                size="lg"
+                radius="lg"
+                variant="flat"
+                isInvalid={!!errors.gl_SR}
+                errorMessage={errors.gl_SR}
+                startContent={<Droplets size={18} className="text-zinc-400" />}
+                classNames={{
+                  inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                  label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
+                }}
               />
 
               <Input
                 label={t('input-wein-sugar')}
                 placeholder="0,00"
-                variant="bordered"
-                color={errors.gl_Wein ? "danger" : "default"}
-                isInvalid={!!errors.gl_Wein}
-                errorMessage={errors.gl_Wein}
                 value={values.gl_Wein}
                 onValueChange={(v) => setValues({ ...values, gl_Wein: v })}
-                startContent={<Beaker className="text-secondary-500" size={18} />}
-                classNames={{ inputWrapper: "border-2 focus-within:!border-wine-600" }}
+                labelPlacement="outside"
+                size="lg"
+                radius="lg"
+                variant="flat"
+                isInvalid={!!errors.gl_Wein}
+                errorMessage={errors.gl_Wein}
+                startContent={<Beaker size={18} className="text-zinc-400" />}
+                classNames={{
+                  inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                  label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
+                }}
               />
 
               <Input
                 label={t('input-wein-vol')}
                 placeholder="0"
-                variant="bordered"
-                color="default"
                 value={values.l_Wein}
                 onValueChange={(v) => setValues({ ...values, l_Wein: v })}
-                endContent={<span className="text-tiny font-bold text-default-400">L</span>}
-                classNames={{ inputWrapper: "border-2 focus-within:!border-wine-600" }}
+                labelPlacement="outside"
+                size="lg"
+                radius="lg"
+                variant="flat"
+                endContent={<span className="text-zinc-400 font-black text-[10px]">L</span>}
+                classNames={{
+                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
+                }}
               />
 
               <Input
                 label={t('input-ziel-sugar')}
                 placeholder="0,00"
-                variant="bordered"
-                color={errors.ziel_gl ? "danger" : "default"}
-                isInvalid={!!errors.ziel_gl}
-                errorMessage={errors.ziel_gl}
                 value={values.ziel_gl}
                 onValueChange={(v) => setValues({ ...values, ziel_gl: v })}
-                startContent={<Target className="text-success-500" size={18} />}
-                classNames={{ inputWrapper: "border-2 focus-within:!border-wine-600" }}
+                labelPlacement="outside"
+                size="lg"
+                radius="lg"
+                variant="flat"
+                isInvalid={!!errors.ziel_gl}
+                errorMessage={errors.ziel_gl}
+                startContent={<Target size={18} className="text-zinc-400" />}
+                classNames={{
+                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all border-dashed",
+                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
+                }}
               />
             </div>
 
-            <Divider />
-
             {/* Блок результатов */}
-            <div className="space-y-4">
-              <div className={`p-6 rounded-2xl transition-all shadow-inner ${results ? 'bg-wine-50 dark:bg-wine-900/10 border-2 border-wine-500/30' : 'bg-default-50 border-2 border-dashed border-default-200 opacity-60'}`}>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-[10px] font-black uppercase text-wine-600 tracking-[0.2em] mb-1">{t('result-add')}</p>
-                    <p className={`text-3xl font-mono font-black ${results ? 'text-wine-700 dark:text-wine-400' : 'text-default-300'}`}>
-                      {results ? results.liter_SR.toFixed(2) : "0.00"} <span className="text-lg font-sans">L</span>
-                    </p>
-                  </div>
-                  <div className={`p-3 rounded-full ${results ? 'bg-wine-600 text-white shadow-lg' : 'bg-default-200 text-default-400'}`}>
-                    <Droplets />
-                  </div>
+            <div className="space-y-6">
+                <div className="flex items-center gap-2 px-1">
+                    <Zap size={14} className="text-brand-500" />
+                    <h3 className="text-[10px] uppercase font-black tracking-widest text-zinc-400">
+                        {commonT('results')}
+                    </h3>
                 </div>
-              </div>
 
-              <div className="p-4 bg-zinc-900 dark:bg-zinc-800 text-white rounded-xl flex justify-between items-center shadow-lg">
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{t('result-total')}</span>
-                <span className="text-xl font-mono font-black">
-                  {results ? results.gesamt_Liter.toFixed(2) : "0.00"} <span className="text-sm font-sans font-medium">L</span>
-                </span>
-              </div>
+                <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+                    <Card className="relative bg-zinc-950 text-white border-none overflow-hidden h-44 flex items-center justify-center rounded-[2.5rem]" shadow="none">
+                        <CardBody className="p-0 flex flex-col items-center justify-center relative z-10 px-6">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-3 ml-[0.3em]">
+                                {t('result-add')}
+                            </span>
+                            <div className="flex items-baseline gap-3">
+                                <span className={`text-6xl font-black tracking-tighter transition-all ${results ? 'text-white' : 'text-zinc-800 animate-pulse'}`}>
+                                    {results ? results.liter_SR.toFixed(2) : "0.00"}
+                                </span>
+                                <span className="text-xl font-black text-brand-500 uppercase italic">L</span>
+                            </div>
+                            
+                            {results && (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mt-4 flex items-center gap-2 px-3 py-1 bg-brand-500/10 rounded-full border border-brand-500/20"
+                                >
+                                    <Info size={12} className="text-brand-500" />
+                                    <span className="text-[9px] font-black text-brand-400 uppercase tracking-widest">
+                                        Total: {results.gesamt_Liter.toFixed(2)} L
+                                    </span>
+                                </motion.div>
+                            )}
+                        </CardBody>
+                        <div className="absolute -bottom-10 -right-10 opacity-10 rotate-12">
+                            <Droplets size={160} />
+                        </div>
+                    </Card>
+                </div>
             </div>
+          </CardBody>
 
+          <CardBody className="px-8 pb-8 pt-0 flex flex-col items-center">
             <Button
-              fullWidth
-              variant="flat"
-              color="danger"
-              className="font-black uppercase tracking-widest text-xs"
+              variant="light"
               onPress={() => setShowFormula(!showFormula)}
               startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
+              className="font-black uppercase tracking-widest text-[10px] text-zinc-400 hover:text-brand-600 w-full h-12 rounded-2xl"
             >
               {showFormula ? commonT('formula.hide') : commonT('formula.show')}
             </Button>
@@ -206,15 +254,18 @@ const SrCalc: React.FC = () => {
         </Card>
       </motion.div>
 
-      {showFormula && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-2xl mt-8"
-        >
-          <FormulSRCalc />
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {showFormula && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full max-w-2xl"
+          >
+            <FormulSRCalc />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

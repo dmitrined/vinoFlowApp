@@ -96,6 +96,8 @@
         },
         "sr-verschnitt": {
             "title": "Sugar Blending",
+            "subtitle": "Precise calculation of blending quantity",
+            "total-volume": "Total Volume",
             "input-sr-sugar": "Sugar in additive (g/l)",
             "input-wein-sugar": "Sugar in wine (g/l)",
             "input-wein-vol": "Volume wine (L)",
