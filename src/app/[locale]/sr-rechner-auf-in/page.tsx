@@ -29,6 +29,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
+import { useHistoryStore } from "@/lib/store/useHistoryStore";
 
 interface ResultCardProps {
   label: string;
@@ -53,6 +54,20 @@ const PercentSRCalc = () => {
 
   const resultAuf = useMemo(() => (areInputsValid ? calcSR_Auf(P, L) : 0), [P, L, areInputsValid]);
   const resultIn = useMemo(() => (areInputsValid ? calcSR_In(P, L) : 0), [P, L, areInputsValid]);
+
+  // Авто-сохранение в историю
+  const { addRecord } = useHistoryStore();
+  React.useEffect(() => {
+    if (resultAuf <= 0) return;
+    const timer = setTimeout(() => {
+        addRecord({
+            type: 'sr-rechner',
+            result: resultAuf.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            unit: 'L'
+        });
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [resultAuf, addRecord]);
 
   const ResultCard = ({ label, value, description, color }: ResultCardProps) => {
     const [isLabelVisible, setIsLabelVisible] = useState(false);

@@ -30,6 +30,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 import { convertGLToVol, convertVolToGL } from '@/lib/calculations';
 import FormulAlcCalculation from './FormulAlcCalculation';
+import { useHistoryStore } from '@/lib/store/useHistoryStore';
 
 const AlcCalculation = () => {
   const t = useTranslations('Calculators.alkohol');
@@ -52,6 +53,35 @@ const AlcCalculation = () => {
     if (isNaN(numVol)) return '';
     return convertVolToGL(numVol).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }, [inputVOL]);
+
+  // Авто-сохранение в историю
+  const { addRecord } = useHistoryStore();
+  
+  // Для g/l -> % Vol.
+  React.useEffect(() => {
+    if (!resultVOL || resultVOL === '0,00') return;
+    const timer = setTimeout(() => {
+        addRecord({
+            type: 'alkohol',
+            result: resultVOL,
+            unit: '% Vol.'
+        });
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [resultVOL, addRecord]);
+
+  // Для % Vol. -> g/l
+  React.useEffect(() => {
+    if (!resultGL || resultGL === '0,00') return;
+    const timer = setTimeout(() => {
+        addRecord({
+            type: 'alkohol',
+            result: resultGL,
+            unit: 'g/l'
+        });
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [resultGL, addRecord]);
 
   return (
     <div className="min-h-screen bg-background text-foreground p-3 sm:p-8 flex flex-col items-center">

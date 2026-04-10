@@ -20,6 +20,10 @@
         "title": "VinoFlow - Winemaker Tools",
         "description": "Professional calculators for oenology, blending and cellar management.",
         "tool-label": "Tool",
+        "recent-calculations": "Recent Calculations",
+        "empty-history": "No calculation history yet",
+        "clear-history": "Clear History",
+        "last-result": "Last Result:",
         "tools": {
             "sr-rechner": "Sugar Calculator",
             "sr-rechner-desc": "Quick calculation of residual sugar in wine.",

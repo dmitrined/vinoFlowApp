@@ -27,6 +27,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 import { calcSRVerschnitt } from '@/lib/calculations';
 import FormulSRCalc from './FormulSRCalc';
+import { useHistoryStore } from '@/lib/store/useHistoryStore';
 
 const SrCalc: React.FC = () => {
   const t = useTranslations('Calculators.sr-verschnitt');
@@ -82,6 +83,20 @@ const SrCalc: React.FC = () => {
       gesamt_Liter: l + liter_SR
     };
   }, [values]);
+
+  // Авто-сохранение в историю
+  const { addRecord } = useHistoryStore();
+  React.useEffect(() => {
+    if (!results || results.liter_SR <= 0) return;
+    const timer = setTimeout(() => {
+        addRecord({
+            type: 'sr-verschnitt',
+            result: results.liter_SR.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            unit: 'L'
+        });
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [results, addRecord]);
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8 flex flex-col items-center">

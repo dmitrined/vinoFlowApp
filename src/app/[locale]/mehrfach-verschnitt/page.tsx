@@ -29,6 +29,7 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from "framer-motion";
 import { calcMultiBlended } from '@/lib/calculations';
 import FormulMultiCalc from './FormulMultiCalc';
+import { useHistoryStore } from '@/lib/store/useHistoryStore';
 
 interface WineEntry {
   liter: string;
@@ -81,6 +82,30 @@ const MultiWineCalc: React.FC = () => {
       avgAlcohol: calcMultiBlended(entriesAlc)
     };
   }, [wines]);
+
+  // Авто-сохранение в историю (сохраняем оба результата как отдельные записи)
+  const { addRecord } = useHistoryStore();
+  React.useEffect(() => {
+    if (results.totalLiters <= 0) return;
+    
+    const timer = setTimeout(() => {
+        if (results.avgSugar > 0) {
+            addRecord({
+                type: 'mehrfach',
+                result: results.avgSugar.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                unit: 'g/l SR'
+            });
+        }
+        if (results.avgAlcohol > 0) {
+            addRecord({
+                type: 'mehrfach',
+                result: results.avgAlcohol.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                unit: 'g/l Alc'
+            });
+        }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [results.avgSugar, results.avgAlcohol, results.totalLiters, addRecord]);
 
   return (
     <div className="min-h-screen bg-background p-3 sm:p-8 flex flex-col items-center">

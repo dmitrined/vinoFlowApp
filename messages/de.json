@@ -20,6 +20,10 @@
         "title": "VinoFlow - Winzer-Werkzeuge",
         "description": "Professionelle Rechner für Önologie, Verschnitt und Kellerwirtschaft.",
         "tool-label": "Werkzeug",
+        "recent-calculations": "Letzte Berechnungen",
+        "empty-history": "Noch keine Berechnungen",
+        "clear-history": "Verlauf löschen",
+        "last-result": "Letztes Ergebnis:",
         "tools": {
             "sr-rechner": "SR Rechner auf/in",
             "sr-rechner-desc": "Schnelle Berechnung der Süßreserve in Wein.",

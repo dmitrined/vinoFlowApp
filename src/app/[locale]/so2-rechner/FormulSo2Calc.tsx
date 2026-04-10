@@ -12,6 +12,7 @@ import { FlaskConical, Beaker, Wind, Calculator, Info, Eye, EyeOff } from "lucid
 import { calcSO2Addition } from '@/lib/calculations';
 import { motion, AnimatePresence } from "framer-motion";
 import FormulSo2Math from './FormulSo2Math';
+import { useHistoryStore } from '@/lib/store/useHistoryStore';
 
 const FormulSo2Calc: React.FC = () => {
     const t = useTranslations('Calculators.so2-calc');
@@ -40,6 +41,22 @@ const FormulSo2Calc: React.FC = () => {
     }, [volume, deltaSO2, productType, concentration]);
 
     const unit = productType === 'liquid' ? t('unit-ml') : t('unit-g');
+
+    // Авто-сохранение в историю через 2 секунды после изменения результата
+    const { addRecord } = useHistoryStore();
+    React.useEffect(() => {
+        if (result <= 0) return;
+
+        const timer = setTimeout(() => {
+            addRecord({
+                type: 'so2-calc',
+                result: result.toLocaleString(undefined, { maximumFractionDigits: 1 }),
+                unit: unit
+            });
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [result, unit, addRecord]);
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-6 md:px-0 flex flex-col items-center">

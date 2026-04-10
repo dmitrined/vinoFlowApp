@@ -17,6 +17,7 @@ import {
     Droplets,
     Beaker
 } from "lucide-react";
+import { RecentCalculations } from "@/components/layout/RecentCalculations";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -108,6 +109,9 @@ export default function Home() {
                     {t('description')}
                 </p>
             </motion.section>
+
+            {/* Последние расчеты (Dashboard) */}
+            <RecentCalculations />
 
             {/* Grid с инструментами */}
             <motion.div
