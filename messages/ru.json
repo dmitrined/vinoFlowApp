@@ -9,7 +9,8 @@
             "alkohol": "Конвертер спирта",
             "sr-verschnitt": "Купаж сахара",
             "mehrfach": "Множественный купаж",
-            "so2-rechner": "Калькулятор SO2"
+            "so2-rechner": "Калькулятор SO2",
+            "close": "Закрыть"
         },
         "footer": {
             "app-name": "Wine Calculator App",

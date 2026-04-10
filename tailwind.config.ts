@@ -9,22 +9,27 @@ const config = {
   theme: {
     extend: {
       colors: {
-        wine: {
-          50: '#fdf2f4',
-          100: '#fce7e9',
-          200: '#f9d2d9',
-          300: '#f4afbc',
-          400: '#ec8198',
-          500: '#e05374',
-          600: '#cb345a',
-          700: '#aa2548',
-          800: '#8e2140',
-          900: '#791f3a',
-          950: '#440c1b',
+        // Современная палитра "Tech SaaS"
+        brand: {
+          50: '#f5f7ff',
+          100: '#ebf0fe',
+          200: '#dae3fd',
+          300: '#bfc9fb',
+          400: '#9ba4f8',
+          500: '#7e7cf2',
+          600: '#6453e9',
+          700: '#5342d4',
+          800: '#4536ac',
+          900: '#3b3189',
+          950: '#231d51',
         },
+        slate: {
+          950: '#020617', // Почти черный для глубоких фонов
+        }
       },
       backgroundImage: {
-        'luxury-gradient': 'linear-gradient(to right, #791f3a, #440c1b)',
+        'tech-gradient': 'linear-gradient(135deg, #6453e9 0%, #7e7cf2 100%)',
+        'dark-mesh': 'radial-gradient(at 0% 0%, rgba(100, 83, 233, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(126, 124, 242, 0.1) 0px, transparent 50%)',
       }
     },
   },

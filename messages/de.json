@@ -9,7 +9,8 @@
             "alkohol": "Alkohol-Umrechner",
             "sr-verschnitt": "SR Verschnitt",
             "mehrfach": "Mehrfach-Verschnitt",
-            "so2-rechner": "SO2-Rechner"
+            "so2-rechner": "SO2-Rechner",
+            "close": "Schließen"
         },
         "footer": {
             "app-name": "Wine Calculator App",

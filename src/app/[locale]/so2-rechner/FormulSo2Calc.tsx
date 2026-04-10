@@ -1,14 +1,14 @@
 /**
- * НАЗНАЧЕНИЕ: Компонент калькулятора SO2 для расчета добавки серы.
+ * НАЗНАЧЕНИЕ: Компонент калькулятора SO2 в стиле Tech SaaS
  * ЗАВИСИМОСТИ: next-intl, HeroUI, calculations.ts, Lucide-react
- * ОСОБЕННОСТИ: Клиентский компонент, поддержка 3 типов продуктов (Газ, Порошок, Жидкость), i18n.
+ * ОСОБЕННОСТИ: Клиентский компонент, поддержка 3 типов продуктов, i18n, Tech UI дизайн.
  */
 'use client';
 
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Tabs, Tab, Divider, Button } from "@heroui/react";
-import { FlaskConical, Beaker, Wind, Calculator, Info, Eye, EyeOff } from "lucide-react";
+import { FlaskConical, Beaker, Wind, Calculator, Info, Eye, EyeOff, Cpu, Zap } from "lucide-react";
 import { calcSO2Addition } from '@/lib/calculations';
 import { motion, AnimatePresence } from "framer-motion";
 import FormulSo2Math from './FormulSo2Math';
@@ -59,156 +59,152 @@ const FormulSo2Calc: React.FC = () => {
     }, [result, unit, addRecord]);
 
     return (
-        <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-6 md:px-0 flex flex-col items-center">
+        <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 className="w-full"
             >
-                <Card shadow="lg" className="border-none bg-gradient-to-br from-white to-default-50 dark:from-default-50 dark:to-default-100">
-                    <CardHeader className="flex gap-4 p-6 italic hover:not-italic transition-all">
-                        <div className="p-3 bg-wine-500/10 rounded-2xl text-wine-600 dark:text-wine-400">
-                            <Calculator size={32} />
+                <Card className="bento-card border-none shadow-none">
+                    <CardHeader className="flex gap-5 p-8">
+                        <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
+                            <Cpu size={32} />
                         </div>
-                        <div className="flex flex-col">
-                            <h1 className="text-2xl font-black text-default-900">{t('title')}</h1>
-                            <p className="text-sm text-default-500 font-medium">{t('subtitle')}</p>
+                        <div className="flex flex-col text-left">
+                            <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">{t('title')}</h1>
+                            <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">{t('subtitle')}</p>
                         </div>
                     </CardHeader>
-                    <Divider />
-                    <CardBody className="p-6 space-y-8">
-                        {/* Тип продукта */}
-                        <div className="flex flex-col gap-3">
+                    
+                    <CardBody className="p-8 space-y-10">
+                        {/* Тип продукта - Modern Toggle */}
+                        <div className="flex flex-col gap-4">
                             <Tabs
                                 fullWidth
-                                radius="lg"
+                                radius="full"
                                 color="primary"
-                                variant="underlined"
+                                variant="bordered"
                                 selectedKey={productType}
                                 onSelectionChange={handleTypeChange}
                                 classNames={{
-                                    tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
-                                    cursor: "w-full bg-wine-600",
-                                    tab: "max-w-fit px-0 h-12",
-                                    tabContent: "group-data-[selected=true]:text-wine-600 font-black uppercase tracking-widest text-[10px] sm:text-xs"
+                                    tabList: "bg-zinc-100 dark:bg-zinc-800/50 p-1 border-none",
+                                    cursor: "bg-white dark:bg-zinc-700 shadow-sm",
+                                    tab: "h-10",
+                                    tabContent: "group-data-[selected=true]:text-brand-600 font-black uppercase tracking-tighter text-[10px] sm:text-xs"
                                 }}
                             >
                                 <Tab key="gas" title={
                                     <div className="flex items-center gap-2">
-                                        <Wind size={16} className="text-zinc-400 group-data-[selected=true]:text-wine-600" />
+                                        <Wind size={16} />
                                         <span>{t('gas')}</span>
                                     </div>
                                 } />
                                 <Tab key="powder" title={
                                     <div className="flex items-center gap-2">
-                                        <Beaker size={16} className="text-zinc-400 group-data-[selected=true]:text-wine-600" />
+                                        <Beaker size={16} />
                                         <span>{t('powder')}</span>
                                     </div>
                                 } />
                                 <Tab key="liquid" title={
                                     <div className="flex items-center gap-2">
-                                        <FlaskConical size={16} className="text-zinc-400 group-data-[selected=true]:text-wine-600" />
+                                        <FlaskConical size={16} />
                                         <span>{t('liquid')}</span>
                                     </div>
                                 } />
                             </Tabs>
                         </div>
 
-                        {/* Поля ввода */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Поля ввода - Clean Modern Style */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <Input
                                 type="number"
                                 label={t('input-volume')}
-                                placeholder="0"
                                 value={volume}
                                 onValueChange={setVolume}
-                                variant="bordered"
+                                variant="flat"
                                 labelPlacement="outside"
                                 size="lg"
+                                radius="lg"
                                 classNames={{
-                                    inputWrapper: "border-default-200 hover:border-wine-500 focus-within:!border-wine-500 transition-colors",
-                                    label: "font-bold text-default-700"
+                                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                                 }}
                             />
                             <Input
                                 type="number"
                                 label={t('input-delta')}
-                                placeholder="0"
                                 value={deltaSO2}
                                 onValueChange={setDeltaSO2}
-                                variant="bordered"
+                                variant="flat"
                                 labelPlacement="outside"
                                 size="lg"
+                                radius="lg"
                                 classNames={{
-                                    inputWrapper: "border-default-200 hover:border-wine-500 focus-within:!border-wine-500 transition-colors",
-                                    label: "font-bold text-default-700"
+                                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                                 }}
                             />
                             <Input
                                 type="number"
                                 label={productType === 'liquid' ? t('input-liquid-conc') : t('input-powder-conc')}
-                                placeholder="0"
                                 value={concentration}
                                 onValueChange={setConcentration}
-                                variant="bordered"
+                                variant="flat"
                                 labelPlacement="outside"
                                 size="lg"
+                                radius="lg"
                                 isReadOnly={productType !== 'liquid'}
-                                className={productType !== 'liquid' ? "opacity-70 cursor-not-allowed" : ""}
                                 classNames={{
-                                    inputWrapper: `border-default-200 ${productType === 'liquid' ? 'hover:border-wine-500 focus-within:!border-wine-500' : ''} transition-colors`,
-                                    label: "font-bold text-default-700"
+                                    inputWrapper: `bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent ${productType === 'liquid' ? 'group-data-[focus=true]:border-brand-500' : 'opacity-60'} transition-all`,
+                                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
                                 }}
-                                description={productType !== 'liquid' ? commonT('formula.standard') : undefined}
                             />
                         </div>
 
-                        {/* Результат */}
-                        <Card className="bg-wine-600 text-white shadow-wine-500/20 shadow-xl overflow-hidden border-none" radius="lg">
-                            <CardBody className="p-8 relative overflow-hidden">
-                                {/* Фоновая иконка */}
-                                <Calculator size={120} className="absolute -right-8 -bottom-8 text-white/10 rotate-12" />
-
-                                <div className="relative z-10 flex flex-col items-center">
-                                    <span className="text-wine-100 text-sm font-bold uppercase tracking-wider mb-2">
+                        {/* Результат - Hero Action Style */}
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                            <Card className="relative bg-zinc-950 text-white border-none overflow-hidden h-40 flex items-center justify-center rounded-[2.5rem]" shadow="none">
+                                <CardBody className="p-0 flex flex-col items-center justify-center relative z-10">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-3 ml-[0.3em]">
                                         {t('result')}
                                     </span>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-5xl font-black tracking-tighter">
+                                    <div className="flex items-baseline gap-3">
+                                        <span className="text-6xl font-black tracking-tighter text-white">
                                             {result > 0 ? result.toLocaleString(undefined, { maximumFractionDigits: 1 }) : '0'}
                                         </span>
-                                        <span className="text-2xl font-bold text-wine-200 uppercase">
+                                        <span className="text-xl font-black text-brand-500 uppercase italic">
                                             {unit}
                                         </span>
                                     </div>
+                                </CardBody>
+                                {/* Futuristic background elements */}
+                                <div className="absolute top-0 right-0 p-4 opacity-10">
+                                    <Zap size={80} />
                                 </div>
-                            </CardBody>
-                        </Card>
+                                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-600/20 rounded-full blur-3xl"></div>
+                            </Card>
+                        </div>
 
-                        {/* Инфо */}
-                        <Card shadow="sm" className="bg-default-50 border-none">
-                            <CardBody className="p-4 flex flex-row items-center gap-4">
-                                <div className="p-2 bg-primary-500/10 rounded-full text-primary-600">
-                                    <Info size={20} />
-                                </div>
-                                <p className="text-sm text-default-600 font-medium">
-                                    {productType === 'gas' && t('formula-gas')}
-                                    {productType === 'powder' && t('formula-powder')}
-                                    {productType === 'liquid' && t('formula-liquid')}
-                                </p>
-                            </CardBody>
-                        </Card>
+                        {/* Инфо - Minimal SaaS Style */}
+                        <div className="flex items-center gap-4 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50">
+                            <div className="p-2 bg-brand-500/10 rounded-lg text-brand-600">
+                                <Info size={18} />
+                            </div>
+                            <p className="text-xs text-zinc-500 font-bold uppercase tracking-tight text-left">
+                                {productType === 'gas' && t('formula-gas')}
+                                {productType === 'powder' && t('formula-powder')}
+                                {productType === 'liquid' && t('formula-liquid')}
+                            </p>
+                        </div>
                     </CardBody>
 
-                    <Divider />
-
-                    <CardBody className="p-4 flex flex-col items-center">
+                    <CardBody className="px-8 pb-8 pt-0 flex flex-col items-center">
                         <Button
                             variant="light"
-                            color="danger"
                             onPress={() => setShowFormula(!showFormula)}
                             startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
-                            className="font-bold w-full"
+                            className="font-black uppercase tracking-widest text-[10px] text-zinc-400 hover:text-brand-600 w-full h-12 rounded-2xl"
                         >
                             {showFormula ? commonT('formula.hide') : commonT('formula.title')}
                         </Button>
@@ -219,9 +215,9 @@ const FormulSo2Calc: React.FC = () => {
             <AnimatePresence>
                 {showFormula && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
+                        exit={{ opacity: 0, y: -10 }}
                         className="w-full"
                     >
                         <FormulSo2Math />

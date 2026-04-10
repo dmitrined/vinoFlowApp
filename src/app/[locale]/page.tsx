@@ -1,13 +1,12 @@
 /**
- * НАЗНАЧЕНИЕ: Главная страница приложения с выбором инструментов
+ * НАЗНАЧЕНИЕ: Трендовая главная страница в стиле Bento Grid
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, framer-motion
- * ОСОБЕННОСТИ: Адаптивная сетка, i18n, анимация появления компонентов
+ * ОСОБЕННОСТИ: Модульная сетка, SaaS стилистика, улучшенная мобильная эргономика
  */
 
 'use client';
 
-import { Card, CardBody, CardHeader, Image } from "@heroui/react";
-import NextImage from "next/image";
+import { Card, CardBody, Button, Chip } from "@heroui/react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
@@ -15,49 +14,52 @@ import {
     Calculator,
     Layers,
     Droplets,
-    Beaker
+    Beaker,
+    ArrowUpRight,
+    TrendingUp,
+    Zap,
+    Cpu
 } from "lucide-react";
 import { RecentCalculations } from "@/components/layout/RecentCalculations";
 
 export default function Home() {
     const t = useTranslations('HomePage');
 
-    // Список инструментов для быстрого доступа
     const tools = [
         {
             title: t('tools.sr-rechner'),
-            description: t('tools.sr-rechner-desc'),
-            icon: <Calculator className="text-orange-500" size={24} />,
+            icon: <Calculator className="text-blue-500" size={24} />,
             href: "/sr-rechner-auf-in",
-            color: "hover:border-orange-500"
+            className: "md:col-span-2 md:row-span-1",
+            color: "brand"
         },
         {
             title: t('tools.alkohol'),
-            description: t('tools.alkohol-desc'),
             icon: <Beaker className="text-purple-500" size={24} />,
             href: "/alkohol-umrechner",
-            color: "hover:border-purple-500"
-        },
-        {
-            title: t('tools.sr-verschnitt'),
-            description: t('tools.sr-verschnitt-desc'),
-            icon: <Droplets className="text-teal-500" size={24} />,
-            href: "/sr-verschnitt-rechner",
-            color: "hover:border-teal-500"
-        },
-        {
-            title: t('tools.mehrfach'),
-            description: t('tools.mehrfach-desc'),
-            icon: <Layers className="text-indigo-500" size={24} />,
-            href: "/mehrfach-verschnitt",
-            color: "hover:border-indigo-500"
+            className: "md:col-span-1 md:row-span-1",
+            color: "secondary"
         },
         {
             title: t('tools.so2-rechner'),
-            description: t('tools.so2-rechner-desc'),
-            icon: <Droplets className="text-teal-500" size={24} />,
+            icon: <Cpu className="text-emerald-500" size={24} />,
             href: "/so2-rechner",
-            color: "hover:border-teal-500"
+            className: "md:col-span-1 md:row-span-1",
+            color: "success"
+        },
+        {
+            title: t('tools.sr-verschnitt'),
+            icon: <Droplets className="text-cyan-500" size={24} />,
+            href: "/sr-verschnitt-rechner",
+            className: "md:col-span-1 md:row-span-1",
+            color: "primary"
+        },
+        {
+            title: t('tools.mehrfach'),
+            icon: <Layers className="text-orange-500" size={24} />,
+            href: "/mehrfach-verschnitt",
+            className: "md:col-span-1 md:row-span-1",
+            color: "warning"
         },
     ];
 
@@ -65,90 +67,122 @@ export default function Home() {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
+            transition: { staggerChildren: 0.1 }
         }
     };
 
     const itemVariants = {
         hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1
-        }
+        visible: { y: 0, opacity: 1 }
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-12">
-            {/* Основная секция */}
+        <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+            {/* Hero Section - SaaS Style */}
             <motion.section
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center text-center mb-16"
+                className="flex flex-col items-center justify-center text-center mb-20"
             >
-                <div className="bg-wine-500/5 p-2 rounded-full mb-6 relative">
-                    <Image
-                        as={NextImage}
-                        src="/icon-192x192.png"
-                        alt="VinoFlow Logo"
-                        width={80}
-                        height={80}
-                        className="rounded-full shadow-lg"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 4, repeat: Infinity }}
-                        className="absolute inset-0 bg-wine-500/10 rounded-full -z-10 blur-xl"
-                    />
-                </div>
-                <h1 className="text-4xl sm:text-6xl font-black mb-4 tracking-tighter">
-                    Vino<span className="text-wine-600 italic">Flow</span>
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="mb-8"
+                >
+                    <Chip 
+                        variant="flat" 
+                        color="primary" 
+                        startContent={<Zap size={14} />}
+                        className="bg-brand-500/10 text-brand-600 font-black border-none uppercase text-[10px] py-4 px-4 px-6 neon-glow"
+                    >
+                        Precision Enology Platform
+                    </Chip>
+                </motion.div>
+                
+                <h1 className="text-6xl sm:text-8xl font-black mb-6 tracking-tight text-tech-gradient">
+                    Vino<span className="text-zinc-200 dark:text-zinc-800 italic ml-1">Flow</span>
                 </h1>
-                <p className="text-xl text-default-500 max-w-2xl mb-8">
-                    {t('description')}
+                
+                <p className="text-lg md:text-xl text-zinc-500 max-w-2xl font-medium leading-relaxed mb-10 px-4">
+                    Professional-grade tools for winemakers. <br/>
+                    <span className="text-zinc-400 font-normal">Calculations redefined for speed and accuracy.</span>
                 </p>
+
+                <div className="flex gap-4">
+                    <Button 
+                        as={Link}
+                        href="/so2-rechner"
+                        className="bg-tech-primary font-bold px-8 h-12"
+                        radius="full"
+                    >
+                        Get Started
+                    </Button>
+                    <Button 
+                        variant="light"
+                        className="font-bold text-zinc-500"
+                        radius="full"
+                    >
+                        View Documentation
+                    </Button>
+                </div>
             </motion.section>
 
-            {/* Последние расчеты (Dashboard) */}
+            {/* Dashboard / History */}
             <RecentCalculations />
 
-            {/* Grid с инструментами */}
+            {/* Bento Grid Tools */}
+            <div className="mb-8 flex items-center gap-2 px-2">
+                <TrendingUp size={20} className="text-brand-500" />
+                <h2 className="text-2xl font-black tracking-tight uppercase italic opacity-80">Enology Tools</h2>
+            </div>
+
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-5"
             >
                 {tools.map((tool) => (
-                    <motion.div key={tool.title} variants={itemVariants}>
+                    <motion.div key={tool.title} variants={itemVariants} className={tool.className}>
                         <Card
                             isPressable
                             as={Link}
                             href={tool.href}
-                            className={`border-2 border-transparent transition-all duration-300 ${tool.color} glass-card`}
+                            className="bento-card group overflow-hidden border-none h-full"
                         >
-                            <CardHeader className="flex gap-3 p-5">
-                                <div className="p-2 bg-default-100 rounded-lg">
-                                    {tool.icon}
+                            <CardBody className="p-8 flex flex-col justify-between h-full">
+                                <div className="flex justify-between items-start w-full">
+                                    <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-2xl group-hover:bg-brand-600 group-hover:text-white group-hover:rotate-12 transition-all duration-300">
+                                        {tool.icon}
+                                    </div>
+                                    <div className="p-2 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 opacity-20 group-hover:opacity-100 text-brand-600">
+                                        <ArrowUpRight size={24} />
+                                    </div>
                                 </div>
-                                <div className="flex flex-col text-left">
-                                    <p className="text-md font-bold">{tool.title}</p>
-                                    <p className="text-small text-default-500 font-medium italic">{t('tool-label')}</p>
+                                <div className="mt-8 text-left">
+                                    <h3 className="text-xl font-black tracking-tight mb-2 group-hover:text-brand-600 transition-colors">
+                                        {tool.title}
+                                    </h3>
+                                    <p className="text-sm text-zinc-500 font-medium leading-relaxed">
+                                        Professional tool for precise vinification parameters.
+                                    </p>
                                 </div>
-                            </CardHeader>
-                            <Divider />
-                            <CardBody className="p-5">
-                                <p className="text-sm text-default-600 leading-relaxed text-left">
-                                    {tool.description}
-                                </p>
                             </CardBody>
                         </Card>
                     </motion.div>
                 ))}
+
+                {/* Placeholder Bento Card for Pro features or info */}
+                <Card className="bento-card border-none bg-brand-600 text-white md:col-span-1 md:row-span-1 pointer-events-none group">
+                    <CardBody className="p-8 flex flex-col items-center justify-center text-center">
+                        <div className="mb-4 p-4 bg-white/20 rounded-full animate-pulse">
+                            <Zap size={32} />
+                        </div>
+                        <h3 className="text-xl font-black italic mb-2 tracking-tight">Stay Precise</h3>
+                        <p className="text-xs text-white/70 font-bold uppercase tracking-widest">Cellar Management Pro</p>
+                    </CardBody>
+                </Card>
             </motion.div>
         </div>
     );
 }
-
-const Divider = () => <div className="h-px w-full bg-default-100" />;

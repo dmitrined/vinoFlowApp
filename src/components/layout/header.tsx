@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Главное навигационное меню приложения с поддержкой i18n
+ * НАЗНАЧЕНИЕ: Современное навигационное меню "Floating Island"
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl
- * ОСОБЕННОСТИ: Адаптивный дизайн, переключение языков, поддержка активных состояний
+ * ОСОБЕННОСТИ: Минималистичный дизайн, поддержка i18n, эффект плавающего меню
  */
 
 'use client';
@@ -14,9 +14,10 @@ import {
   NavbarItem,
   Button,
   Image,
+  Chip
 } from '@heroui/react';
 import NextImage from 'next/image';
-import { User, Globe } from 'lucide-react';
+import { Globe, Zap } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 
@@ -26,97 +27,61 @@ export const Header = () => {
   const router = useRouter();
   const locale = useLocale();
 
-  const navigationItems = [
-    { label: t('menu.sr-auf-in'), path: '/sr-rechner-auf-in' },
-    { label: t('menu.alkohol'), path: '/alkohol-umrechner' },
-    { label: t('menu.sr-verschnitt'), path: '/sr-verschnitt-rechner' },
-    { label: t('menu.mehrfach'), path: '/mehrfach-verschnitt' },
-    { label: t('menu.so2-rechner'), path: '/so2-rechner' },
-  ];
-
   const handleLanguageChange = (newLocale: string) => {
     router.replace(pathname, { locale: newLocale });
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full">
-      {/* Верхняя панель с автором и выбором языка */}
-      <div className="bg-zinc-100 dark:bg-zinc-900 text-[10px] sm:text-tiny py-2 px-4 border-b border-divider">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Image
-              as={NextImage}
-              src="/icon-192x192.png"
-              alt="Logo"
-              width={16}
-              height={16}
-              className="rounded-sm"
-            />
-            <span className="text-wine-700 font-bold mr-1 sm:mr-2">{t('developer')}</span>
-          </div>
-
-          <div className="flex gap-3 items-center">
-            <Globe size={12} className="text-zinc-400" />
-            <div className="flex gap-2">
-              {['en', 'de', 'ru'].map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => handleLanguageChange(lang)}
-                  className={`uppercase font-black text-[10px] tracking-widest transition-all hover:text-wine-500 ${locale === lang ? 'text-wine-600 scale-110' : 'text-zinc-400'
-                    }`}
-                >
-                  {lang}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div className="w-full pt-4 px-4 sticky top-0 z-50 pointer-events-none">
       <Navbar
         maxWidth="xl"
-        isBordered
-        className="h-16"
+        className="max-w-7xl mx-auto glass-modern rounded-[2rem] h-16 neon-glow pointer-events-auto border-none"
+        position="static"
         classNames={{
-          item: [
-            "flex", "relative", "h-full", "items-center",
-            "data-[active=true]:after:content-['']",
-            "data-[active=true]:after:absolute",
-            "data-[active=true]:after:bottom-0",
-            "data-[active=true]:after:left-0",
-            "data-[active=true]:after:right-0",
-            "data-[active=true]:after:h-[3px]",
-            "data-[active=true]:after:rounded-t-[2px]",
-            "data-[active=true]:after:bg-wine-600",
-          ],
+            wrapper: "px-6",
         }}
       >
         <NavbarBrand>
-          <Link href="/" className="flex items-center gap-2 group">
-            <p className="font-serif font-black text-xl sm:text-2xl tracking-tighter italic transition-transform group-hover:scale-105">
-              Vino<span className="text-wine-600 not-italic font-sans uppercase ml-1">Flow</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="bg-brand-600 p-1.5 rounded-xl shadow-lg group-hover:rotate-12 transition-transform">
+                <NextImage src="/icon-192x192.png" alt="Logo" width={24} height={24} className="invert brightness-200" />
+            </div>
+            <p className="font-black text-2xl tracking-tighter text-tech-gradient">
+              Vino<span className="text-zinc-400 dark:text-zinc-500 ml-0.5">Flow</span>
             </p>
           </Link>
+          <Chip size="sm" variant="flat" className="ml-3 hidden sm:flex bg-brand-500/10 text-brand-600 font-bold border-none uppercase text-[10px]">
+            Pro
+          </Chip>
         </NavbarBrand>
 
-        {/* Десктопное меню */}
         <NavbarContent className="hidden lg:flex gap-8" justify="center">
-          {navigationItems.map((item) => (
-            <NavbarItem key={item.path} isActive={pathname === item.path}>
-              <Link
-                href={item.path}
-                className={`text-sm font-bold transition-colors ${pathname === item.path ? "text-wine-600" : "text-foreground hover:text-wine-600"
-                  }`}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
+            {/* Навигация в SaaS стиле */}
+            <Link href="/" className={`text-sm font-bold ${pathname === '/' ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
+                Dashboard
+            </Link>
+            <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
+            <Link href="/so2-rechner" className={`text-sm font-bold ${pathname.includes('so2') ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
+                Tools
+            </Link>
         </NavbarContent>
 
         <NavbarContent justify="end">
-          <Button isIconOnly variant="flat" radius="full" size="sm" className="bg-wine-50 text-wine-600">
-            <User size={18} />
+          <div className="flex bg-zinc-100 dark:bg-zinc-800/50 p-1 rounded-full border border-zinc-200/50 dark:border-zinc-700/50">
+            {['en', 'de', 'ru'].map((lang) => (
+              <button
+                key={lang}
+                onClick={() => handleLanguageChange(lang)}
+                className={`w-8 h-8 rounded-full text-[10px] font-black uppercase transition-all ${
+                    locale === lang ? 'bg-white dark:bg-zinc-700 text-brand-600 shadow-sm scale-100' : 'text-zinc-400 opacity-60 hover:opacity-100'
+                }`}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
+          <Button isIconOnly variant="flat" radius="full" size="sm" className="hidden sm:flex bg-brand-500 text-white">
+            <Zap size={16} />
           </Button>
         </NavbarContent>
       </Navbar>
