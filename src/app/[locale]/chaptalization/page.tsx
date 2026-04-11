@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const t = await getTranslations({ locale, namespace: 'Calculators.chaptalization' });
 
     return {
-        title: `${t('title')} | VinoFlow`,
-        description: t('subtitle'),
+        title: t('seo-title'),
+        description: t('seo-description'),
     };
 }
 

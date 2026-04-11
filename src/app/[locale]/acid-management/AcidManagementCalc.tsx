@@ -7,6 +7,7 @@ import { Droplet, Info, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
+import { WINE_CONSTANTS, calcAcidManagement } from '@/lib/calculations';
 
 export default function AcidManagementCalc() {
     const t = useTranslations('Calculators.acid-management');
@@ -32,14 +33,15 @@ export default function AcidManagementCalc() {
     }, [mode]);
 
     const activeCoeff = useMemo(() => {
+        const c = WINE_CONSTANTS.ACID_MANAGEMENT.COEFFICIENTS;
         if (mode === 'acidification') {
-            if (agent === 'tartaric') return 1.0;
-            if (agent === 'malic') return 1.12;
-            if (agent === 'lactic') return 1.5;
-            if (agent === 'citric') return 0.85;
+            if (agent === 'tartaric') return c.tartaric;
+            if (agent === 'malic') return c.malic;
+            if (agent === 'lactic') return c.lactic;
+            if (agent === 'citric') return c.citric;
         } else {
-            if (agent === 'potassium') return 0.9;
-            if (agent === 'calcium') return 0.67;
+            if (agent === 'potassium') return c.potassium;
+            if (agent === 'calcium') return c.calcium;
         }
         return 1.0;
     }, [mode, agent]);
@@ -49,12 +51,8 @@ export default function AcidManagementCalc() {
         const c = parseFloat(currentTa) || 0;
         const target = parseFloat(targetTa) || 0;
         
-        if (v <= 0 || c <= 0 || target <= 0) return 0;
-        
-        const diff = Math.abs(target - c);
-        
-        return v * diff * activeCoeff;
-    }, [volume, currentTa, targetTa, activeCoeff]);
+        return calcAcidManagement(v, c, target, agent as any);
+    }, [volume, currentTa, targetTa, agent]);
 
     const formattedResult = result > 0 ? result.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0';
 

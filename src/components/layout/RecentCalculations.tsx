@@ -54,14 +54,9 @@ const getTitleKey = (type: CalculationType) => {
 
 export const RecentCalculations: React.FC = () => {
     const t = useTranslations('HomePage');
-    const { records, clearHistory, deleteRecord } = useHistoryStore();
-    const [mounted, setMounted] = useState(false);
+    const { records, clearHistory, deleteRecord, _hasHydrated } = useHistoryStore();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted || records.length === 0) {
+    if (!_hasHydrated || records.length === 0) {
         return null;
     }
 

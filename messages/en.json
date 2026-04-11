@@ -84,6 +84,8 @@
         "sr-rechner": {
             "title": "SR Calculator",
             "subtitle": "Precise calculation of sugar reserve for wine technologists",
+            "seo-title": "Wine Sugar Reserve (SR) Calculator | VinoFlow",
+            "seo-description": "Determine the required volume of sweet reserve for your wine based on desired residual sugar percentages.",
             "input-sr": "% Sugar (SR)",
             "input-liter": "Liter Wine (Basis)",
             "auf": "SR % on",
@@ -99,6 +101,8 @@
         "alkohol": {
             "title": "Alcohol Converter",
             "subtitle": "Conversion between g/l and % vol.",
+            "seo-title": "Wine Alcohol Converter (g/L to % Vol) | VinoFlow",
+            "seo-description": "Instant conversion between alcohol by volume (%) and grams per liter for enological analysis and cellar management.",
             "input-gl": "Grams per Liter",
             "input-vol": "Percent Volume",
             "result-gl": "Result: Grams per Liter",
@@ -110,6 +114,8 @@
         "sr-verschnitt": {
             "title": "Sugar Blending",
             "subtitle": "Precise calculation of blending quantity",
+            "seo-title": "Targeted Wine Sugar Blending Calculator | VinoFlow",
+            "seo-description": "Determine the exact amount of high-sugar must needed to reach your target residual sugar level.",
             "total-volume": "Total Volume",
             "input-sr-sugar": "Sugar in additive (g/l)",
             "input-wein-sugar": "Sugar in wine (g/l)",
@@ -128,6 +134,8 @@
         "mehrfach": {
             "title": "Multiple Blending",
             "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
+            "seo-title": "Wine Blending & Assemblage Calculator | VinoFlow",
+            "seo-description": "Optimize your wine blends with weighted average calculations for sugar and alcohol across multiple batches.",
             "add-wine": "Add another batch",
             "total-vol": "Total volume",
             "avg-sugar": "Ø Sugar content",
@@ -150,6 +158,8 @@
         "so2-calc": {
             "title": "SO2 Calculator",
             "subtitle": "Calculation of required SO2 amount for sulfitation",
+            "seo-title": "Wine SO2 Addition Calculator | VinoFlow",
+            "seo-description": "Calculate sulfur (SO2) additions using gas, potassium metabisulfite powder, or liquid solutions for wine preservation.",
             "input-volume": "Wine Volume (l)",
             "input-delta": "SO2 Addition (mg/l)",
             "input-powder-conc": "Concentration (%)",
@@ -167,6 +177,8 @@
         "acid-management": {
             "title": "Acid Management",
             "subtitle": "Calculate additions for acidification or deacidification",
+            "seo-title": "Wine Acid Correction Calculator | VinoFlow",
+            "seo-description": "Calculate precise additions of tartaric, malic, or lactic acid, and potassium bicarbonate for professional wine balancing.",
             "input-volume": "Volume (L)",
             "input-current-ta": "Current TA (g/L)",
             "input-target-ta": "Target TA (g/L)",
@@ -188,6 +200,8 @@
         "chaptalization": {
             "title": "Chaptalization",
             "subtitle": "Calculate sugar needed to increase potential alcohol",
+            "seo-title": "Chaptalization Calculator & Enrichment | VinoFlow",
+            "seo-description": "Calculate precise sugar additions to increase potential alcohol in wine using standard Dujardin-Salleron formulas.",
             "input-volume": "Current Volume (L)",
             "input-current-abv": "Current ABV (%)",
             "input-target-abv": "Target ABV (%)",

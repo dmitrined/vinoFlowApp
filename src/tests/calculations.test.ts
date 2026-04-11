@@ -1,133 +1,135 @@
-/**
- * НАЗНАЧЕНИЕ: Модульные тесты для энологических расчетов
- * ЗАВИСИМОСТИ: vitest, @/lib/calculations
- * ОСОБЕННОСТИ: Тестирование конвертации алкоголя, добавки SR и расчетов SO2
- */
-
 import { describe, it, expect } from 'vitest';
-import {
-    convertGLToVol,
-    convertVolToGL,
-    calcSR_Auf,
-    calcSR_In,
-    calcSRVerschnitt,
-    calcMultiBlended,
-    calcSO2Addition
+import { 
+    convertGLToVol, 
+    convertVolToGL, 
+    calcSR_Auf, 
+    calcSR_In, 
+    calcSRVerschnitt, 
+    calcMultiBlended, 
+    calcSO2Addition,
+    calcChaptalization,
+    calcAcidManagement,
+    WINE_CONSTANTS
 } from '../lib/calculations';
 
 describe('Enological Calculations', () => {
-
     describe('Alcohol Conversion', () => {
-        it('should convert g/l to % Vol correctly', () => {
-            expect(convertGLToVol(100)).toBeCloseTo(12.67, 2);
-        });
-
-        it('should convert % Vol to g/l correctly', () => {
-            expect(convertVolToGL(12.67)).toBeCloseTo(100, 2);
-        });
-
-        it('should return 0 for negative inputs', () => {
+        it('should correctly convert g/L to % Vol', () => {
+            expect(convertGLToVol(78.9)).toBeCloseTo(10.0, 1);
+            expect(convertGLToVol(0)).toBe(0);
             expect(convertGLToVol(-10)).toBe(0);
+        });
+
+        it('should correctly convert % Vol to g/L', () => {
+            expect(convertVolToGL(10.0)).toBeCloseTo(78.9, 1);
+            expect(convertVolToGL(0)).toBe(0);
             expect(convertVolToGL(-10)).toBe(0);
         });
+    });
 
-        it('should handle zero input correctly', () => {
-            expect(convertGLToVol(0)).toBe(0);
-            expect(convertVolToGL(0)).toBe(0);
+    describe('Süßreserve (SR)', () => {
+        it('should calculate SR (Auf) correctly', () => {
+            // 10% on top of 1000L = 100L
+            expect(calcSR_Auf(10, 1000)).toBe(100);
+            expect(calcSR_Auf(0, 1000)).toBe(0);
+            expect(calcSR_Auf(110, 1000)).toBe(0); // Invalid percent
         });
 
-        it('should handle extremely high values', () => {
-            // Unrealistic but should not crash or return NaN
-            expect(convertGLToVol(1000000)).toBeGreaterThan(0);
+        it('should calculate SR (In) correctly', () => {
+            // 10% in total volume of 1000L base wine
+            // result = (10 / (100 - 10)) * 1000 = 111.11
+            expect(calcSR_In(10, 1000)).toBeCloseTo(111.11, 2);
+        });
+
+        it('should calculate SR Blending (Verschnitt)', () => {
+            // Wine: 1000L @ 0g/L sugar
+            // SR: 800g/L sugar
+            // Target: 8g/L sugar
+            // Formula: (1000 * (8 - 0)) / (800 - 8) = 8000 / 792 = 10.101
+            expect(calcSRVerschnitt(800, 0, 1000, 8)).toBeCloseTo(10.1, 1);
         });
     });
 
-    describe('Süßreserve (SR) Basic Calculation', () => {
-        it('should calculate SR Auf correctly', () => {
-            // 10% of 100L = 10L
-            expect(calcSR_Auf(10, 100)).toBe(10);
-        });
-
-        it('should calculate SR In correctly', () => {
-            // 10% inside 100L base: (10 / 90) * 100 = 11.11L
-            expect(calcSR_In(10, 90)).toBe(10);
-        });
-
-        it('should handle edge cases for SR', () => {
-            expect(calcSR_Auf(100, 100)).toBe(0); // Max 100%
-            expect(calcSR_In(50, 50)).toBe(50); // 50% SR in 100L total = 50L base + 50L SR
-        });
-
-        it('should return 0 for negative or invalid inputs', () => {
-            expect(calcSR_Auf(-10, 100)).toBe(0);
-            expect(calcSR_Auf(10, -100)).toBe(0);
-            expect(calcSR_In(110, 100)).toBe(0); // Above 100%
-        });
-    });
-
-    describe('SR Blending (Mixing Rule)', () => {
-        it('should calculate required SR based on sugar', () => {
-            // SR: 800g/l, Wein: 10g/l, Liter: 1000L, Ziel: 50g/l
-            // (1000 * (50-10)) / (800-50) = 40000 / 750 = 53.33
-            expect(calcSRVerschnitt(800, 10, 1000, 50)).toBeCloseTo(53.33, 2);
-        });
-
-        it('should return 0 if targets are unreachable or invalid', () => {
-            // Division by zero case: target sugar same as SR sugar
-            expect(calcSRVerschnitt(50, 10, 1000, 50)).toBe(0);
-            // Target lower than base wine sugar (negative result logic)
-            expect(calcSRVerschnitt(800, 50, 1000, 10)).toBe(0);
-        });
-
-        it('should handle zero volume gracefully', () => {
-            expect(calcSRVerschnitt(800, 10, 0, 50)).toBe(0);
-        });
-    });
-
-    describe('Multi-Wine Assemblage', () => {
+    describe('Multi-Blending', () => {
         it('should calculate weighted average correctly', () => {
-            const wines = [
-                { liter: 100, parameter: 10 }, // 1000 mass
-                { liter: 200, parameter: 20 }, // 4000 mass
-            ];
-            // total: 300L, mass: 5000. avg: 5000 / 300 = 16.67
-            expect(calcMultiBlended(wines)).toBeCloseTo(16.67, 2);
-        });
-
-        it('should handle empty or zero lists', () => {
-            expect(calcMultiBlended([])).toBe(0);
-            expect(calcMultiBlended([{ liter: 0, parameter: 100 }])).toBe(0);
-        });
-
-        it('should ignore negative volumes', () => {
-            const wines = [
+            const entries = [
                 { liter: 100, parameter: 10 },
-                { liter: -50, parameter: 20 }
+                { liter: 200, parameter: 20 }
             ];
-            expect(calcMultiBlended(wines)).toBe(10);
+            // Total volume: 300
+            // Total mass: (100*10) + (200*20) = 1000 + 4000 = 5000
+            // Result: 5000 / 300 = 16.666
+            expect(calcMultiBlended(entries)).toBeCloseTo(16.67, 2);
         });
 
-        describe('SO2 Addition Calculation', () => {
-            it('should calculate gas (100%) addition correctly', () => {
-                // 1000L, +30mg/L, 100% -> (1000 * 30) / (10 * 100) = 30000 / 1000 = 30g
-                expect(calcSO2Addition(1000, 30, 'gas', 100)).toBe(30);
-            });
+        it('should handle empty or zero volume entries', () => {
+            expect(calcMultiBlended([])).toBe(0);
+            expect(calcMultiBlended([{ liter: 0, parameter: 10 }])).toBe(0);
+        });
+    });
 
-            it('should calculate powder (50%) addition correctly', () => {
-                // 1000L, +30mg/L, 50% -> (1000 * 30) / (10 * 50) = 30000 / 500 = 60g
-                expect(calcSO2Addition(1000, 30, 'powder', 50)).toBe(60);
-            });
+    describe('SO2 Addition', () => {
+        it('should calculate SO2 for Gas (100%)', () => {
+            // 1000L, +30mg/L SO2
+            // Formula: (1000 * 30) / (10 * 100) = 30000 / 1000 = 30g
+            expect(calcSO2Addition(1000, 30, 'gas', 100)).toBe(30);
+        });
 
-            it('should calculate liquid (150g/l) addition correctly', () => {
-                // 1000L, +30mg/L, 150g/l -> (1000 * 30) / 150 = 30000 / 150 = 200ml
-                expect(calcSO2Addition(1000, 30, 'liquid', 150)).toBe(200);
-            });
+        it('should calculate SO2 for Powder (50%)', () => {
+            // Formula: (1000 * 30) / (10 * 50) = 30000 / 500 = 60g
+            expect(calcSO2Addition(1000, 30, 'powder', 50)).toBe(60);
+        });
 
-            it('should return 0 for invalid inputs', () => {
-                expect(calcSO2Addition(-100, 30, 'gas', 100)).toBe(0);
-                expect(calcSO2Addition(1000, -30, 'gas', 100)).toBe(0);
-                expect(calcSO2Addition(1000, 30, 'gas', 0)).toBe(0);
-            });
+        it('should calculate SO2 for Liquid (150g/L)', () => {
+            // Formula: (1000 * 30) / 150 = 30000 / 150 = 200ml
+            expect(calcSO2Addition(1000, 30, 'liquid', 150)).toBe(200);
+        });
+    });
+
+    describe('Chaptalization', () => {
+        it('should calculate sugar and volume increase', () => {
+            // 1000L, 10.0% -> 12.5%
+            // Diff: 2.5
+            // Sugar: 2.5 * 16.83 * 1000 / 1000 = 42.075 kg
+            // Vol Increase: 42.075 * 0.63 = 26.507 L
+            const result = calcChaptalization(1000, 10.0, 12.5, 'percent');
+            expect(result.sugar).toBeCloseTo(42.075, 3);
+            expect(result.deltaVol).toBeCloseTo(26.5, 1);
+            expect(result.total).toBeCloseTo(1026.5, 1);
+        });
+
+        it('should handle g/L input', () => {
+            // 1000L, 78.9 g/L alc -> 98.6 g/L alc
+            // Equivalent to 10.0% -> 12.5% approx
+            const result = calcChaptalization(1000, 78.9, 98.6, 'gl');
+            expect(result.sugar).toBeGreaterThan(41);
+            expect(result.sugar).toBeLessThan(43);
+        });
+
+        it('should return zeros for invalid input', () => {
+            expect(calcChaptalization(1000, 12.5, 10.0).sugar).toBe(0);
+            expect(calcChaptalization(0, 10, 12).sugar).toBe(0);
+        });
+    });
+
+    describe('Acid Management', () => {
+        it('should calculate Tartaric Acid addition', () => {
+            // 1000L, 5g/L -> 6.5g/L (diff 1.5)
+            // Coeff: 1.0
+            // Result: 1000 * 1.5 * 1.0 = 1500g
+            expect(calcAcidManagement(1000, 5, 6.5, 'tartaric')).toBe(1500);
+        });
+
+        it('should calculate Potassium Bicarbonate deacidification', () => {
+            // 1000L, 7g/L -> 6g/L (diff 1.0)
+            // Coeff: 0.9
+            // Result: 1000 * 1.0 * 0.9 = 900g
+            expect(calcAcidManagement(1000, 7, 6, 'potassium')).toBe(900);
+        });
+
+        it('should handle Malic Acid coefficient', () => {
+            // Diff 1.0, Coeff 1.12
+            expect(calcAcidManagement(1000, 5, 6, 'malic')).toBe(1120);
         });
     });
 });

@@ -84,6 +84,8 @@
         "sr-rechner": {
             "title": "SR Rechner",
             "subtitle": "Präzise Berechnung der Süßreserve für Weintechnologen",
+            "seo-title": "Süßreserve (SR) Rechner für Wein | VinoFlow",
+            "seo-description": "Bestimmen Sie das benötigte Volumen an Süßreserve basierend auf den gewünschten Restzucker-Prozentsätzen.",
             "input-sr": "% Süßreserve",
             "input-liter": "Liter Wein (Basis)",
             "auf": "SR % auf",
@@ -99,6 +101,8 @@
         "alkohol": {
             "title": "Alkohol-Umrechner",
             "subtitle": "Konvertierung zwischen g/l и % Vol.",
+            "seo-title": "Alkohol-Umrechner Wein (g/L in % Vol) | VinoFlow",
+            "seo-description": "Schnelle Umrechnung zwischen Volumenprozent и Gramm pro Liter für die önologische Analyse und Kellerwirtschaft.",
             "input-gl": "Gramm pro Liter",
             "input-vol": "Prozent Volumen",
             "result-gl": "Ergebnis: Gramm pro Liter",
@@ -110,6 +114,8 @@
         "sr-verschnitt": {
             "title": "SR-Verschnitt",
             "subtitle": "Präzise Berechnung der Verschnittmenge",
+            "seo-title": "Ziel-Zucker Verschnitt Rechner | VinoFlow",
+            "seo-description": "Ermitteln Sie die exakte Menge an Süßreserve, um Ihren Ziel-Restzuckergehalt präzise zu erreichen.",
             "total-volume": "Gesamtvolumen",
             "input-sr-sugar": "Zuckergehalt SR (g/l)",
             "input-wein-sugar": "Zuckergehalt Wein (g/l)",
@@ -128,6 +134,8 @@
         "mehrfach": {
             "title": "Multi-Verschnitt",
             "subtitle": "Kalkulation von Zucker и Alkohol für beliebig viele Weinpartien",
+            "seo-title": "Wein-Verschnitt & Assemblage Rechner | VinoFlow",
+            "seo-description": "Optimieren Sie Ihre Cuvées mit gewichteten Durchschnittsberechnungen für Zucker и Alkohol über mehrere Partien.",
             "add-wine": "Weitere Partie hinzufügen",
             "total-vol": "Gesamtvolumen",
             "avg-sugar": "Ø Zuckergehalt",
@@ -150,6 +158,8 @@
         "so2-calc": {
             "title": "SO2-Rechner",
             "subtitle": "Berechnung der benötigten SO2-Menge für die Schwefelung",
+            "seo-title": "SO2-Rechner für die Schwefelung | VinoFlow",
+            "seo-description": "Berechnen Sie die Schwefelerfordernis mit Gas, Kaliumdisulfit-Pulver oder flüssigen Lösungen zur Weinkonservierung.",
             "input-volume": "Wein-Volumen (l)",
             "input-delta": "SO2-Gabe (mg/l)",
             "input-powder-conc": "Konzentration (%)",
@@ -167,6 +177,8 @@
         "acid-management": {
             "title": "Säuremanagement",
             "subtitle": "Berechnung von Zusätzen für Aufsäuerung oder Entsäuerung",
+            "seo-title": "Säuremanagement Rechner für Wein | VinoFlow",
+            "seo-description": "Berechnen Sie präzise Zugaben von Weinsäure, Äpfelsäure oder Kaliumbicarbonat für ein ausgewogenes Säureprofil.",
             "input-volume": "Volumen (L)",
             "input-current-ta": "Aktuelle Gesamtsäure (g/L)",
             "input-target-ta": "Ziel Gesamtsäure (g/L)",
@@ -188,6 +200,8 @@
         "chaptalization": {
             "title": "Chaptalisation",
             "subtitle": "Berechnung des benötigten Zuckers",
+            "seo-title": "Chaptalisation Rechner & Anreicherung | VinoFlow",
+            "seo-description": "Berechnen Sie die Zuckerzugabe zur Erhöhung des potenziellen Alkoholgehalts nach gängigen önologischen Standards.",
             "input-volume": "Aktuelles Volumen (L)",
             "input-current-abv": "Aktueller Alkoholgehalt (%)",
             "input-target-abv": "Ziel Alkoholgehalt (%)",

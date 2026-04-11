@@ -10,6 +10,22 @@ export const WINE_CONSTANTS = {
         gas: 100,
         powder: 50,
         liquid: 150
+    },
+    CHAPTALIZATION: {
+        SUGAR_PER_ABV: 16.83,
+        VOL_INCREASE_PER_KG: 0.63
+    },
+    ACID_MANAGEMENT: {
+        COEFFICIENTS: {
+            // Acidification
+            tartaric: 1.0,
+            malic: 1.12,
+            lactic: 1.5,
+            citric: 0.85,
+            // Deacidification
+            potassium: 0.9,
+            calcium: 0.67
+        }
     }
 } as const;
 
@@ -121,4 +137,60 @@ export const calcSO2Addition = (
     // M(g) = M(mg) / 1000
     // M_product(g) = M(g) / (concentration / 100)
     return (volume * deltaSO2) / (10 * concentration);
+};
+
+/**
+ * Расчет шаптализации (добавление сахара)
+ * @param volume Объем вина (л)
+ * @param currentAbv Текущий алкоголь (% об. или г/л в зависимости от unit)
+ * @param targetAbv Целевой алкоголь (% об. или г/л в зависимости от unit)
+ * @param unit Единица измерения ('percent' | 'gl')
+ */
+export const calcChaptalization = (
+    volume: number,
+    currentAbv: number,
+    targetAbv: number,
+    unit: 'percent' | 'gl' = 'percent'
+) => {
+    if (isNaN(volume) || isNaN(currentAbv) || isNaN(targetAbv) || volume <= 0 || currentAbv < 0 || targetAbv <= currentAbv) {
+        return { sugar: 0, deltaVol: 0, total: volume };
+    }
+
+    let c = currentAbv;
+    let target = targetAbv;
+
+    if (unit === 'gl') {
+        c = convertGLToVol(c);
+        target = convertGLToVol(target);
+    }
+
+    const diff = target - c;
+    const sugarNeeded = (diff * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV * volume) / 1000;
+    const volumeIncrease = sugarNeeded * WINE_CONSTANTS.CHAPTALIZATION.VOL_INCREASE_PER_KG;
+    const totalVolume = volume + volumeIncrease;
+
+    return { sugar: sugarNeeded, deltaVol: volumeIncrease, total: totalVolume };
+};
+
+/**
+ * Расчет добавки для управления кислотностью
+ * @param volume Объем вина (л)
+ * @param currentTa Текущая кислотность (г/л)
+ * @param targetTa Целевая кислотность (г/л)
+ * @param agent Агент (кислота или основание)
+ */
+export const calcAcidManagement = (
+    volume: number,
+    currentTa: number,
+    targetTa: number,
+    agent: keyof typeof WINE_CONSTANTS.ACID_MANAGEMENT.COEFFICIENTS
+): number => {
+    if (isNaN(volume) || isNaN(currentTa) || isNaN(targetTa) || volume <= 0 || currentTa < 0 || targetTa < 0) {
+        return 0;
+    }
+
+    const coeff = WINE_CONSTANTS.ACID_MANAGEMENT.COEFFICIENTS[agent] || 1.0;
+    const diff = Math.abs(targetTa - currentTa);
+    
+    return volume * diff * coeff;
 };

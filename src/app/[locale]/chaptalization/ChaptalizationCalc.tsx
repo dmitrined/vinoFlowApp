@@ -7,7 +7,7 @@ import { Beaker, Zap, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
-import { WINE_CONSTANTS } from '@/lib/calculations';
+import { WINE_CONSTANTS, calcChaptalization } from '@/lib/calculations';
 
 export default function ChaptalizationCalc() {
     const t = useTranslations('Calculators.chaptalization');
@@ -46,24 +46,10 @@ export default function ChaptalizationCalc() {
 
     const results = useMemo(() => {
         const v = parseFloat(volume) || 0;
-        let c = parseFloat(currentAbv) || 0;
-        let target = parseFloat(targetAbv) || 0;
+        const c = parseFloat(currentAbv) || 0;
+        const target = parseFloat(targetAbv) || 0;
         
-        if (v <= 0 || c <= 0 || target <= 0 || target <= c) {
-            return { sugar: 0, deltaVol: 0, total: v };
-        }
-        
-        if (unit === 'gl') {
-            c = c * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-            target = target * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-        }
-        
-        const diff = target - c;
-        const sugarNeeded = (diff * 16.83 * v) / 1000;
-        const volumeIncrease = sugarNeeded * 0.63;
-        const totalVolume = v + volumeIncrease;
-        
-        return { sugar: sugarNeeded, deltaVol: volumeIncrease, total: totalVolume };
+        return calcChaptalization(v, c, target, unit);
     }, [volume, currentAbv, targetAbv, unit]);
 
     const formattedResult = results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0';
