@@ -18,7 +18,9 @@ import {
     ArrowUpRight,
     TrendingUp,
     Zap,
-    Cpu
+    Cpu,
+    FlaskConical,
+    Activity
 } from "lucide-react";
 import { RecentCalculations } from "@/components/layout/RecentCalculations";
 
@@ -61,6 +63,20 @@ export default function Home() {
             href: "/mehrfach-verschnitt",
             className: "md:col-span-1 md:row-span-1",
         },
+        {
+            title: t('tools.acid-management'),
+            desc: t('tools.acid-management-desc'),
+            icon: <FlaskConical className="text-rose-500" size={24} />,
+            href: "/acid-management",
+            className: "md:col-span-1 md:row-span-1",
+        },
+        {
+            title: t('tools.chaptalization'),
+            desc: t('tools.chaptalization-desc'),
+            icon: <Activity className="text-amber-500" size={24} />,
+            href: "/chaptalization",
+            className: "md:col-span-1 md:row-span-1",
+        },
     ];
 
     const containerVariants = {
@@ -100,7 +116,7 @@ export default function Home() {
                 </motion.div>
                 
                 <h1 className="text-6xl sm:text-8xl font-black mb-6 tracking-tight text-tech-gradient">
-                    Vino<span className="text-zinc-200 dark:text-zinc-800 italic ml-1">Flow</span>
+                    Vino<span className="text-zinc-800 dark:text-zinc-200 italic ml-1">Flow</span>
                 </h1>
                 
                 <p className="text-lg md:text-xl text-zinc-500 max-w-2xl font-medium leading-relaxed mb-10 px-4">

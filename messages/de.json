@@ -43,7 +43,11 @@
             "mehrfach": "Mehrfach-Verschnitt",
             "mehrfach-desc": "Assemblage von beliebig vielen Weinpartien.",
             "so2-rechner": "SO2-Rechner",
-            "so2-rechner-desc": "Berechnung der Schwefelgabe (SO2) für den Wein."
+            "so2-rechner-desc": "Berechnung der Schwefelgabe (SO2) für den Wein.",
+            "acid-management": "Säuremanagement",
+            "acid-management-desc": "Berechnungen zur Aufsäuerung und Entsäuerung.",
+            "chaptalization": "Chaptalisation",
+            "chaptalization-desc": "Berechnung der Zuckerzugabe zur Erhöhung des Alkoholgehalts."
         }
     },
     "Calculators": {
@@ -159,6 +163,38 @@
             "formula-gas": "Reines SO2-Gas (100% Gehalt)",
             "formula-powder": "Kaliumdisulfit (Pulver ~50% SO2)",
             "formula-liquid": "Schweflige Säure (Flüssiglösung)"
+        },
+        "acid-management": {
+            "title": "Säuremanagement",
+            "subtitle": "Berechnung von Zusätzen für Aufsäuerung oder Entsäuerung",
+            "input-volume": "Volumen (L)",
+            "input-current-ta": "Aktuelle Gesamtsäure (g/L)",
+            "input-target-ta": "Ziel Gesamtsäure (g/L)",
+            "acidification": "Aufsäuerung",
+            "deacidification": "Entsäuerung",
+            "acid-tartaric": "Weinsäure",
+            "acid-malic": "Äpfelsäure",
+            "acid-lactic": "Milchsäure (80%)",
+            "acid-citric": "Zitronensäure",
+            "base-potassium": "Kaliumbicarbonat",
+            "base-calcium": "Calciumcarbonat",
+            "alert-trial": "Führen Sie immer zuerst einen Vorversuch durch. Die Chemie im Wein kann unvorhersehbar sein.",
+            "warn-tartaric": "Weinsteinrisiko! Frühestens 6 Wochen nach der Zugabe in Flaschen abfüllen.",
+            "warn-citric": "Gesetzliches Limit: maximal 1 g/L. Risiko von flüchtiger Säure bei BSA.",
+            "result-addition": "Erforderlicher Zusatz (Gramm)",
+            "mode": "Modus:",
+            "agent": "Mittel:"
+        },
+        "chaptalization": {
+            "title": "Chaptalisation",
+            "subtitle": "Berechnung des benötigten Zuckers",
+            "input-volume": "Aktuelles Volumen (L)",
+            "input-current-abv": "Aktueller Alkoholgehalt (%)",
+            "input-target-abv": "Ziel Alkoholgehalt (%)",
+            "result-sugar": "Benötigter Zucker (kg)",
+            "result-volume-increase": "Volumenzunahme (L)",
+            "result-total-volume": "Neues Gesamtvolumen (L)",
+            "error-target": "Der Zielalkoholgehalt muss höher als der aktuelle Alkoholgehalt sein"
         }
     }
 }

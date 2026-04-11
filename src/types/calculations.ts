@@ -1,8 +1,7 @@
 /**
  * НАЗНАЧЕНИЕ: Общие типы данных для энологических расчетов
  */
-
-export type CalculationType = 'sr-rechner' | 'alkohol' | 'sr-verschnitt' | 'mehrfach' | 'so2-calc';
+export type CalculationType = 'sr-rechner' | 'alkohol' | 'sr-verschnitt' | 'mehrfach' | 'so2-calc' | 'acid-management' | 'chaptalization';
 
 export type ProductType = 'gas' | 'powder' | 'liquid';
 

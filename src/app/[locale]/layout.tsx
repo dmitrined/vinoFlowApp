@@ -49,8 +49,6 @@ export const metadata: Metadata = {
         icon: [
             { url: "/icon-192x192.png?v=2", sizes: "192x192", type: "image/png" },
         ],
-        shortcut: "/icon-192x192.png?v=2",
-        apple: "/icon-192x192.png?v=2",
     },
 };
 

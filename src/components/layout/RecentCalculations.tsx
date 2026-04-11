@@ -19,7 +19,8 @@ import {
     RefreshCcw,
     ChevronRight,
     Clock,
-    FlaskConical
+    FlaskConical,
+    Activity
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useHistoryStore } from '@/lib/store/useHistoryStore';
@@ -32,6 +33,8 @@ const getIcon = (type: CalculationType) => {
         case 'sr-verschnitt': return <Droplets className="text-cyan-500" size={18} />;
         case 'mehrfach': return <Layers className="text-orange-500" size={18} />;
         case 'so2-calc': return <FlaskConical className="text-emerald-500" size={18} />;
+        case 'acid-management': return <FlaskConical className="text-rose-500" size={18} />;
+        case 'chaptalization': return <Activity className="text-amber-500" size={18} />;
         default: return <Calculator size={18} />;
     }
 };
@@ -43,6 +46,8 @@ const getTitleKey = (type: CalculationType) => {
         case 'sr-verschnitt': return 'tools.sr-verschnitt';
         case 'mehrfach': return 'tools.mehrfach';
         case 'so2-calc': return 'tools.so2-rechner';
+        case 'acid-management': return 'tools.acid-management';
+        case 'chaptalization': return 'tools.chaptalization';
         default: return 'tool-label';
     }
 };

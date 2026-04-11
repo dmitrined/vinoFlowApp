@@ -43,7 +43,11 @@
             "mehrfach": "Multiple Blending",
             "mehrfach-desc": "Assemblage of any number of wine batches.",
             "so2-rechner": "SO2 Calculator",
-            "so2-rechner-desc": "Calculation of sulfur (SO2) addition for wine."
+            "so2-rechner-desc": "Calculation of sulfur (SO2) addition for wine.",
+            "acid-management": "Acid Management",
+            "acid-management-desc": "Acidification and deacidification calculations.",
+            "chaptalization": "Chaptalization",
+            "chaptalization-desc": "Calculate sugar additions to increase potential alcohol."
         }
     },
     "Calculators": {
@@ -159,6 +163,38 @@
             "formula-gas": "Pure SO2 gas (100% content)",
             "formula-powder": "Potassium metabisulfite (powder ~50% SO2)",
             "formula-liquid": "Sulfurous acid (liquid solution)"
+        },
+        "acid-management": {
+            "title": "Acid Management",
+            "subtitle": "Calculate additions for acidification or deacidification",
+            "input-volume": "Volume (L)",
+            "input-current-ta": "Current TA (g/L)",
+            "input-target-ta": "Target TA (g/L)",
+            "acidification": "Acidification",
+            "deacidification": "Deacidification",
+            "acid-tartaric": "Tartaric Acid",
+            "acid-malic": "Malic Acid",
+            "acid-lactic": "Lactic Acid (80%)",
+            "acid-citric": "Citric Acid",
+            "base-potassium": "Potassium Bicarbonate",
+            "base-calcium": "Calcium Carbonate",
+            "alert-trial": "Always perform a bench trial first. Chemistry in wine can be unpredictable.",
+            "warn-tartaric": "Risk of tartrate crystals! Do not bottle earlier than 6 weeks after addition.",
+            "warn-citric": "Legal limit: maximum 1 g/L. Risk of volatile acidity if added before MLF.",
+            "result-addition": "Required Addition (grams)",
+            "mode": "Mode:",
+            "agent": "Agent:"
+        },
+        "chaptalization": {
+            "title": "Chaptalization",
+            "subtitle": "Calculate sugar needed to increase potential alcohol",
+            "input-volume": "Current Volume (L)",
+            "input-current-abv": "Current ABV (%)",
+            "input-target-abv": "Target ABV (%)",
+            "result-sugar": "Sugar Required (kg)",
+            "result-volume-increase": "Volume Increase (L)",
+            "result-total-volume": "Total Final Volume (L)",
+            "error-target": "Target ABV must be greater than Current ABV"
         }
     }
 }

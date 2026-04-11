@@ -15,8 +15,10 @@ import {
   Droplets, 
   Calculator, 
   FlaskConical,
+  Droplet,
   Wine,
   X,
+  Activity
 } from "lucide-react";
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -24,16 +26,19 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const BottomHeader = () => {
   const t = useTranslations('Layout');
+  const tTools = useTranslations('HomePage.tools');
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { label: t('menu.sr-auf-in'), path: '/sr-rechner-auf-in', icon: <Calculator size={20} /> },
-    { label: t('menu.alkohol'), path: '/alkohol-umrechner', icon: <Beaker size={20} /> },
-    { label: t('menu.sr-verschnitt'), path: '/sr-verschnitt-rechner', icon: <Droplets size={20} /> },
-    { label: t('menu.mehrfach'), path: '/mehrfach-verschnitt', icon: <Layers size={20} /> },
-    { label: t('menu.so2-rechner'), path: '/so2-rechner', icon: <FlaskConical size={20} /> },
+    { label: tTools('sr-rechner'), path: '/sr-rechner-auf-in', icon: <Calculator size={20} /> },
+    { label: tTools('alkohol'), path: '/alkohol-umrechner', icon: <Beaker size={20} /> },
+    { label: tTools('sr-verschnitt'), path: '/sr-verschnitt-rechner', icon: <Droplets size={20} /> },
+    { label: tTools('mehrfach'), path: '/mehrfach-verschnitt', icon: <Layers size={20} /> },
+    { label: tTools('so2-rechner'), path: '/so2-rechner', icon: <FlaskConical size={20} /> },
+    { label: tTools('acid-management'), path: '/acid-management', icon: <Droplet size={20} /> },
+    { label: tTools('chaptalization'), path: '/chaptalization', icon: <Activity size={20} /> },
   ];
 
   return (

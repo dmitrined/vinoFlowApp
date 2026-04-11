@@ -14,15 +14,20 @@ import {
   NavbarItem,
   Button,
   Image,
-  Chip
+  Chip,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
 } from '@heroui/react';
 import NextImage from 'next/image';
-import { Globe, Zap } from 'lucide-react';
+import { Globe, Zap, ChevronDown } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 
 export const Header = () => {
   const t = useTranslations('Layout');
+  const tTools = useTranslations('HomePage.tools');
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
@@ -49,7 +54,6 @@ export const Header = () => {
                 alt="Logo" 
                 width={40} 
                 height={40}
-                style={{ mixBlendMode: 'screen' }}
               />
             </div>
             <p className="font-black text-2xl tracking-tighter text-tech-gradient">
@@ -64,9 +68,26 @@ export const Header = () => {
             Dashboard
           </Link>
           <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
-          <Link href="/so2-rechner" className={`text-sm font-bold ${pathname.includes('so2') ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
-            Tools
-          </Link>
+          <Dropdown placement="bottom-start" classNames={{ content: "min-w-[220px]" }}>
+            <DropdownTrigger>
+              <button className={`flex items-center gap-1 text-sm font-bold ${['rechner', 'umrechner', 'verschnitt', 'acid-management', 'chaptalization'].some(p => pathname.includes(p)) ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors outline-none cursor-pointer`}>
+                Tools
+                <ChevronDown size={14} className="opacity-70" />
+              </button>
+            </DropdownTrigger>
+            <DropdownMenu 
+              aria-label="Calculators" 
+              itemClasses={{ base: "py-2 px-3", title: "font-bold text-[11px] uppercase tracking-widest text-zinc-600 dark:text-zinc-400 group-hover:text-brand-600 transition-colors" }}
+            >
+              <DropdownItem key="sr-rechner" onPress={() => router.push('/sr-rechner-auf-in')}>{tTools('sr-rechner')}</DropdownItem>
+              <DropdownItem key="alkohol" onPress={() => router.push('/alkohol-umrechner')}>{tTools('alkohol')}</DropdownItem>
+              <DropdownItem key="so2" onPress={() => router.push('/so2-rechner')}>{tTools('so2-rechner')}</DropdownItem>
+              <DropdownItem key="verschnitt" onPress={() => router.push('/sr-verschnitt-rechner')}>{tTools('sr-verschnitt')}</DropdownItem>
+              <DropdownItem key="mehrfach" onPress={() => router.push('/mehrfach-verschnitt')}>{tTools('mehrfach')}</DropdownItem>
+              <DropdownItem key="acid-management" onPress={() => router.push('/acid-management')}>{tTools('acid-management')}</DropdownItem>
+              <DropdownItem key="chaptalization" onPress={() => router.push('/chaptalization')}>{tTools('chaptalization')}</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarContent>
 
         <NavbarContent justify="end">
