@@ -16,8 +16,10 @@ import {
 } from "@/lib/sync/mapping";
 
 export function useSyncEngine() {
-  const { barrels, markBarrelsSynced, markReadingsSynced, markAdditionsSynced } = useFermentationStore();
-  const { records, markHistorySynced } = useHistoryStore();
+  // Мы НЕ достаем barrels/records через хук здесь, чтобы избежать бесконечного цикла ререндеров
+  // Вместо этого мы будем брать их через getState() в самих функциях.
+  const { markBarrelsSynced, markReadingsSynced, markAdditionsSynced } = useFermentationStore();
+  const { markHistorySynced } = useHistoryStore();
 
   const pushBarrels = api.sync.pushBarrels.useMutation();
   const pushReadings = api.sync.pushReadings.useMutation();
@@ -28,70 +30,79 @@ export function useSyncEngine() {
 
   const pushLocalData = useCallback(async () => {
     if (isExecuting.current) {
-        console.log("SyncEngine: Синхронизация уже запущена, пропуск...");
         return;
     }
 
     try {
       isExecuting.current = true;
+      
+      // Актуальные данные из сторов без подписки на изменения
+      const barrels = useFermentationStore.getState().barrels;
+      const records = useHistoryStore.getState().records;
+
       const unsyncedBarrels = barrels
         .filter(b => b.synced === false)
         .map(mapBarrelToSync);
 
-      const unsyncedReadings = barrels
-        .flatMap(b => b.readings.map(r => mapReadingToSync(r, b.id)))
-        .filter(r => r.synced === false);
+      const unsyncedReadings = barrels.flatMap(b => 
+        (b.readings || [])
+          .filter(r => r.synced === false)
+          .map(r => mapReadingToSync(r, b.id))
+      );
 
-      const unsyncedAdditions = barrels
-        .flatMap(b => (b.additions || []).map(a => mapAdditionToSync(a, b.id)))
-        .filter(a => a.synced === false);
+      const unsyncedAdditions = barrels.flatMap(b => 
+        (b.additions || [])
+          .filter(a => a.synced === false)
+          .map(a => mapAdditionToSync(a, b.id))
+      );
 
       const unsyncedHistory = records
-        .filter(h => h.synced === false)
+        .filter(r => r.synced === false)
         .map(mapHistoryToSync);
 
       const syncPromises = [];
 
       if (unsyncedBarrels.length > 0) {
         syncPromises.push(
-          pushBarrels.mutateAsync(unsyncedBarrels)
-            .then(res => markBarrelsSynced(res.syncedIds))
+          pushBarrels.mutateAsync(unsyncedBarrels as any).then((res) => {
+            markBarrelsSynced(res.syncedIds);
+          })
         );
       }
-      
+
       if (unsyncedReadings.length > 0) {
         syncPromises.push(
-          pushReadings.mutateAsync(unsyncedReadings)
-            .then(res => markReadingsSynced(res.syncedIds))
+          pushReadings.mutateAsync(unsyncedReadings).then((res) => {
+            markReadingsSynced(res.syncedIds);
+          })
         );
       }
 
       if (unsyncedAdditions.length > 0) {
         syncPromises.push(
-          pushAdditions.mutateAsync(unsyncedAdditions)
-            .then(res => markAdditionsSynced(res.syncedIds))
+          pushAdditions.mutateAsync(unsyncedAdditions).then((res) => {
+            markAdditionsSynced(res.syncedIds);
+          })
         );
       }
 
       if (unsyncedHistory.length > 0) {
         syncPromises.push(
-          pushHistory.mutateAsync(unsyncedHistory)
-            .then(res => markHistorySynced(res.syncedIds))
+          pushHistory.mutateAsync(unsyncedHistory).then((res) => {
+            markHistorySynced(res.syncedIds);
+          })
         );
       }
 
       if (syncPromises.length > 0) {
         await Promise.all(syncPromises);
-        console.log("SyncEngine: Данные успешно синхронизированы");
       }
     } catch (e) {
-      console.error("SyncEngine: Ошибка синхронизации:", e);
+      console.error("SyncEngine: Ошибка выгрузки:", e);
     } finally {
       isExecuting.current = false;
     }
   }, [
-    barrels, 
-    records, 
     pushBarrels, 
     pushReadings, 
     pushAdditions, 
@@ -112,15 +123,14 @@ export function useSyncEngine() {
       const { data } = await pullQuery.refetch();
       if (data) {
         hydrateFermentation({
-          barrels: data.barrels as any[], // type assertion due to generic Date/string conversions
+          barrels: data.barrels as any[],
           readings: data.readings,
           additions: data.additions
         });
         hydrateHistory(data.history as any[]);
-        console.log("SyncEngine: Успешно получены новые данные");
       }
     } catch (e) {
-      console.error("SyncEngine: Ошибка при скачивании данных", e);
+      console.error("SyncEngine: Ошибка скачивания:", e);
     }
   }, [pullQuery, hydrateFermentation, hydrateHistory]);
 
@@ -129,10 +139,7 @@ export function useSyncEngine() {
     await pullData();
   }, [pushLocalData, pullData]);
 
-  return { 
-    pushLocalData, 
-    pullData,
-    syncAll,
     isSyncing: pushBarrels.isPending || pushReadings.isPending || pushAdditions.isPending || pushHistory.isPending || pullQuery.isFetching
   };
 }
+
