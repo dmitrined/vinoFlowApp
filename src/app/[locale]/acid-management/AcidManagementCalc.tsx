@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Калькулятор управления кислотностью (подкисление/раскисление)
+ * ЗАВИСИМОСТИ: @/lib/calculations, @/hooks/useHistoryAutoSave, @heroui/react
+ * ОСОБЕННОСТИ: Автоматическое переключение режима (acid/base), сохранение истории, поддержка i18n
+ */
+
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -9,6 +15,8 @@ import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { WINE_CONSTANTS, calcAcidManagement } from '@/lib/calculations';
 
+type AcidAgent = keyof typeof WINE_CONSTANTS.ACID_MANAGEMENT.COEFFICIENTS;
+
 export default function AcidManagementCalc() {
     const t = useTranslations('Calculators.acid-management');
     const locale = useLocale();
@@ -16,7 +24,7 @@ export default function AcidManagementCalc() {
     const [volume, setVolume] = useState<string>('1000');
     const [currentTa, setCurrentTa] = useState<string>('5.0');
     const [targetTa, setTargetTa] = useState<string>('6.5');
-    const [agent, setAgent] = useState<string>('tartaric');
+    const [agent, setAgent] = useState<AcidAgent>('tartaric');
 
     const mode = useMemo(() => {
         const c = parseFloat(currentTa) || 0;
@@ -34,24 +42,15 @@ export default function AcidManagementCalc() {
 
     const activeCoeff = useMemo(() => {
         const c = WINE_CONSTANTS.ACID_MANAGEMENT.COEFFICIENTS;
-        if (mode === 'acidification') {
-            if (agent === 'tartaric') return c.tartaric;
-            if (agent === 'malic') return c.malic;
-            if (agent === 'lactic') return c.lactic;
-            if (agent === 'citric') return c.citric;
-        } else {
-            if (agent === 'potassium') return c.potassium;
-            if (agent === 'calcium') return c.calcium;
-        }
-        return 1.0;
-    }, [mode, agent]);
+        return c[agent] || 1.0;
+    }, [agent]);
 
     const result = useMemo(() => {
         const v = parseFloat(volume) || 0;
         const c = parseFloat(currentTa) || 0;
         const target = parseFloat(targetTa) || 0;
         
-        return calcAcidManagement(v, c, target, agent as any);
+        return calcAcidManagement(v, c, target, agent);
     }, [volume, currentTa, targetTa, agent]);
 
     const formattedResult = result > 0 ? result.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0';
@@ -62,8 +61,7 @@ export default function AcidManagementCalc() {
             result: formattedResult,
             unit: 'g'
         },
-        result > 0 ? result : null,
-        3000
+        result > 0 ? result : null
     );
 
     return (
@@ -137,7 +135,7 @@ export default function AcidManagementCalc() {
                             <RadioGroup
                                 label={t('agent')}
                                 value={agent}
-                                onValueChange={setAgent}
+                                onValueChange={(val) => setAgent(val as AcidAgent)}
                                 orientation="horizontal"
                                 classNames={{
                                     label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2"
@@ -178,7 +176,7 @@ export default function AcidManagementCalc() {
                                     <div className="mt-4 text-[9px] uppercase tracking-[0.2em] text-zinc-400/80 font-bold px-3 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
                                         {t(mode === 'acidification' 
                                             ? (['tartaric', 'malic', 'lactic', 'citric'].includes(agent) ? `acid-${agent}` : 'acid-tartaric') 
-                                            : (['potassium', 'calcium'].includes(agent) ? `base-${agent}` : 'base-potassium') as any)}: {activeCoeff}g / 1 g/L TA
+                                            : (['potassium', 'calcium'].includes(agent) ? `base-${agent}` : 'base-potassium'))}: {activeCoeff}g / 1 g/L TA
                                     </div>
                                 </CardBody>
                                 <div className="absolute top-0 right-0 p-4 opacity-10">

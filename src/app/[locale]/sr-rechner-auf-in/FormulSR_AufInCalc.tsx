@@ -63,8 +63,7 @@ const FormulSR_AufInCalc = () => {
       result: resultAuf.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       unit: 'L'
     },
-    resultAuf > 0 ? resultAuf : null,
-    3000
+    resultAuf > 0 ? resultAuf : null
   );
 
   const ResultCard = ({ label, value, description, color }: ResultCardProps) => {

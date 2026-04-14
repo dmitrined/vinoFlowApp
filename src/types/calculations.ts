@@ -11,6 +11,9 @@ export interface CalculationRecord {
     date: number;
     result: string;
     unit?: string;
+    updatedAt: string;
+    isDeleted?: boolean;
+    synced: boolean;
 }
 
 export interface AutoSaveRecord {

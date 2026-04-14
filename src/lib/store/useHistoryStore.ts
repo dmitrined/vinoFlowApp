@@ -13,9 +13,10 @@ interface HistoryState {
     records: CalculationRecord[];
     _hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
-    addRecord: (record: Omit<CalculationRecord, 'id' | 'date'>) => void;
+    addRecord: (record: Omit<CalculationRecord, 'id' | 'date' | 'updatedAt' | 'synced' | 'isDeleted'>) => void;
     deleteRecord: (id: string) => void;
     clearHistory: () => void;
+    markHistorySynced: (ids: string[]) => void;
 }
 
 export const useHistoryStore = create<HistoryState>()(
@@ -29,26 +30,34 @@ export const useHistoryStore = create<HistoryState>()(
                     {
                         ...record,
                         id: crypto.randomUUID(),
-                        date: Date.now()
+                        date: Date.now(),
+                        updatedAt: new Date().toISOString(),
+                        isDeleted: false,
+                        synced: false
                     },
                     ...state.records
                 ].slice(0, 6)
             })),
             deleteRecord: (id) => set((state) => ({
-                records: state.records.filter(r => r.id !== id)
+                records: state.records.map(r => 
+                    r.id === id ? { ...r, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : r
+                )
             })),
             clearHistory: () => set({ records: [] }),
+            markHistorySynced: (ids: string[]) => set((state) => ({
+                records: state.records.map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
+            })),
         }),
         {
             name: 'vinoflow-history-storage',
             version: 1,
-            migrate: (persistedState: any, version: number) => {
+            migrate: (persistedState: unknown, version: number) => {
+                const state = persistedState as HistoryState;
                 if (version === 0) {
-                    // Например, если раньше records был чем-то другим, или нужно добавить поля
-                    // Сейчас просто возвращаем как есть, но структура готова для миграций.
-                    return persistedState as HistoryState;
+                    // Структура готова для будущих миграций данных
+                    return state;
                 }
-                return persistedState as HistoryState;
+                return state;
             },
             onRehydrateStorage: (state) => {
                 return (rehydratedState, error) => {

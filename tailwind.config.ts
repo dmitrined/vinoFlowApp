@@ -29,6 +29,7 @@ const config = {
       },
       backgroundImage: {
         'tech-gradient': 'linear-gradient(135deg, #6453e9 0%, #7e7cf2 100%)',
+        'wine-luxury': 'linear-gradient(135deg, #cb345a 0%, #430d1d 100%)',
         'dark-mesh': 'radial-gradient(at 0% 0%, rgba(100, 83, 233, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(126, 124, 242, 0.1) 0px, transparent 50%)',
       }
     },

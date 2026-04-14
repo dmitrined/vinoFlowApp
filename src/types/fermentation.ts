@@ -9,6 +9,9 @@ export interface Reading {
     date: string; // Формат ISO YYYY-MM-DD
     oechsle: number;
     temperature: number;
+    updatedAt: string;
+    isDeleted?: boolean;
+    synced: boolean;
 }
 
 export interface Addition {
@@ -17,6 +20,9 @@ export interface Addition {
     name: string;
     dosage: number;
     unit: string;
+    updatedAt: string;
+    isDeleted?: boolean;
+    synced: boolean;
 }
 
 export type BarrelStatus = 'active' | 'finished';
@@ -28,4 +34,7 @@ export interface Barrel {
     startDate: string;
     readings: Reading[];
     additions: Addition[];
+    updatedAt: string;
+    isDeleted?: boolean;
+    synced: boolean;
 }

@@ -93,8 +93,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
         result: results.liter_SR.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         unit: 'L'
     } : null,
-    results?.liter_SR || 0,
-    3000
+    results?.liter_SR || 0
   );
 
   return (

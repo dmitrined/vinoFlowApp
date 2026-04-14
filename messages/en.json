@@ -206,9 +206,13 @@
             "input-volume": "Current Volume (L)",
             "input-current-abv": "Current Alcohol (%)",
             "input-target-abv": "Target Alcohol (%)",
+            "input-current-oechsle": "Current Density (°Oe)",
+            "input-target-oechsle": "Target Density (°Oe)",
             "result-sugar": "Required Sugar (kg)",
             "result-volume-increase": "Volume Increase (L)",
             "result-total-volume": "Total Volume (L)",
+            "result-alc-increase": "Addition (Alc)",
+            "warning-limit": "Exceeds alcohol limit (24 g/L Alc)",
             "error-target": "Target alcohol must be greater than current"
         }
     },
@@ -266,5 +270,16 @@
         "delete-confirm-btn": "Yes, delete",
         "added": "Added",
         "temp-short": "Temp"
+    },
+    "SyncEngine": {
+        "offline": "Offline. Waiting for connection...",
+        "syncing": "Syncing...",
+        "synced": "Cloud synced"
+    },
+    "LoginView": {
+        "title": "Restricted Area",
+        "description": "Enter the administrator password to access fermentation synchronization.",
+        "password_label": "Password",
+        "submit_button": "Log In"
     }
 }

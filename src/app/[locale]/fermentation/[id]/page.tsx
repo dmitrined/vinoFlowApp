@@ -73,10 +73,15 @@ export default function BarrelDetailPage() {
     } = useFermentationStore();
     const barrel = useMemo(() => {
         const b = barrels.find(b => b.id === id);
-        if (!b) return null;
+        if (!b || b.isDeleted) return null;
+        
+        const activeReadings = (b.readings || []).filter(r => !r.isDeleted);
+        const activeAdditions = (b.additions || []).filter(a => !a.isDeleted);
+
         return {
             ...b,
-            readings: [...b.readings].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            readings: activeReadings.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+            additions: activeAdditions
         };
     }, [barrels, id]);
 

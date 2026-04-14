@@ -24,6 +24,7 @@ import NextImage from 'next/image';
 import { Globe, Zap, ChevronDown } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
+import { CloudIndicator } from '@/components/CloudIndicator';
 
 export const Header = () => {
   const t = useTranslations('Layout');
@@ -107,9 +108,9 @@ export const Header = () => {
               </button>
             ))}
           </div>
-          <Button isIconOnly variant="flat" radius="full" size="sm" className="hidden sm:flex bg-brand-500 text-white">
-            <Zap size={16} />
-          </Button>
+          <div className="hidden sm:flex ml-1 relative">
+            <CloudIndicator />
+          </div>
         </NavbarContent>
       </Navbar>
     </div>

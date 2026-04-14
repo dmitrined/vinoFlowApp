@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Глобальное состояние для отслеживания брожения
- * ЗАВИСИМОСТИ: zustand, fermentation.ts
- * ОСОБЕННОСТИ: LocalStorage persistence, лимит 20 записей на бочку
+ * НАЗНАЧЕНИЕ: Глобальное состояние для отслеживания процессов брожения
+ * ЗАВИСИМОСТИ: zustand, @/types/fermentation
+ * ОСОБЕННОСТИ: LocalStorage persistence, лимит 20 записей на бочку, поддержка оффлайн-флагов синхронизации
  */
 
 import { create } from 'zustand';
@@ -17,15 +17,20 @@ interface FermentationState {
     toggleStatus: (id: string) => void;
     updateBarrel: (id: string, number: string) => void;
     
-    // Действия с записями
+    // Действия с замерами параметров (плотность, температура и т.д.)
     addReading: (barrelId: string, oechsle: number, temperature: number, date?: string) => void;
     updateReading: (barrelId: string, readingId: string, data: Partial<Reading>) => void;
     deleteReading: (barrelId: string, readingId: string) => void;
     
-    // Действия с добавками
+    // Действия с добавками ингредиентов
     addAddition: (barrelId: string, name: string, dosage: number, unit: string, date: string) => void;
     updateAddition: (barrelId: string, additionId: string, data: Partial<Addition>) => void;
     deleteAddition: (barrelId: string, additionId: string) => void;
+
+    // Методы для работы SyncEngine (установка флагов успешной синхронизации)
+    markBarrelsSynced: (ids: string[]) => void;
+    markReadingsSynced: (ids: string[]) => void;
+    markAdditionsSynced: (ids: string[]) => void;
 }
 
 export const useFermentationStore = create<FermentationState>()(
@@ -37,45 +42,63 @@ export const useFermentationStore = create<FermentationState>()(
                 barrels: [
                     ...state.barrels,
                     {
-                        id: Math.random().toString(36).substring(2, 9),
+                        id: crypto.randomUUID(),
                         number,
                         status: 'active',
                         startDate: new Date().toISOString().split('T')[0],
                         readings: [],
-                        additions: []
+                        additions: [],
+                        updatedAt: new Date().toISOString(),
+                        synced: false
                     }
                 ]
             })),
 
             deleteBarrel: (id) => set((state) => ({
-                barrels: state.barrels.filter(b => b.id !== id)
+                barrels: state.barrels.map(b => 
+                    b.id === id ? { ...b, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : b
+                )
             })),
 
             toggleStatus: (id) => set((state) => ({
                 barrels: state.barrels.map(b => 
-                    b.id === id ? { ...b, status: b.status === 'active' ? 'finished' : 'active' } : b
+                    b.id === id ? { 
+                        ...b, 
+                        status: b.status === 'active' ? 'finished' : 'active',
+                        updatedAt: new Date().toISOString(),
+                        synced: false
+                    } : b
                 )
             })),
 
             updateBarrel: (id, number) => set((state) => ({
                 barrels: state.barrels.map(b => 
-                    b.id === id ? { ...b, number } : b
+                    b.id === id ? { 
+                        ...b, 
+                        number,
+                        updatedAt: new Date().toISOString(),
+                        synced: false 
+                    } : b
                 )
             })),
 
             addReading: (barrelId, oechsle, temperature, date) => set((state) => ({
                 barrels: state.barrels.map(b => {
                     if (b.id === barrelId) {
-                        if (b.readings.length >= 20) return b; // Лимит 20 записей
+                        if (b.readings.length >= 20) return b; // Ограничение для оптимизации стора
                         return {
                             ...b,
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
                             readings: [
                                 ...b.readings,
                                 {
-                                    id: Math.random().toString(36).substring(2, 9),
+                                    id: crypto.randomUUID(),
                                     date: date || new Date().toISOString().split('T')[0],
                                     oechsle,
-                                    temperature
+                                    temperature,
+                                    updatedAt: new Date().toISOString(),
+                                    synced: false
                                 }
                             ]
                         };
@@ -89,8 +112,15 @@ export const useFermentationStore = create<FermentationState>()(
                     if (b.id === barrelId) {
                         return {
                             ...b,
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
                             readings: b.readings.map(r => 
-                                r.id === readingId ? { ...r, ...data } : r
+                                r.id === readingId ? { 
+                                    ...r, 
+                                    ...data,
+                                    updatedAt: new Date().toISOString(),
+                                    synced: false
+                                } : r
                             )
                         };
                     }
@@ -103,7 +133,11 @@ export const useFermentationStore = create<FermentationState>()(
                     if (b.id === barrelId) {
                         return {
                             ...b,
-                            readings: b.readings.filter(r => r.id !== readingId)
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
+                            readings: b.readings.map(r => 
+                                r.id === readingId ? { ...r, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : r
+                            )
                         };
                     }
                     return b;
@@ -115,14 +149,18 @@ export const useFermentationStore = create<FermentationState>()(
                     if (b.id === barrelId) {
                         return {
                             ...b,
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
                             additions: [
                                 ...(b.additions || []),
                                 {
-                                    id: Math.random().toString(36).substring(2, 9),
+                                    id: crypto.randomUUID(),
                                     date,
                                     name,
                                     dosage,
-                                    unit
+                                    unit,
+                                    updatedAt: new Date().toISOString(),
+                                    synced: false
                                 }
                             ]
                         };
@@ -136,7 +174,11 @@ export const useFermentationStore = create<FermentationState>()(
                     if (b.id === barrelId) {
                         return {
                             ...b,
-                            additions: (b.additions || []).filter(a => a.id !== additionId)
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
+                            additions: (b.additions || []).map(a => 
+                                a.id === additionId ? { ...a, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : a
+                            )
                         };
                     }
                     return b;
@@ -148,13 +190,38 @@ export const useFermentationStore = create<FermentationState>()(
                     if (b.id === barrelId) {
                         return {
                             ...b,
+                            updatedAt: new Date().toISOString(),
+                            synced: false,
                             additions: (b.additions || []).map(a => 
-                                a.id === additionId ? { ...a, ...data } : a
+                                a.id === additionId ? { 
+                                    ...a, 
+                                    ...data,
+                                    updatedAt: new Date().toISOString(),
+                                    synced: false
+                                } : a
                             )
                         };
                     }
                     return b;
                 })
+            })),
+
+            markBarrelsSynced: (ids) => set((state) => ({
+                barrels: state.barrels.map(b => ids.includes(b.id) ? { ...b, synced: true } : b)
+            })),
+
+            markReadingsSynced: (ids) => set((state) => ({
+                barrels: state.barrels.map(b => ({
+                    ...b,
+                    readings: b.readings.map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
+                }))
+            })),
+
+            markAdditionsSynced: (ids) => set((state) => ({
+                barrels: state.barrels.map(b => ({
+                    ...b,
+                    additions: (b.additions || []).map(a => ids.includes(a.id) ? { ...a, synced: true } : a)
+                }))
             })),
         }),
         {

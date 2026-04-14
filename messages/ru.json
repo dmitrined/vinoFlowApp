@@ -206,9 +206,13 @@
             "input-volume": "Текущий объем (Л)",
             "input-current-abv": "Текущий алкоголь (%)",
             "input-target-abv": "Целевой алкоголь (%)",
+            "input-current-oechsle": "Текущая плотность (°Oe)",
+            "input-target-oechsle": "Целевая плотность (°Oe)",
             "result-sugar": "Требуемый сахар (кг)",
             "result-volume-increase": "Прирост объема (Л)",
             "result-total-volume": "Итоговый объем (Л)",
+            "result-alc-increase": "Прирост (Alc)",
+            "warning-limit": "Превышает лимит алкоголя (24 g/L Alc)",
             "error-target": "Целевой алкоголь должен быть больше текущего"
         }
     },
@@ -266,5 +270,16 @@
         "delete-confirm-btn": "Да, удалить",
         "added": "Добавлено",
         "temp-short": "Темп."
+    },
+    "SyncEngine": {
+        "offline": "Офлайн. Ожидание интернета...",
+        "syncing": "Синхронизация...",
+        "synced": "Облако синхронизировано"
+    },
+    "LoginView": {
+        "title": "Защищенная зона",
+        "description": "Введи пароль администратора для доступа к синхронизации брожения.",
+        "password_label": "Пароль",
+        "submit_button": "Войти"
     }
 }

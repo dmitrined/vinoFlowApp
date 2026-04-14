@@ -61,8 +61,7 @@ const FormulAlcConverter = () => {
         result: resultVOL,
         unit: '% Vol.'
     },
-    resultVOL && resultVOL !== '0,00' ? resultVOL : null,
-    3000
+    resultVOL && resultVOL !== '0,00' ? resultVOL : null
   );
 
   const { showFeedback: showFeedback2 } = useHistoryAutoSave(
@@ -71,8 +70,7 @@ const FormulAlcConverter = () => {
         result: resultGL,
         unit: 'g/l'
     },
-    resultGL && resultGL !== '0,00' ? resultGL : null,
-    3000
+    resultGL && resultGL !== '0,00' ? resultGL : null
   );
 
   return (

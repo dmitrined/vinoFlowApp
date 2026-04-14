@@ -13,6 +13,7 @@ export const WINE_CONSTANTS = {
     },
     CHAPTALIZATION: {
         SUGAR_PER_ABV: 16.83,
+        SUGAR_PER_OECHSLE: 2.5,
         VOL_INCREASE_PER_KG: 0.63
     },
     ACID_MANAGEMENT: {
@@ -140,32 +141,61 @@ export const calcSO2Addition = (
 };
 
 /**
- * Расчет шаптализации (добавление сахара)
+ * Расчет шаптализации
  * @param volume Объем вина (л)
- * @param currentAbv Текущий алкоголь (% об. или г/л в зависимости от unit)
- * @param targetAbv Целевой алкоголь (% об. или г/л в зависимости от unit)
- * @param unit Единица измерения ('percent' | 'gl')
+ * @param currentAbv Текущий показатель
+ * @param targetAbv Целевой показатель
+ * @param currentUnit Единица измерения текущего показателя ('percent' | 'gl' | 'gl-sugar' | 'oechsle')
+ * @param targetUnit Единица измерения целевого показателя ('percent' | 'gl' | 'gl-sugar' | 'oechsle')
  */
 export const calcChaptalization = (
     volume: number,
     currentAbv: number,
     targetAbv: number,
-    unit: 'percent' | 'gl' = 'percent'
+    currentUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle' = 'percent',
+    targetUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle' = 'percent'
 ) => {
-    if (isNaN(volume) || isNaN(currentAbv) || isNaN(targetAbv) || volume <= 0 || currentAbv < 0 || targetAbv <= currentAbv) {
+    if (isNaN(volume) || isNaN(currentAbv) || isNaN(targetAbv) || volume <= 0 || currentAbv < 0) {
         return { sugar: 0, deltaVol: 0, total: volume };
     }
 
-    let c = currentAbv;
-    let target = targetAbv;
-
-    if (unit === 'gl') {
-        c = convertGLToVol(c);
-        target = convertGLToVol(target);
+    // Приводим оба значения к % Vol для сравнения и базового расчета
+    let currentVol = currentAbv;
+    if (currentUnit === 'gl') {
+        currentVol = currentAbv * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
+    } else if (currentUnit === 'oechsle') {
+        currentVol = (currentAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
+    } else if (currentUnit === 'gl-sugar') {
+        currentVol = currentAbv / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
     }
 
-    const diff = target - c;
-    const sugarNeeded = (diff * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV * volume) / 1000;
+    let targetVol = targetAbv;
+    if (targetUnit === 'gl') {
+        targetVol = targetAbv * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
+    } else if (targetUnit === 'oechsle') {
+        targetVol = (targetAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
+    } else if (targetUnit === 'gl-sugar') {
+        targetVol = targetAbv / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
+    }
+
+    if (targetVol <= currentVol) {
+        return { sugar: 0, deltaVol: 0, total: volume };
+    }
+
+    let sugarNeeded = 0;
+
+    // Если оба параметра в Эксле или сахаре, считаем напрямую без погрешностей двойной конверсии
+    if (currentUnit === 'oechsle' && targetUnit === 'oechsle') {
+        const diffOe = targetAbv - currentAbv;
+        sugarNeeded = (diffOe * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE * volume) / 1000;
+    } else if (currentUnit === 'gl-sugar' && targetUnit === 'gl-sugar') {
+        const diffGl = targetAbv - currentAbv;
+        sugarNeeded = (diffGl * volume) / 1000;
+    } else {
+        const diffAbv = targetVol - currentVol;
+        sugarNeeded = (diffAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV * volume) / 1000;
+    }
+
     const volumeIncrease = sugarNeeded * WINE_CONSTANTS.CHAPTALIZATION.VOL_INCREASE_PER_KG;
     const totalVolume = volume + volumeIncrease;
 

@@ -1,11 +1,12 @@
 # VinoFlow 🍷
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![tRPC](https://img.shields.io/badge/tRPC-v11-blue?style=flat-square&logo=trpc)](https://trpc.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![Turso](https://img.shields.io/badge/Turso-LibSQL-4fd1c5?style=flat-square)](https://turso.tech/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![HeroUI](https://img.shields.io/badge/UI-HeroUI-purple?style=flat-square)](https://heroui.com/)
 [![i18n](https://img.shields.io/badge/i18n-EN_DE_RU-green?style=flat-square)](https://next-intl-docs.vercel.app/)
-[![PWA](https://img.shields.io/badge/PWA-ready-orange?style=flat-square)](https://web.dev/progressive-web-apps/)
-[![Tests](https://img.shields.io/badge/Tests-Vitest-yellow?style=flat-square)](https://vitest.dev/)
 
 ---
 
@@ -17,69 +18,51 @@
 
 ### What is VinoFlow?
 
-**VinoFlow** is a precision enology toolkit for winemakers and cellar masters. It provides professional-grade calculation tools for everyday winemaking tasks — from SO₂ additions and alcohol conversion to complex multi-batch blending.
+**VinoFlow** is a precision enology toolkit and cellar management platform. It combines professional-grade calculation tools with a **Secure Cloud Sync Engine** for real-time fermentation tracking across all your devices.
 
-### Calculators
+### Key Features
 
-| Tool | Description |
+| Feature | Description |
 |---|---|
-| **SO₂ Calculator** | Calculates the required SO₂ addition (gas, powder, or liquid) based on target delta and volume |
-| **SR Calculator (Auf/In)** | Computes Süßreserve dosage in two modes: as a percentage added or as a percentage of final volume |
-| **SR Blending** | Determines blending volumes to hit a target sugar content using the lever rule |
-| **Multi-Batch Blending** | Assembles any number of wine batches to achieve a desired final alcohol or sugar target |
-| **Alcohol Converter** | Converts between g/L and % vol alcohol |
+| **Fermentation Tracker** | Dynamic monitoring of Oechsle and Temperature with real-time charting. |
+| **Secure Sync (LWW)** | Backend synchronization via tRPC and Turso (libSQL). "Last Write Wins" resolution for offline-first reliability. |
+| **Enological Tools** | Professional calculators: SO₂, SR, Blending, Acid Management, and Chaptalization. |
+| **Protected Access** | Secure administrative area gated by JWT-based authentication. |
 
 ### Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 15.2 (App Router) |
-| Language | TypeScript 5 |
-| UI Library | HeroUI v2 + Tailwind CSS v4 |
-| Animations | Framer Motion |
-| State Management | Zustand |
-| i18n | next-intl (EN / DE / RU) |
-| PWA | @ducanh2912/next-pwa |
-| Testing | Vitest + Testing Library |
+| **Framework** | Next.js 15.3 (App Router) |
+| **API Layer** | tRPC v11 (Type-safe client-server communication) |
+| **Database** | Turso (libSQL) + Prisma ORM |
+| **Auth** | JWT (Jose) + Protected Procedures |
+| **State** | Zustand (with persistent LocalStorage) |
+| **UI** | HeroUI (NextUI) + Tailwind CSS + Framer Motion |
+| **PWA** | @ducanh2912/next-pwa (Offline Ready) |
 
 ### Project Structure
 
 ```
 vinoFlowApp/
-├── messages/                     # i18n translations
-│   ├── en.json                   # English
-│   ├── de.json                   # German
-│   └── ru.json                   # Russian
-├── public/                       # Static assets
-│   ├── icon-192x192.png
-│   ├── icon-512x512.png
-│   ├── favicon.ico
-│   └── manifest.json             # PWA manifest
+├── prisma/                       # Database schema & migrations
+├── messages/                     # i18n translations (EN/DE/RU)
+├── public/                       # Static assets & PWA manifest
 ├── src/
-│   ├── app/
-│   │   ├── [locale]/             # Localized routes (EN/DE/RU)
-│   │   │   ├── so2-rechner/      # SO₂ Calculator
-│   │   │   ├── sr-rechner-auf-in/# SR Calculator (Auf/In)
-│   │   │   ├── sr-verschnitt-rechner/ # SR Blending
-│   │   │   ├── mehrfach-verschnitt/   # Multi-Batch Blending
-│   │   │   ├── alkohol-umrechner/     # Alcohol Converter
-│   │   │   └── layout.tsx        # Root layout + metadata
-│   │   └── providers.tsx         # HeroUI & theme providers
+│   ├── app/[locale]/             # Localized routes
+│   │   ├── fermentation/         # Secured Fermentation Module
+│   │   ├── [calculators]/        # Oenology tools (SO2, SR, Acid, etc.)
+│   │   └── api/trpc/[trpc]/      # tRPC endpoint
 │   ├── components/
-│   │   ├── layout/               # Header, Footer, BottomNav
-│   │   └── ui/                   # Shared components (ProductTypeSelector, SaveFeedback)
-│   ├── lib/
-│   │   ├── calculations.ts       # All enological math functions
-│   │   └── store/                # Zustand stores (history)
-│   ├── hooks/                    # Custom React hooks
-│   ├── tests/
-│   │   └── calculations.test.ts  # 19+ edge-case unit tests
-│   ├── types/                    # Shared TypeScript types
-│   └── middleware.ts             # i18n routing middleware
-├── next.config.mjs               # Next.js + PWA config
-├── tailwind.config.ts
-├── vitest.config.ts
-└── package.json
+│   │   ├── auth/                 # Login & Protection UI
+│   │   ├── layout/               # Dynamic Headers & Indicators
+│   │   └── SyncEngine.tsx        # Cloud Synchronization Orchestrator
+│   ├── server/                   # Backend Logic
+│   │   ├── api/                  # tRPC Routers (Sync, Auth)
+│   │   └── db.ts                 # Prisma/Turso Client
+│   ├── lib/store/                # Zustand Offline Stores
+│   ├── types/                    # Domain-driven TypeScript definitions
+│   └── middleware.ts             # i18n & Auth guarding
 ```
 
 ### Getting Started
@@ -94,7 +77,7 @@ npm run dev
 # Run tests
 npm test
 
-# Production build
+# Build for production
 npm run build
 ```
 
@@ -104,46 +87,16 @@ npm run build
 
 ### Что такое VinoFlow?
 
-**VinoFlow** — это профессиональный набор инструментов, разработанный для энологов и виноделов. Приложение обеспечивает точные расчеты для ежедневных задач в погребе: от добавления SO₂ и конвертации спирта до сложного купажа из нескольких партий.
+**VinoFlow** — это профессиональный набор инструментов для энологов и платформа для управления погребом. Приложение сочетает в себе точные калькуляторы и **синхронизируемый трекер брожения**, работающий на всех ваших устройствах в реальном времени.
 
-### Калькуляторы
+### Основные возможности
 
-| Инструмент | Описание |
+| Функция | Описание |
 |---|---|
-| **Калькулятор SO₂** | Рассчитывает необходимую дозу SO₂ (газ, порошок или жидкость) по целевому значению ΔSO₂ и объему |
-| **SR Калькулятор (Auf/In)** | Вычисляет дозировку Süßreserve двумя способами: как процент добавки или как процент конечного объема |
-| **Купаж SR** | Определяет объемы купажа для достижения целевого содержания сахара по правилу рычага |
-| **Многокомпонентный купаж** | Ассамбляж любого количества партий вина для получения заданного конечного показателя |
-| **Конвертер спирта** | Перевод между г/л и % об. для содержания спирта |
-
-### Технологии
-
-| Уровень | Технология |
-|---|---|
-| Фреймворк | Next.js 15.2 (App Router) |
-| Язык | TypeScript 5 |
-| UI | HeroUI v2 + Tailwind CSS v4 |
-| Анимации | Framer Motion |
-| Состояние | Zustand |
-| Локализация | next-intl (EN / DE / RU) |
-| PWA | @ducanh2912/next-pwa |
-| Тесты | Vitest + Testing Library |
-
-### Запуск проекта
-
-```bash
-# Установка зависимостей
-npm install
-
-# Сервер разработки
-npm run dev
-
-# Запуск тестов
-npm test
-
-# Продакшн сборка
-npm run build
-```
+| **Мониторинг брожения** | Динамический контроль Oechsle и температуры с графиками в реальном времени. |
+| **Облачная синхронизация** | Движок на базе tRPC и Turso (libSQL). Стратегия "Last Write Wins" для надежной работы офлайн. |
+| **Энологические инструменты** | Профессиональные расчеты: SO₂, сахара, купажа, кислотности и шаптализации. |
+| **Защищенный доступ** | Административный раздел, защищенный авторизацией на базе JWT. |
 
 ---
 
@@ -151,46 +104,16 @@ npm run build
 
 ### Was ist VinoFlow?
 
-**VinoFlow** ist ein professionelles Berechnungswerkzeug für Önologen und Kellermeister. Es bietet präzise Kalkulationstools für den täglichen Kellerbetrieb — von SO₂-Zugaben und Alkohol-Umrechnung bis hin zur Verschnittberechnung für mehrere Chargen.
+**VinoFlow** ist ein Präzisions-Werkzeugsatz für Önologen und eine Plattform für das Kellermanagement. Es kombiniert professionelle Kalkulationstools mit einer **Cloud-Synchronisation** zur Echtzeit-Überwachung der Gärung auf allen Ihren Geräten.
 
-### Kalkulatoren
+### Hauptfunktionen
 
-| Werkzeug | Beschreibung |
+| Funktion | Beschreibung |
 |---|---|
-| **SO₂-Rechner** | Berechnet die benötigte SO₂-Menge (Gas, Pulver oder Flüssig) anhand des Zielwerts und Volumens |
-| **SR-Rechner (Auf/In)** | Berechnet die Süßreserve-Dosierung auf zwei Arten: als Prozentsatz der Zugabe oder des Endvolumens |
-| **SR-Verschnitt** | Ermittelt Verschnittmengen zur Erreichung eines Zielzuckergehalts nach der Kreuzmethode |
-| **Mehrfach-Verschnitt** | Assemblage aus beliebig vielen Chargen zum Erreichen eines gewünschten Endwerts |
-| **Alkohol-Umrechner** | Umrechnung zwischen g/L und Vol.-% für Alkohol |
-
-### Technologie-Stack
-
-| Ebene | Technologie |
-|---|---|
-| Framework | Next.js 15.2 (App Router) |
-| Sprache | TypeScript 5 |
-| UI | HeroUI v2 + Tailwind CSS v4 |
-| Animationen | Framer Motion |
-| State Management | Zustand |
-| Internationalisierung | next-intl (EN / DE / RU) |
-| PWA | @ducanh2912/next-pwa |
-| Tests | Vitest + Testing Library |
-
-### Erste Schritte
-
-```bash
-# Abhängigkeiten installieren
-npm install
-
-# Entwicklungsserver starten
-npm run dev
-
-# Tests ausführen
-npm test
-
-# Produktions-Build
-npm run build
-```
+| **Gärungs-Tracker** | Dynamische Überwachung von Oechsle und Temperatur mit Echtzeit-Diagrammen. |
+| **Cloud-Sync (LWW)** | Backend-Synchronisierung via tRPC und Turso (libSQL). "Last Write Wins" Strategie für absolute Datensicherheit. |
+| **Önologische Tools** | Profi-Rechner: SO₂, SR, Verschnitt, Säuremanagement und Chaptalisierung. |
+| **Geschützter Bereich** | Sicherer Administrationsbereich, geschützt durch JWT-basierte Authentifizierung. |
 
 ---
 

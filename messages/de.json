@@ -201,9 +201,13 @@
             "input-volume": "Aktuelles Volumen (L)",
             "input-current-abv": "Aktueller Alkohol (%)",
             "input-target-abv": "Ziel-Alkohol (%)",
+            "input-current-oechsle": "Aktuelles Mostgewicht (°Oe)",
+            "input-target-oechsle": "Ziel-Mostgewicht (°Oe)",
             "result-sugar": "Benötigter Zucker (kg)",
             "result-volume-increase": "Volumenzunahme (L)",
             "result-total-volume": "Gesamtvolumen (L)",
+            "result-alc-increase": "Zusatz (Alc)",
+            "warning-limit": "Alkohol-Limit überschritten (24 g/L Alc)",
             "error-target": "Der Zielalkohol muss größer als der aktuelle sein"
         }
     },
@@ -261,5 +265,16 @@
         "delete-confirm-btn": "Ja, löschen",
         "added": "Hinzugefügt",
         "temp-short": "Temp"
+    },
+    "SyncEngine": {
+        "offline": "Offline. Warte auf Internet...",
+        "syncing": "Synchronisieren...",
+        "synced": "Cloud synchronisiert"
+    },
+    "LoginView": {
+        "title": "Geschützter Bereich",
+        "description": "Geben Sie das Administrator-Passwort ein, um auf die Gärung-Synchronisation zuzugreifen.",
+        "password_label": "Passwort",
+        "submit_button": "Anmelden"
     }
 }

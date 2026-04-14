@@ -13,10 +13,10 @@ import { CalculationType, AutoSaveRecord } from '@/types/calculations';
 export function useHistoryAutoSave(
     records: AutoSaveRecord | (AutoSaveRecord | null)[] | null,
     trigger: any,
-    delay: number = 3000
+    delay: number = 10000
 ) {
     const { addRecord } = useHistoryStore();
-    const [showFeedback, setShowFeedback] = useState(false);
+    const [showFeedback] = useState(false);
     
     // Дебаунсим триггер (результат)
     const debouncedTrigger = useDebounce(trigger, delay);
@@ -40,10 +40,7 @@ export function useHistoryAutoSave(
             addRecord(data);
         }
 
-        // Показываем фидбек
-        setShowFeedback(true);
-        const timer = setTimeout(() => setShowFeedback(false), 2000);
-        return () => clearTimeout(timer);
+        // Фидбек отключен по просьбе пользователя
     }, [debouncedTrigger, addRecord]);
 
     return { showFeedback };

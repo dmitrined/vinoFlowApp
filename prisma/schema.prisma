@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Barrel {
+  id        String     @id @default(uuid())
+  name      String
+  type      String     // 'red', 'white', 'rose'
+  variant   String?    // 'wine', 'juice', 'must'
+  year      String
+  volume    Float?
+  status    String     // 'empty', 'fermenting', 'aging', 'bottled', 'sold'
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  isDeleted Boolean    @default(false) @map("is_deleted")
+  
+  readings  Reading[]
+  additions Addition[]
+
+  @@map("barrels")
+}
+
+model Reading {
+  id          String   @id @default(uuid())
+  date        String
+  oechsle     Float?
+  temperature Float?
+  density     Float?
+  ph          Float?
+  notes       String?
+  barrel      Barrel   @relation(fields: [barrelId], references: [id], onDelete: Cascade)
+  barrelId    String   @map("barrel_id")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  isDeleted   Boolean  @default(false) @map("is_deleted")
+
+  @@index([barrelId])
+  @@map("readings")
+}
+
+model Addition {
+  id        String   @id @default(uuid())
+  date      String
+  name      String
+  dosage    String
+  unit      String
+  barrel    Barrel   @relation(fields: [barrelId], references: [id], onDelete: Cascade)
+  barrelId  String   @map("barrel_id")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+
+  @@index([barrelId])
+  @@map("additions")
+}
+
+model CalculationRecord {
+  id        String   @id @default(uuid())
+  type      String
+  date      BigInt
+  result    String
+  unit      String?
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+
+  @@map("calculation_records")
+}

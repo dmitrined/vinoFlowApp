@@ -28,14 +28,33 @@ interface Props {
     additions?: Addition[];
 }
 
-const CustomTooltip = ({ active, payload, label, t }: any) => {
+interface TooltipPayload {
+    color: string;
+    dataKey: string;
+    name: string;
+    value: number | string;
+    payload: {
+        date: string;
+        additionNames?: string;
+        [key: string]: unknown;
+    };
+}
+
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: TooltipPayload[];
+    label?: string;
+    t: (key: string) => string;
+}
+
+const CustomTooltip = ({ active, payload, label, t }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl p-4 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl">
                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 border-b border-zinc-100 dark:border-zinc-800 pb-1">
-                    {formatDate(label)}
+                    {formatDate(label || '')}
                 </p>
-                {payload.map((entry: any, index: number) => {
+                {payload.map((entry: TooltipPayload, index: number) => {
                     if (entry.dataKey === 'additionVal') {
                         if (!entry.payload.additionNames) return null;
                         return (

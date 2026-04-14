@@ -1,0 +1,45 @@
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { cookies } from "next/headers";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { signAuthToken } from "@/lib/auth";
+
+export const authRouter = createTRPCRouter({
+  login: publicProcedure
+    .input(z.object({ password: z.string() }))
+    .mutation(async ({ input }) => {
+      const correctPassword = process.env.ADMIN_PASSWORD;
+
+      if (!correctPassword || input.password !== correctPassword) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Неверный пароль",
+        });
+      }
+
+      // Generate the token
+      const token = await signAuthToken();
+      
+      // Set HTTP-only cookie using Next.js cookies API
+      const cookieStore = await cookies();
+      cookieStore.set("vinoflow_auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      });
+
+      return { success: true };
+    }),
+    
+  check: publicProcedure.query(({ ctx }) => {
+    return { isAuthenticated: ctx.isAuthenticated };
+  }),
+
+  logout: publicProcedure.mutation(async () => {
+    const cookieStore = await cookies();
+    cookieStore.delete("vinoflow_auth_token");
+    return { success: true };
+  })
+});

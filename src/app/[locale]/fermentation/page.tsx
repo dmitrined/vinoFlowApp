@@ -34,7 +34,7 @@ export default function FermentationDashboard() {
     };
 
     const filteredBarrels = barrels.filter(b => 
-        b.number.toLowerCase().includes(searchQuery.toLowerCase())
+        !b.isDeleted && b.number.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (

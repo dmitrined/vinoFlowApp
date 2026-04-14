@@ -56,7 +56,9 @@ export const RecentCalculations: React.FC = () => {
     const t = useTranslations('HomePage');
     const { records, clearHistory, deleteRecord, _hasHydrated } = useHistoryStore();
 
-    if (!_hasHydrated || records.length === 0) {
+    const activeRecords = records.filter(r => !r.isDeleted);
+
+    if (!_hasHydrated || activeRecords.length === 0) {
         return null;
     }
 
@@ -83,7 +85,7 @@ export const RecentCalculations: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <AnimatePresence mode='popLayout'>
-                    {records.map((record) => (
+                    {activeRecords.map((record) => (
                         <motion.div
                             key={record.id}
                             layout

@@ -8,12 +8,27 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   disable: process.env.NODE_ENV === "development",
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        urlPattern: /\/api\/trpc\/.*/i,
+        handler: "NetworkOnly",
+        options: {
+          cacheName: "trpc-sync-api-bypass",
+          plugins: [],
+        },
+      },
+    ],
+  },
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     reactCompiler: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

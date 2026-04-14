@@ -52,8 +52,7 @@ const FormulSo2Calc: React.FC = () => {
             result: formattedResult,
             unit: unit
         },
-        result > 0 ? result : null,
-        3000
+        result > 0 ? result : null
     );
 
     return (

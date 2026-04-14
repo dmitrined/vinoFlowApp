@@ -99,8 +99,7 @@ const FormulMultiBlendCalc: React.FC = () => {
             unit: 'g/l Alc'
         } : null
     ],
-    results.totalLiters > 0,
-    3000
+    results.totalLiters > 0
   );
 
   return (
