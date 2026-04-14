@@ -6,21 +6,29 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
 import { Plus, Wine, Search, Filter } from "lucide-react";
 import { useFermentationStore } from '@/lib/store/useFermentationStore';
 import { BarrelCard } from '@/components/fermentation/BarrelCard';
 import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
+import { useSyncEngine } from '@/hooks/useSyncEngine';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function FermentationDashboard() {
     const t = useTranslations('Fermentation');
     const { barrels, addBarrel, deleteBarrel } = useFermentationStore();
+    const { syncAll } = useSyncEngine();
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        if (navigator.onLine) {
+            syncAll();
+        }
+    }, [syncAll]);
     
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [barrelToDelete, setBarrelToDelete] = useState<string | null>(null);

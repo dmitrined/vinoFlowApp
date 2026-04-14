@@ -102,8 +102,37 @@ export function useSyncEngine() {
     markHistorySynced
   ]);
 
+  const { hydrateFromServer: hydrateFermentation } = useFermentationStore();
+  const { hydrateFromServer: hydrateHistory } = useHistoryStore();
+  
+  const pullQuery = api.sync.pullAll.useQuery(undefined, { enabled: false });
+
+  const pullData = useCallback(async () => {
+    try {
+      const { data } = await pullQuery.refetch();
+      if (data) {
+        hydrateFermentation({
+          barrels: data.barrels as any[], // type assertion due to generic Date/string conversions
+          readings: data.readings,
+          additions: data.additions
+        });
+        hydrateHistory(data.history as any[]);
+        console.log("SyncEngine: Успешно получены новые данные");
+      }
+    } catch (e) {
+      console.error("SyncEngine: Ошибка при скачивании данных", e);
+    }
+  }, [pullQuery, hydrateFermentation, hydrateHistory]);
+
+  const syncAll = useCallback(async () => {
+    await pushLocalData();
+    await pullData();
+  }, [pushLocalData, pullData]);
+
   return { 
     pushLocalData, 
-    isSyncing: pushBarrels.isPending || pushReadings.isPending || pushAdditions.isPending || pushHistory.isPending 
+    pullData,
+    syncAll,
+    isSyncing: pushBarrels.isPending || pushReadings.isPending || pushAdditions.isPending || pushHistory.isPending || pullQuery.isFetching
   };
 }

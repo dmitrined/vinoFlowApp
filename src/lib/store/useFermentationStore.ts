@@ -31,6 +31,9 @@ interface FermentationState {
     markBarrelsSynced: (ids: string[]) => void;
     markReadingsSynced: (ids: string[]) => void;
     markAdditionsSynced: (ids: string[]) => void;
+    
+    // Гидратация с сервера (для скачивания изменений от других устройств)
+    hydrateFromServer: (serverData: { barrels: any[]; readings: any[]; additions: any[] }) => void;
 }
 
 export const useFermentationStore = create<FermentationState>()(
@@ -223,6 +226,136 @@ export const useFermentationStore = create<FermentationState>()(
                     additions: (b.additions || []).map(a => ids.includes(a.id) ? { ...a, synced: true } : a)
                 }))
             })),
+            
+            hydrateFromServer: (serverData) => set((state) => {
+                const localBarrelsMap = new Map(state.barrels.map(b => [b.id, b]));
+                const mergedBarrels: Barrel[] = [];
+
+                for (const sb of serverData.barrels) {
+                    const lb = localBarrelsMap.get(sb.id);
+                    if (!lb) {
+                        // Create shell barrel, then we populate readings/additions
+                        mergedBarrels.push({
+                            id: sb.id,
+                            number: sb.name || '',
+                            status: sb.status as any,
+                            startDate: sb.updatedAt.split('T')[0], // Approximation
+                            updatedAt: sb.updatedAt,
+                            isDeleted: sb.isDeleted,
+                            synced: true,
+                            readings: [],
+                            additions: []
+                        });
+                    } else {
+                        const sTime = new Date(sb.updatedAt).getTime();
+                        const lTime = new Date(lb.updatedAt).getTime();
+                        if (sTime > lTime) {
+                            mergedBarrels.push({
+                                ...lb,
+                                number: sb.name || lb.number,
+                                status: sb.status as any,
+                                updatedAt: sb.updatedAt,
+                                isDeleted: sb.isDeleted,
+                                synced: true
+                            });
+                        } else {
+                            mergedBarrels.push(lb); // Keep local if it's newer
+                        }
+                        localBarrelsMap.delete(sb.id);
+                    }
+                }
+                
+                // Add any local-only barrels that aren't on server yet
+                for (const lb of localBarrelsMap.values()) {
+                    mergedBarrels.push(lb);
+                }
+
+                // Process readings
+                const readingsByBarrelId: Record<string, Reading[]> = {};
+                for (const sr of serverData.readings) {
+                    if (!readingsByBarrelId[sr.barrelId]) readingsByBarrelId[sr.barrelId] = [];
+                    readingsByBarrelId[sr.barrelId].push({
+                        id: sr.id,
+                        date: sr.date,
+                        oechsle: sr.oechsle || 0,
+                        temperature: sr.temperature || 0,
+                        updatedAt: sr.updatedAt,
+                        isDeleted: sr.isDeleted,
+                        synced: true
+                    });
+                }
+
+                // Process additions
+                const additionsByBarrelId: Record<string, Addition[]> = {};
+                for (const sa of serverData.additions) {
+                    if (!additionsByBarrelId[sa.barrelId]) additionsByBarrelId[sa.barrelId] = [];
+                    additionsByBarrelId[sa.barrelId].push({
+                        id: sa.id,
+                        date: sa.date,
+                        name: sa.name,
+                        dosage: parseFloat(sa.dosage) || 0,
+                        unit: sa.unit,
+                        updatedAt: sa.updatedAt,
+                        isDeleted: sa.isDeleted,
+                        synced: true
+                    });
+                }
+
+                // Merge readings and additions into barrels
+                const finalBarrels = mergedBarrels.map(b => {
+                    // Update readings
+                    const localReadingsMap = new Map(b.readings?.map(r => [r.id, r]) || []);
+                    const mergedReadings: Reading[] = [];
+                    const serverReadings = readingsByBarrelId[b.id] || [];
+
+                    for (const sr of serverReadings) {
+                        const lr = localReadingsMap.get(sr.id);
+                        if (!lr) {
+                            mergedReadings.push(sr);
+                        } else {
+                            const sTime = new Date(sr.updatedAt).getTime();
+                            const lTime = new Date(lr.updatedAt).getTime();
+                            if (sTime > lTime) {
+                                mergedReadings.push(sr);
+                            } else {
+                                mergedReadings.push(lr);
+                            }
+                            localReadingsMap.delete(sr.id);
+                        }
+                    }
+                    for (const lr of localReadingsMap.values()) {
+                        mergedReadings.push(lr);
+                    }
+
+                    // Update additions
+                    const localAdditionsMap = new Map(b.additions?.map(a => [a.id, a]) || []);
+                    const mergedAdditions: Addition[] = [];
+                    const serverAdditions = additionsByBarrelId[b.id] || [];
+
+                    for (const sa of serverAdditions) {
+                        const la = localAdditionsMap.get(sa.id);
+                        if (!la) {
+                            mergedAdditions.push(sa);
+                        } else {
+                            const sTime = new Date(sa.updatedAt).getTime();
+                            const lTime = new Date(la.updatedAt).getTime();
+                            if (sTime > lTime) {
+                                mergedAdditions.push(sa);
+                            } else {
+                                mergedAdditions.push(la);
+                            }
+                            localAdditionsMap.delete(sa.id);
+                        }
+                    }
+                    for (const la of localAdditionsMap.values()) {
+                        mergedAdditions.push(la);
+                    }
+
+                    return { ...b, readings: mergedReadings, additions: mergedAdditions };
+                });
+
+                return { barrels: finalBarrels };
+            }),
         }),
         {
             name: 'vinoflow-fermentation-storage',

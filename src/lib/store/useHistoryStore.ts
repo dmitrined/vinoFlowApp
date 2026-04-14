@@ -17,6 +17,7 @@ interface HistoryState {
     deleteRecord: (id: string) => void;
     clearHistory: () => void;
     markHistorySynced: (ids: string[]) => void;
+    hydrateFromServer: (serverHistory: CalculationRecord[]) => void;
 }
 
 export const useHistoryStore = create<HistoryState>()(
@@ -47,6 +48,28 @@ export const useHistoryStore = create<HistoryState>()(
             markHistorySynced: (ids: string[]) => set((state) => ({
                 records: state.records.map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
             })),
+            hydrateFromServer: (serverHistory) => set((state) => {
+                const localMap = new Map(state.records.map(r => [r.id, r]));
+                const merged = [...state.records];
+
+                for (const sh of serverHistory) {
+                    const lh = localMap.get(sh.id);
+                    if (!lh) {
+                        merged.push(sh);
+                    } else {
+                        const sTime = new Date(sh.updatedAt).getTime();
+                        const lTime = new Date(lh.updatedAt).getTime();
+                        if (sTime > lTime) {
+                            const index = merged.findIndex(r => r.id === sh.id);
+                            if (index !== -1) merged[index] = sh;
+                        }
+                    }
+                }
+                
+                // Keep only top 6 and sort by date descending
+                const sorted = merged.sort((a, b) => Number(b.date) - Number(a.date));
+                return { records: sorted.slice(0, 6) };
+            }),
         }),
         {
             name: 'vinoflow-history-storage',

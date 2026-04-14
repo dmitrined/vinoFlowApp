@@ -50,6 +50,7 @@ import { ReadingModal } from '@/components/fermentation/ReadingModal';
 import { AdditionModal } from '@/components/fermentation/AdditionModal';
 import { AdditionsList } from '@/components/fermentation/AdditionsList';
 import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
+import { useSyncEngine } from '@/hooks/useSyncEngine';
 import { Reading, Addition } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
@@ -59,6 +60,7 @@ export default function BarrelDetailPage() {
     const params = useParams();
     const id = params.id as string;
     const t = useTranslations('Fermentation');
+    const { syncAll } = useSyncEngine();
     
     const { 
         barrels, 
@@ -100,7 +102,10 @@ export default function BarrelDetailPage() {
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
-    }, []);
+        if (navigator.onLine) {
+            syncAll();
+        }
+    }, [syncAll]);
 
     if (!mounted) return null;
 

@@ -15,36 +15,42 @@ export function SyncEngine() {
   const [isMounted, setIsMounted] = useState(false);
   const { barrels } = useFermentationStore();
   const { records } = useHistoryStore();
-  const { pushLocalData } = useSyncEngine();
+  const { syncAll, pushLocalData } = useSyncEngine();
 
+  // Первоначальная загрузка из БД при монтировании
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    if (navigator.onLine) {
+        syncAll(); // Тянем свежие данные с сервера при старте
+    }
+  }, [syncAll]);
 
   // Мониторинг восстановления интернет-соединения
   useEffect(() => {
     const handleOnline = () => {
-      pushLocalData();
+      syncAll(); // Когда возвращаемся в онлайн — и отдаем, и забираем
     };
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
-  }, [pushLocalData]);
+  }, [syncAll]);
 
-  // Периодическая проверка несохраненных изменений (каждые 30 секунд)
+  // Периодическая проверка несохраненных изменений (каждые 30 секунд двусторонняя синхронизация)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const intervalId = setInterval(() => {
       if (navigator.onLine) {
-        pushLocalData();
+        syncAll();
       }
     }, 30000);
 
     return () => clearInterval(intervalId);
-  }, [pushLocalData]);
+  }, [syncAll]);
 
-  // Триггер синхронизации при изменении данных в сторах с дебаунсом 2сек
+  // Триггер локальной выгрузки при изменении данных юзером (с дебаунсом 2сек)
+  // Мы делаем push, так как это реакция на локальные действия.
+  // Можно было бы делать syncAll, но pushLocalData работает быстрее.
   useEffect(() => {
     if (!isMounted || !navigator.onLine) return;
 
