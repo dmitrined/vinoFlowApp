@@ -24,11 +24,9 @@ export default function FermentationDashboard() {
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
-        if (navigator.onLine) {
-            syncAll();
-        }
-    }, [syncAll]);
+    // Синхронизация теперь управляется централизованно через SyncEngine в layout.tsx
+    // Убираем локальный вызов, чтобы не дублировать запросы
+
     
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [barrelToDelete, setBarrelToDelete] = useState<string | null>(null);

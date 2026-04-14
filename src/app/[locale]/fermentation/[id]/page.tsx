@@ -100,12 +100,12 @@ export default function BarrelDetailPage() {
     const [readingToDelete, setReadingToDelete] = useState<string | null>(null);
 
     const [mounted, setMounted] = useState(false);
+    // Синхронизация теперь управляется централизованно через SyncEngine в layout.tsx
+    // Убираем локальный вызов, чтобы не дублировать запросы
     useEffect(() => {
         setMounted(true);
-        if (navigator.onLine) {
-            syncAll();
-        }
-    }, [syncAll]);
+    }, []);
+
 
     if (!mounted) return null;
 

@@ -13,32 +13,30 @@ import { useSyncEngine } from "@/hooks/useSyncEngine";
 
 export function SyncEngine() {
   const [isMounted, setIsMounted] = useState(false);
-  const { barrels } = useFermentationStore();
-  const { records } = useHistoryStore();
   const { syncAll, pushLocalData } = useSyncEngine();
 
   // Первоначальная загрузка из БД при монтировании
   useEffect(() => {
     setIsMounted(true);
     if (navigator.onLine) {
-        syncAll(); // Тянем свежие данные с сервера при старте
+        syncAll();
     }
-  }, [syncAll]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Только один раз при старте приложения
 
   // Мониторинг восстановления интернет-соединения
   useEffect(() => {
     const handleOnline = () => {
-      syncAll(); // Когда возвращаемся в онлайн — и отдаем, и забираем
+      syncAll();
     };
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
-  }, [syncAll]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Периодическая проверка несохраненных изменений (каждые 30 секунд двусторонняя синхронизация)
+  // Периодическая проверка несохраненных изменений (каждые 30 секунд)
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const intervalId = setInterval(() => {
       if (navigator.onLine) {
         syncAll();
@@ -46,20 +44,16 @@ export function SyncEngine() {
     }, 30000);
 
     return () => clearInterval(intervalId);
-  }, [syncAll]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Триггер локальной выгрузки при изменении данных юзером (с дебаунсом 2сек)
-  // Мы делаем push, так как это реакция на локальные действия.
-  // Можно было бы делать syncAll, но pushLocalData работает быстрее.
-  useEffect(() => {
-    if (!isMounted || !navigator.onLine) return;
-
-    const handler = setTimeout(() => {
-      pushLocalData();
-    }, 2000);
-
-    return () => clearTimeout(handler);
-  }, [barrels, records, isMounted, pushLocalData]);
-
+  // ВАЖНО: Мы НЕ подписываемся на barrels здесь, так как мы хотим
+  // чтобы этот эффект срабатывал только когда реально изменилось что-то ВНУТРИ стора.
+  // Но для простоты и стабильности мы полагаемся на то, что syncAll
+  // и так делает свою работу при входе на страницу и каждые 30 сек.
+  // Если нужно сохранение "на лету", лучше делать его в самих действиях стора.
+  
   return null;
 }
+

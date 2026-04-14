@@ -15,34 +15,43 @@ import {
   mapHistoryToSync 
 } from "@/lib/sync/mapping";
 
+// Глобальный флаг за пределами хука, чтобы он был общим для всех экземпляров
+let isGlobalSyncing = false;
+let lastSyncTime = 0;
+const MIN_SYNC_INTERVAL = 2000; // Минимум 2 секунды между полными циклами
+
 export function useSyncEngine() {
-  // Мы НЕ достаем barrels/records через хук здесь, чтобы избежать бесконечного цикла ререндеров
-  // Вместо этого мы будем брать их через getState() в самих функциях.
-  const { markBarrelsSynced, markReadingsSynced, markAdditionsSynced } = useFermentationStore();
-  const { markHistorySynced } = useHistoryStore();
+  const markBarrelsSynced = useFermentationStore(s => s.markBarrelsSynced);
+  const markReadingsSynced = useFermentationStore(s => s.markReadingsSynced);
+  const markAdditionsSynced = useFermentationStore(s => s.markAdditionsSynced);
+  const hydrateFermentation = useFermentationStore(s => s.hydrateFromServer);
+  
+  const markHistorySynced = useHistoryStore(s => s.markHistorySynced);
+  const hydrateHistory = useHistoryStore(s => s.hydrateFromServer);
 
   const pushBarrels = api.sync.pushBarrels.useMutation();
   const pushReadings = api.sync.pushReadings.useMutation();
   const pushAdditions = api.sync.pushAdditions.useMutation();
   const pushHistory = api.sync.pushHistory.useMutation();
 
-  const isExecuting = useRef(false);
-
   const pushLocalData = useCallback(async () => {
-    if (isExecuting.current) {
-        return;
-    }
-
+    // Внутренняя функция пуша не использует глобальный замок, 
+    // так как она вызывается из syncAll, который уже защищен.
     try {
-      isExecuting.current = true;
-      
       // Актуальные данные из сторов без подписки на изменения
       const barrels = useFermentationStore.getState().barrels;
       const records = useHistoryStore.getState().records;
 
       const unsyncedBarrels = barrels
-        .filter(b => b.synced === false)
+        .filter(b => b.synced === false && !b.isDeleted)
         .map(mapBarrelToSync);
+
+      // Обработка удаленных бочек
+      const deletedBarrels = barrels
+        .filter(b => b.synced === false && b.isDeleted)
+        .map(mapBarrelToSync);
+
+      const allBarrelsToSync = [...unsyncedBarrels, ...deletedBarrels];
 
       const unsyncedReadings = barrels.flatMap(b => 
         (b.readings || [])
@@ -62,9 +71,9 @@ export function useSyncEngine() {
 
       const syncPromises = [];
 
-      if (unsyncedBarrels.length > 0) {
+      if (allBarrelsToSync.length > 0) {
         syncPromises.push(
-          pushBarrels.mutateAsync(unsyncedBarrels as any).then((res) => {
+          pushBarrels.mutateAsync(allBarrelsToSync as any).then((res) => {
             markBarrelsSynced(res.syncedIds);
           })
         );
@@ -99,8 +108,6 @@ export function useSyncEngine() {
       }
     } catch (e) {
       console.error("SyncEngine: Ошибка выгрузки:", e);
-    } finally {
-      isExecuting.current = false;
     }
   }, [
     pushBarrels, 
@@ -113,15 +120,18 @@ export function useSyncEngine() {
     markHistorySynced
   ]);
 
-  const { hydrateFromServer: hydrateFermentation } = useFermentationStore();
-  const { hydrateFromServer: hydrateHistory } = useHistoryStore();
-  
-  const pullQuery = api.sync.pullAll.useQuery(undefined, { enabled: false });
+  const pullQuery = api.sync.pullAll.useQuery(undefined, { 
+    enabled: false,
+    refetchOnWindowFocus: false,
+    retry: false
+  });
 
   const pullData = useCallback(async () => {
     try {
       const { data } = await pullQuery.refetch();
       if (data) {
+        // Проверяем, есть ли реально новые данные, чтобы не дергать стор зря
+        // (упрощенно - просто прокидываем в гидратацию)
         hydrateFermentation({
           barrels: data.barrels as any[],
           readings: data.readings,
@@ -135,15 +145,30 @@ export function useSyncEngine() {
   }, [pullQuery, hydrateFermentation, hydrateHistory]);
 
   const syncAll = useCallback(async () => {
-    await pushLocalData();
-    await pullData();
+    // Глобальная блокировка для всех экземпляров хука
+    if (isGlobalSyncing) return;
+    
+    // Защита от слишком частых вызовов (debounce/throttle)
+    const now = Date.now();
+    if (now - lastSyncTime < MIN_SYNC_INTERVAL) return;
+
+    try {
+      isGlobalSyncing = true;
+      lastSyncTime = now;
+      
+      await pushLocalData();
+      await pullData();
+    } finally {
+      isGlobalSyncing = false;
+    }
   }, [pushLocalData, pullData]);
 
   return { 
     pushLocalData, 
     pullData,
     syncAll,
-    isSyncing: pushBarrels.isPending || pushReadings.isPending || pushAdditions.isPending || pushHistory.isPending || pullQuery.isFetching
+    isSyncing: isGlobalSyncing || pushBarrels.isPending || pullQuery.isFetching
   };
 }
+
 
