@@ -139,6 +139,10 @@ export function useSyncEngine() {
     await pullData();
   }, [pushLocalData, pullData]);
 
+  return { 
+    pushLocalData, 
+    pullData,
+    syncAll,
     isSyncing: pushBarrels.isPending || pushReadings.isPending || pushAdditions.isPending || pushHistory.isPending || pullQuery.isFetching
   };
 }
