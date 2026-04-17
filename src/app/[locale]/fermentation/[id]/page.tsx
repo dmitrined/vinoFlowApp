@@ -89,6 +89,7 @@ export default function BarrelDetailPage() {
 
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editNumber, setEditNumber] = useState('');
+    const [editVolume, setEditVolume] = useState('');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedReading, setSelectedReading] = useState<Reading | null>(null);
@@ -160,7 +161,19 @@ export default function BarrelDetailPage() {
                         }}
                     >
                         <BreadcrumbItem href="/fermentation">{t('title')}</BreadcrumbItem>
-                        <BreadcrumbItem>{t('barrel-number')} {barrel.number}</BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <div className="flex items-center gap-2 group cursor-pointer" onClick={() => {
+                                setEditNumber(barrel.number);
+                                setEditVolume(barrel.volume?.toString() || '');
+                                setIsEditOpen(true);
+                            }}>
+                                <span className="font-black text-zinc-900 dark:text-white uppercase italic">
+                                    {barrel.number}
+                                    {barrel.volume ? ` (${barrel.volume} ${t('unit-liters')})` : ''}
+                                </span>
+                                <Edit2 size={14} className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                        </BreadcrumbItem>
                     </Breadcrumbs>
                 </div>
 
@@ -172,18 +185,6 @@ export default function BarrelDetailPage() {
                         className="font-black uppercase tracking-widest text-[10px] h-11 flex-1 sm:flex-none"
                     >
                         {barrel.status === 'active' ? t('finish') : t('activate')}
-                    </Button>
-                    <Button 
-                        color="primary" 
-                        onPress={() => {
-                            setSelectedReading(null);
-                            setIsModalOpen(true);
-                        }}
-                        isDisabled={barrel.readings.length >= 20}
-                        startContent={<Plus size={18} />}
-                        className="font-black uppercase tracking-widest text-[10px] h-11 shadow-lg shadow-brand-500/20 flex-1 sm:flex-none"
-                    >
-                        {t('add-reading')}
                     </Button>
                 </div>
             </div>
@@ -220,60 +221,23 @@ export default function BarrelDetailPage() {
 
                 {/* Right: Info & Log Section */}
                 <div className="space-y-6">
-                    {/* Barrel Stats */}
-                    <Card className="bento-card border-none shadow-none bg-white dark:bg-zinc-900">
-                         <CardHeader className="px-6 pt-6 flex justify-between items-center group">
-                            <div className="flex gap-3 items-center">
-                               <div className="p-2 bg-brand-500/10 text-brand-600 rounded-xl">
-                                    <FlaskConical size={20} />
-                               </div>
-                               <p className="text-lg font-black uppercase italic text-tech-gradient">{t('barrel-number')} {barrel.number}</p>
-                            </div>
-                            <Button
-                                isIconOnly
-                                size="sm"
-                                variant="light"
-                                className="text-zinc-300 hover:text-brand-500 transition-opacity"
-                                onPress={() => {
-                                    setEditNumber(barrel.number);
-                                    setIsEditOpen(true);
-                                }}
-                            >
-                                <Edit2 size={16} />
-                            </Button>
-                        </CardHeader>
-                        <CardBody className="px-6 py-6 pt-2">
-                             <div className="space-y-4">
-                                <div className="flex justify-between items-baseline border-b border-zinc-100 dark:border-zinc-800 pb-2">
-                                    <span className="text-[10px] font-black uppercase text-zinc-400">{t('start-date')}</span>
-                                    <span className="font-mono font-bold text-sm">{formatDate(barrel.startDate)}</span>
-                                </div>
-                                <div className="flex justify-between items-baseline border-b border-zinc-100 dark:border-zinc-800 pb-2">
-                                    <span className="text-[10px] font-black uppercase text-zinc-400">{t('total-readings')}</span>
-                                    <span className="font-mono font-bold text-sm">{barrel.readings.length} / 20</span>
-                                </div>
-                             </div>
-                        </CardBody>
-                    </Card>
-
-                    {/* Ingredients List */}
-                    <AdditionsList 
-                        additions={barrel.additions || []} 
-                        onDelete={(aid) => deleteAddition(barrel.id, aid)}
-                        onEditClick={(item) => {
-                            setSelectedAddition(item);
-                            setIsAdditionModalOpen(true);
-                        }}
-                        onAddClick={() => {
-                            setSelectedAddition(null);
-                            setIsAdditionModalOpen(true);
-                        }}
-                    />
 
                     {/* History Log */}
                     <Card className="bento-card border-none shadow-none bg-white dark:bg-zinc-900 max-h-[500px] overflow-hidden">
-                        <CardHeader className="px-6 pt-6">
+                        <CardHeader className="px-6 pt-6 flex justify-between items-center">
                             <h3 className="text-sm font-black uppercase tracking-widest text-zinc-400">{t('history')}</h3>
+                            <Button
+                                size="sm"
+                                variant="flat"
+                                color="primary"
+                                onPress={() => {
+                                    setSelectedReading(null);
+                                    setIsModalOpen(true);
+                                }}
+                                className="font-black uppercase tracking-widest text-[10px] px-4"
+                            >
+                                {t('add')}
+                            </Button>
                         </CardHeader>
                         <CardBody className="p-0 overflow-y-auto px-2 sm:px-4 pb-4">
                             <Table 
@@ -336,6 +300,20 @@ export default function BarrelDetailPage() {
                             )}
                         </CardBody>
                     </Card>
+
+                    {/* Ingredients List */}
+                    <AdditionsList 
+                        additions={barrel.additions || []} 
+                        onDelete={(aid) => deleteAddition(barrel.id, aid)}
+                        onEditClick={(item) => {
+                            setSelectedAddition(item);
+                            setIsAdditionModalOpen(true);
+                        }}
+                        onAddClick={() => {
+                            setSelectedAddition(null);
+                            setIsAdditionModalOpen(true);
+                        }}
+                    />
                 </div>
             </div>
 
@@ -397,6 +375,21 @@ export default function BarrelDetailPage() {
                                     onValueChange={setEditNumber}
                                     className="font-bold"
                                 />
+                                <Input
+                                    label={t('volume')}
+                                    placeholder="225"
+                                    variant="flat"
+                                    labelPlacement="outside"
+                                    type="number"
+                                    value={editVolume}
+                                    onValueChange={setEditVolume}
+                                    endContent={
+                                        <div className="pointer-events-none flex items-center">
+                                            <span className="text-default-400 text-small">{t('unit-liters')}</span>
+                                        </div>
+                                    }
+                                    className="font-bold mt-4"
+                                />
                             </ModalBody>
                             <ModalFooter>
                                 <Button variant="light" className="font-bold uppercase tracking-widest text-xs" onPress={onClose}>
@@ -407,7 +400,10 @@ export default function BarrelDetailPage() {
                                     className="font-black uppercase tracking-widest text-xs shadow-lg shadow-brand-500/20" 
                                     onPress={() => {
                                         if (editNumber.trim()) {
-                                            updateBarrel(barrel.id, editNumber.trim());
+                                            updateBarrel(barrel.id, { 
+                                                number: editNumber.trim(),
+                                                volume: editVolume ? parseFloat(editVolume) : 0
+                                            });
                                             onClose();
                                         }
                                     }}

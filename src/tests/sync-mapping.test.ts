@@ -38,7 +38,7 @@ describe('Sync Mapping Functions', () => {
     it('should handle missing barrel number with default name', () => {
         const barrel: Barrel = {
             id: 'uuid-2',
-            number: 'Undefined',
+            number: '',
             status: 'active',
             startDate: '2023-10-01',
             readings: [],

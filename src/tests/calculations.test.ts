@@ -101,7 +101,7 @@ describe('Enological Calculations', () => {
         it('should handle g/L input', () => {
             // 1000L, 78.9 g/L alc -> 98.6 g/L alc
             // Equivalent to 10.0% -> 12.5% approx
-            const result = calcChaptalization(1000, 78.9, 98.6, 'gl');
+            const result = calcChaptalization(1000, 78.9, 98.6, 'gl', 'gl');
             expect(result.sugar).toBeGreaterThan(41);
             expect(result.sugar).toBeLessThan(43);
         });

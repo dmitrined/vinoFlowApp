@@ -24,8 +24,8 @@
 
 | Feature | Description |
 |---|---|
-| **Fermentation Tracker** | Dynamic monitoring of Oechsle and Temperature with real-time charting. |
-| **Secure Sync (LWW)** | Backend synchronization via tRPC and Turso (libSQL). "Last Write Wins" resolution for offline-first reliability. |
+| **Fermentation Tracker** | Dynamic monitoring of Oechsle and Temperature with real-time charting. Optimized with **React.memo** for scale (200+ barrels). |
+| **Secure Sync (LWW)** | Cloud synchronization via tRPC and Turso (libSQL). Uses **Incremental (Delta) Sync** to fetch only changed data. "Last Write Wins" resolution for offline-first reliability. Supports large datasets via IndexedDB. |
 | **Enological Tools** | Professional calculators: SO₂, SR, Blending, Acid Management, and Chaptalization. |
 | **Protected Access** | Secure administrative area gated by JWT-based authentication. |
 
@@ -37,7 +37,7 @@
 | **API Layer** | tRPC v11 (Type-safe client-server communication) |
 | **Database** | Turso (libSQL) + Prisma ORM |
 | **Auth** | JWT (Jose) + Protected Procedures |
-| **State** | Zustand (with persistent LocalStorage) |
+| **State** | Zustand + IndexedDB (via idb-keyval) |
 | **UI** | HeroUI (NextUI) + Tailwind CSS + Framer Motion |
 | **PWA** | @ducanh2912/next-pwa (Offline Ready) |
 
@@ -93,8 +93,8 @@ npm run build
 
 | Функция | Описание |
 |---|---|
-| **Мониторинг брожения** | Динамический контроль Oechsle и температуры с графиками в реальном времени. |
-| **Облачная синхронизация** | Движок на базе tRPC и Turso (libSQL). Стратегия "Last Write Wins" для надежной работы офлайн. |
+| **Мониторинг брожения** | Динамический контроль Oechsle и температуры. Оптимизирован с помощью **React.memo** для быстрой работы с 200+ бочками. |
+| **Облачная синхронизация** | Движок на базе tRPC и Turso. Использует **инкрементальную синхронизацию (Delta Sync)** для экономии трафика. Стратегия "Last Write Wins" для надежной работы офлайн. |
 | **Энологические инструменты** | Профессиональные расчеты: SO₂, сахара, купажа, кислотности и шаптализации. |
 | **Защищенный доступ** | Административный раздел, защищенный авторизацией на базе JWT. |
 
@@ -110,8 +110,8 @@ npm run build
 
 | Funktion | Beschreibung |
 |---|---|
-| **Gärungs-Tracker** | Dynamische Überwachung von Oechsle und Temperatur mit Echtzeit-Diagrammen. |
-| **Cloud-Sync (LWW)** | Backend-Synchronisierung via tRPC und Turso (libSQL). "Last Write Wins" Strategie für absolute Datensicherheit. |
+| **Gärungs-Tracker** | Dynamische Überwachung von Oechsle und Temperatur. Optimiert mit **React.memo** für maximale Performance bei 200+ Fässern. |
+| **Cloud-Sync (LWW)** | Backend-Synchronisierung via tRPC und Turso. Nutzt **Incremental (Delta) Sync** für maximale Effizienz. "Last Write Wins" Strategie für absolute Datensicherheit. |
 | **Önologische Tools** | Profi-Rechner: SO₂, SR, Verschnitt, Säuremanagement und Chaptalisierung. |
 | **Geschützter Bereich** | Sicherer Administrationsbereich, geschützt durch JWT-basierte Authentifizierung. |
 

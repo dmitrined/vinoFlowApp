@@ -1,12 +1,14 @@
 /**
  * НАЗНАЧЕНИЕ: Глобальное состояние для отслеживания процессов брожения
- * ЗАВИСИМОСТИ: zustand, @/types/fermentation
- * ОСОБЕННОСТИ: LocalStorage persistence, лимит 20 записей на бочку, поддержка оффлайн-флагов синхронизации
+ * ЗАВИСИМОСТИ: zustand, @/types/fermentation, @/lib/sync/idb-storage
+ * ОСОБЕННОСТИ: IndexedDB persistence (idb-keyval), автоматическое слияние LWW, поддержка оффлайн-режима
  */
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { Barrel, Reading, Addition } from '@/types/fermentation';
+import { mergeEntities } from '@/lib/sync/mergeUtils';
+import { idbStorage } from './idb-storage';
 
 interface FermentationState {
     barrels: Barrel[];
@@ -15,7 +17,7 @@ interface FermentationState {
     addBarrel: (number: string) => void;
     deleteBarrel: (id: string) => void;
     toggleStatus: (id: string) => void;
-    updateBarrel: (id: string, number: string) => void;
+    updateBarrel: (id: string, data: Partial<Barrel>) => void;
     
     // Действия с замерами параметров (плотность, температура и т.д.)
     addReading: (barrelId: string, oechsle: number, temperature: number, date?: string) => void;
@@ -74,11 +76,11 @@ export const useFermentationStore = create<FermentationState>()(
                 )
             })),
 
-            updateBarrel: (id, number) => set((state) => ({
+            updateBarrel: (id, data) => set((state) => ({
                 barrels: state.barrels.map(b => 
                     b.id === id ? { 
                         ...b, 
-                        number,
+                        ...data,
                         updatedAt: new Date().toISOString(),
                         synced: false 
                     } : b
@@ -88,13 +90,12 @@ export const useFermentationStore = create<FermentationState>()(
             addReading: (barrelId, oechsle, temperature, date) => set((state) => ({
                 barrels: state.barrels.map(b => {
                     if (b.id === barrelId) {
-                        if (b.readings.length >= 20) return b; // Ограничение для оптимизации стора
                         return {
                             ...b,
                             updatedAt: new Date().toISOString(),
                             synced: false,
                             readings: [
-                                ...b.readings,
+                                ...(b.readings || []),
                                 {
                                     id: crypto.randomUUID(),
                                     date: date || new Date().toISOString().split('T')[0],
@@ -117,7 +118,7 @@ export const useFermentationStore = create<FermentationState>()(
                             ...b,
                             updatedAt: new Date().toISOString(),
                             synced: false,
-                            readings: b.readings.map(r => 
+                            readings: (b.readings || []).map(r => 
                                 r.id === readingId ? { 
                                     ...r, 
                                     ...data,
@@ -138,7 +139,7 @@ export const useFermentationStore = create<FermentationState>()(
                             ...b,
                             updatedAt: new Date().toISOString(),
                             synced: false,
-                            readings: b.readings.map(r => 
+                            readings: (b.readings || []).map(r => 
                                 r.id === readingId ? { ...r, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : r
                             )
                         };
@@ -216,7 +217,7 @@ export const useFermentationStore = create<FermentationState>()(
             markReadingsSynced: (ids) => set((state) => ({
                 barrels: state.barrels.map(b => ({
                     ...b,
-                    readings: b.readings.map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
+                    readings: (b.readings || []).map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
                 }))
             })),
 
@@ -228,53 +229,11 @@ export const useFermentationStore = create<FermentationState>()(
             })),
             
             hydrateFromServer: (serverData) => set((state) => {
-                const localBarrelsMap = new Map(state.barrels.map(b => [b.id, b]));
-                const mergedBarrels: Barrel[] = [];
-
-                for (const sb of serverData.barrels) {
-                    const lb = localBarrelsMap.get(sb.id);
-                    if (!lb) {
-                        // Create shell barrel, then we populate readings/additions
-                        mergedBarrels.push({
-                            id: sb.id,
-                            number: sb.name || '',
-                            status: sb.status as any,
-                            startDate: sb.updatedAt.split('T')[0], // Approximation
-                            updatedAt: sb.updatedAt,
-                            isDeleted: sb.isDeleted,
-                            synced: true,
-                            readings: [],
-                            additions: []
-                        });
-                    } else {
-                        const sTime = new Date(sb.updatedAt).getTime();
-                        const lTime = new Date(lb.updatedAt).getTime();
-                        if (sTime > lTime) {
-                            mergedBarrels.push({
-                                ...lb,
-                                number: sb.name || lb.number,
-                                status: sb.status as any,
-                                updatedAt: sb.updatedAt,
-                                isDeleted: sb.isDeleted,
-                                synced: true
-                            });
-                        } else {
-                            mergedBarrels.push(lb); // Keep local if it's newer
-                        }
-                        localBarrelsMap.delete(sb.id);
-                    }
-                }
-                
-                // Add any local-only barrels that aren't on server yet
-                for (const lb of localBarrelsMap.values()) {
-                    mergedBarrels.push(lb);
-                }
-
-                // Process readings
-                const readingsByBarrelId: Record<string, Reading[]> = {};
-                for (const sr of serverData.readings) {
-                    if (!readingsByBarrelId[sr.barrelId]) readingsByBarrelId[sr.barrelId] = [];
-                    readingsByBarrelId[sr.barrelId].push({
+                // Создаем плоские карты серверных данных
+                const serverReadingsByBarrel: Record<string, Reading[]> = {};
+                serverData.readings.forEach(sr => {
+                    if (!serverReadingsByBarrel[sr.barrelId]) serverReadingsByBarrel[sr.barrelId] = [];
+                    serverReadingsByBarrel[sr.barrelId].push({
                         id: sr.id,
                         date: sr.date,
                         oechsle: sr.oechsle || 0,
@@ -283,13 +242,12 @@ export const useFermentationStore = create<FermentationState>()(
                         isDeleted: sr.isDeleted,
                         synced: true
                     });
-                }
+                });
 
-                // Process additions
-                const additionsByBarrelId: Record<string, Addition[]> = {};
-                for (const sa of serverData.additions) {
-                    if (!additionsByBarrelId[sa.barrelId]) additionsByBarrelId[sa.barrelId] = [];
-                    additionsByBarrelId[sa.barrelId].push({
+                const serverAdditionsByBarrel: Record<string, Addition[]> = {};
+                serverData.additions.forEach(sa => {
+                    if (!serverAdditionsByBarrel[sa.barrelId]) serverAdditionsByBarrel[sa.barrelId] = [];
+                    serverAdditionsByBarrel[sa.barrelId].push({
                         id: sa.id,
                         date: sa.date,
                         name: sa.name,
@@ -299,59 +257,35 @@ export const useFermentationStore = create<FermentationState>()(
                         isDeleted: sa.isDeleted,
                         synced: true
                     });
-                }
+                });
 
-                // Merge readings and additions into barrels
+                // Подготавливаем серверные бочки (shell barrels)
+                const serverBarrels = serverData.barrels.map(sb => ({
+                    id: sb.id,
+                    number: sb.name || '',
+                    status: sb.status as any,
+                    volume: sb.volume || 0,
+                    startDate: sb.updatedAt.split('T')[0],
+                    updatedAt: sb.updatedAt,
+                    isDeleted: sb.isDeleted,
+                    synced: true,
+                    readings: serverReadingsByBarrel[sb.id] || [],
+                    additions: serverAdditionsByBarrel[sb.id] || []
+                }));
+
+                // Мержим бочки верхнего уровня
+                const mergedBarrels = mergeEntities(state.barrels, serverBarrels);
+
+                // Теперь мержим вложенные сущности (замеры и добавки) внутри каждой бочки
                 const finalBarrels = mergedBarrels.map(b => {
-                    // Update readings
-                    const localReadingsMap = new Map(b.readings?.map(r => [r.id, r]) || []);
-                    const mergedReadings: Reading[] = [];
-                    const serverReadings = readingsByBarrelId[b.id] || [];
+                    const sReadings = serverReadingsByBarrel[b.id] || [];
+                    const sAdditions = serverAdditionsByBarrel[b.id] || [];
 
-                    for (const sr of serverReadings) {
-                        const lr = localReadingsMap.get(sr.id);
-                        if (!lr) {
-                            mergedReadings.push(sr);
-                        } else {
-                            const sTime = new Date(sr.updatedAt).getTime();
-                            const lTime = new Date(lr.updatedAt).getTime();
-                            if (sTime > lTime) {
-                                mergedReadings.push(sr);
-                            } else {
-                                mergedReadings.push(lr);
-                            }
-                            localReadingsMap.delete(sr.id);
-                        }
-                    }
-                    for (const lr of localReadingsMap.values()) {
-                        mergedReadings.push(lr);
-                    }
-
-                    // Update additions
-                    const localAdditionsMap = new Map(b.additions?.map(a => [a.id, a]) || []);
-                    const mergedAdditions: Addition[] = [];
-                    const serverAdditions = additionsByBarrelId[b.id] || [];
-
-                    for (const sa of serverAdditions) {
-                        const la = localAdditionsMap.get(sa.id);
-                        if (!la) {
-                            mergedAdditions.push(sa);
-                        } else {
-                            const sTime = new Date(sa.updatedAt).getTime();
-                            const lTime = new Date(la.updatedAt).getTime();
-                            if (sTime > lTime) {
-                                mergedAdditions.push(sa);
-                            } else {
-                                mergedAdditions.push(la);
-                            }
-                            localAdditionsMap.delete(sa.id);
-                        }
-                    }
-                    for (const la of localAdditionsMap.values()) {
-                        mergedAdditions.push(la);
-                    }
-
-                    return { ...b, readings: mergedReadings, additions: mergedAdditions };
+                    return {
+                        ...b,
+                        readings: mergeEntities(b.readings || [], sReadings),
+                        additions: mergeEntities(b.additions || [], sAdditions)
+                    };
                 });
 
                 return { barrels: finalBarrels };
@@ -359,7 +293,7 @@ export const useFermentationStore = create<FermentationState>()(
         }),
         {
             name: 'vinoflow-fermentation-storage',
-            storage: createJSONStorage(() => localStorage),
+            storage: createJSONStorage(() => idbStorage),
         }
     )
 );

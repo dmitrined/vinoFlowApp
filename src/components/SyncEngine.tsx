@@ -35,15 +35,27 @@ export function SyncEngine() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Периодическая проверка несохраненных изменений (каждые 30 секунд)
+  // Периодическая проверка несохраненных изменений (каждые 3 минуты)
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (navigator.onLine) {
+      if (navigator.onLine && document.visibilityState === 'visible') {
         syncAll();
       }
-    }, 30000);
+    }, 180000); // 3 минуты
 
-    return () => clearInterval(intervalId);
+    // Синхронизация при возврате во вкладку
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && navigator.onLine) {
+        syncAll();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

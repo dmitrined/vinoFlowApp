@@ -32,6 +32,7 @@ export interface Barrel {
     number: string; // Номер бочки (например "Barrel #42")
     status: BarrelStatus;
     startDate: string;
+    volume?: number;
     readings: Reading[];
     additions: Addition[];
     updatedAt: string;

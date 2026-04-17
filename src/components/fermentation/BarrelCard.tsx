@@ -20,7 +20,7 @@ interface Props {
     onDelete: (id: string) => void;
 }
 
-export const BarrelCard: React.FC<Props> = ({ barrel, onDelete }) => {
+export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
     const t = useTranslations('Fermentation');
     const router = useRouter();
 
@@ -106,4 +106,4 @@ export const BarrelCard: React.FC<Props> = ({ barrel, onDelete }) => {
             </Card>
         </motion.div>
     );
-};
+});

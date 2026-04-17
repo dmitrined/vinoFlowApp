@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
+import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab } from "@heroui/react";
 import { Plus, Wine, Search, Filter } from "lucide-react";
 import { useFermentationStore } from '@/lib/store/useFermentationStore';
 import { BarrelCard } from '@/components/fermentation/BarrelCard';
@@ -23,6 +23,7 @@ export default function FermentationDashboard() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState<'active' | 'finished'>('active');
 
     // Синхронизация теперь управляется централизованно через SyncEngine в layout.tsx
     // Убираем локальный вызов, чтобы не дублировать запросы
@@ -39,8 +40,13 @@ export default function FermentationDashboard() {
         }
     };
 
+    const activeCount = React.useMemo(() => barrels.filter(b => !b.isDeleted && b.status === 'active').length, [barrels]);
+    const finishedCount = React.useMemo(() => barrels.filter(b => !b.isDeleted && b.status === 'finished').length, [barrels]);
+
     const filteredBarrels = barrels.filter(b => 
-        !b.isDeleted && b.number.toLowerCase().includes(searchQuery.toLowerCase())
+        !b.isDeleted && 
+        b.status === statusFilter &&
+        b.number.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -74,23 +80,38 @@ export default function FermentationDashboard() {
             </div>
 
             {/* Sub-Header: Search & Filter */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center bg-zinc-50/50 dark:bg-zinc-900/50 p-4 rounded-[2rem] border border-zinc-100 dark:border-zinc-800">
-                <Input
-                    isClearable
-                    fullWidth
-                    placeholder={t('barrel-placeholder')}
-                    startContent={<Search size={18} className="text-zinc-400" />}
-                    value={searchQuery}
-                    onValueChange={setSearchQuery}
-                    variant="flat"
-                    className="max-w-md"
+            <div className="flex flex-col md:flex-row gap-6 items-center bg-zinc-50/50 dark:bg-zinc-900/50 p-4 rounded-[2rem] border border-zinc-100 dark:border-zinc-800">
+                <Tabs 
+                    aria-label="Barrel Status Filter"
+                    selectedKey={statusFilter}
+                    onSelectionChange={(key) => setStatusFilter(key as 'active' | 'finished')}
+                    variant="underlined"
                     classNames={{
-                        inputWrapper: "bg-white dark:bg-zinc-800 shadow-sm border-zinc-100 dark:border-zinc-700"
+                        base: "w-full md:w-auto",
+                        tabList: "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+                        cursor: "w-full bg-brand-500",
+                        tab: "max-w-fit px-0 h-12",
+                        tabContent: "group-data-[selected=true]:text-brand-600 font-black uppercase tracking-widest text-[10px]"
                     }}
-                />
-                <Button variant="flat" isIconOnly radius="full" className="bg-white dark:bg-zinc-800 shadow-sm">
-                    <Filter size={18} className="text-zinc-500" />
-                </Button>
+                >
+                    <Tab key="active" title={`${t('status-active')} (${activeCount})`} />
+                    <Tab key="finished" title={`${t('status-finished')} (${finishedCount})`} />
+                </Tabs>
+
+                <div className="flex flex-1 w-full gap-4">
+                    <Input
+                        isClearable
+                        fullWidth
+                        placeholder={t('barrel-placeholder')}
+                        startContent={<Search size={18} className="text-zinc-400" />}
+                        value={searchQuery}
+                        onValueChange={setSearchQuery}
+                        variant="flat"
+                        classNames={{
+                            inputWrapper: "bg-white dark:bg-zinc-800 shadow-sm border-zinc-100 dark:border-zinc-700 h-12 rounded-2xl"
+                        }}
+                    />
+                </div>
             </div>
 
             {/* Barrels Grid */}

@@ -61,24 +61,30 @@ const calculationSchema = z.object({
 export const syncRouter = createTRPCRouter({
   
   /**
-   * Загрузка всех данных пользователя для первичной гидрации
+   * Загрузка измененных данных пользователя для синхронизации (Delta Sync)
    */
-  pullAll: protectedProcedure.query(async ({ ctx }) => {
-    const [barrels, readings, additions, history] = await Promise.all([
-      ctx.db.barrel.findMany(),
-      ctx.db.reading.findMany(),
-      ctx.db.addition.findMany(),
-      ctx.db.calculationRecord.findMany(),
-    ]);
+  pullAll: protectedProcedure
+    .input(z.object({ since: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const sinceDate = input?.since ? new Date(input.since) : new Date(0);
+      const now = new Date();
 
-    // Форматирование дат и BigInt в JSON-совместимые типы
-    return {
-      barrels: barrels.map(b => ({ ...b, updatedAt: b.updatedAt.toISOString(), synced: true })),
-      readings: readings.map(r => ({ ...r, updatedAt: r.updatedAt.toISOString(), synced: true })),
-      additions: additions.map(a => ({ ...a, updatedAt: a.updatedAt.toISOString(), synced: true })),
-      history: history.map(h => ({ ...h, updatedAt: h.updatedAt.toISOString(), date: Number(h.date), synced: true })),
-    };
-  }),
+      const [barrels, readings, additions, history] = await Promise.all([
+        ctx.db.barrel.findMany({ where: { updatedAt: { gt: sinceDate } } }),
+        ctx.db.reading.findMany({ where: { updatedAt: { gt: sinceDate } } }),
+        ctx.db.addition.findMany({ where: { updatedAt: { gt: sinceDate } } }),
+        ctx.db.calculationRecord.findMany({ where: { updatedAt: { gt: sinceDate } } }),
+      ]);
+
+      // Форматирование дат и BigInt в JSON-совместимые типы
+      return {
+        barrels: barrels.map(b => ({ ...b, updatedAt: b.updatedAt.toISOString(), synced: true })),
+        readings: readings.map(r => ({ ...r, updatedAt: r.updatedAt.toISOString(), synced: true })),
+        additions: additions.map(a => ({ ...a, updatedAt: a.updatedAt.toISOString(), synced: true })),
+        history: history.map(h => ({ ...h, updatedAt: h.updatedAt.toISOString(), date: Number(h.date), synced: true })),
+        serverTime: now.toISOString(),
+      };
+    }),
 
   /**
    * Синхронизация бочек (Upsert)

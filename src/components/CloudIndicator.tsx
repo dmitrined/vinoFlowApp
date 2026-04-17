@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Cloud, CloudOff, RefreshCw, CheckCircle2 } from "lucide-react";
 import { useFermentationStore } from "@/lib/store/useFermentationStore";
 import { useHistoryStore } from "@/lib/store/useHistoryStore";
+import { useSyncStore } from "@/lib/store/useSyncStore";
 import { Tooltip } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
@@ -17,6 +18,9 @@ export const CloudIndicator = () => {
   const t = useTranslations("SyncEngine");
   const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
+
+  // Глобальное состояние процесса синхронизации
+  const isGlobalSyncing = useSyncStore((s) => s.isSyncing);
 
   // Подписка на состояния Zustand сторов для отслеживания флага synced
   const barrels = useFermentationStore((state) => state.barrels);
@@ -46,7 +50,7 @@ export const CloudIndicator = () => {
   const hasUnsyncedAdditions = barrels.some((b) => (b.additions || []).some((a) => a.synced === false));
   const hasUnsyncedHistory = records.some((h) => h.synced === false);
 
-  const isSyncing = hasUnsyncedBarrels || hasUnsyncedReadings || hasUnsyncedAdditions || hasUnsyncedHistory;
+  const isSyncing = isGlobalSyncing || hasUnsyncedBarrels || hasUnsyncedReadings || hasUnsyncedAdditions || hasUnsyncedHistory;
 
   // Состояние: Оффлайн
   if (!isOnline) {
