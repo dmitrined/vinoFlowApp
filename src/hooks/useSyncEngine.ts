@@ -16,7 +16,7 @@ import {
   mapHistoryToSync 
 } from "@/lib/sync/mapping";
 
-const MIN_SYNC_INTERVAL = 2000; // Минимум 2 секунды между полными циклами
+const MIN_SYNC_INTERVAL = 30000; // 30 секунд между проверками облака для экономии батареи
 
 export function useSyncEngine() {
   const isSyncing = useSyncStore(s => s.isSyncing);

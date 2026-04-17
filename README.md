@@ -24,8 +24,9 @@
 
 | Feature | Description |
 |---|---|
-| **Fermentation Tracker** | Dynamic monitoring of Oechsle and Temperature with real-time charting. Optimized with **React.memo** for scale (200+ barrels). |
-| **Secure Sync (LWW)** | Cloud synchronization via tRPC and Turso (libSQL). Uses **Incremental (Delta) Sync** to fetch only changed data. "Last Write Wins" resolution for offline-first reliability. Supports large datasets via IndexedDB. |
+| **Fermentation Tracker** | Dynamic monitoring of Oechsle and Temperature with a **Relative Timeline (Day 1)** logic. Optimized with **React.memo** and **Bento Pagination** (8 per page) for massive cellars (500+ barrels). |
+| **Cellar Notes** | Batch-specific editable notes for each barrel, persisted in the cloud and available offline. |
+| **Smart Sync Engine** | Cloud sync via tRPC/Turso with **Battery Optimization** (30s adaptive polling). Features a mobile-friendly **Rescue Console** for full data resets. |
 | **Enological Tools** | Professional calculators: SO₂, SR, Blending, Acid Management, and Chaptalization. |
 | **Protected Access** | Secure administrative area gated by JWT-based authentication. |
 
@@ -93,8 +94,9 @@ npm run build
 
 | Функция | Описание |
 |---|---|
-| **Мониторинг брожения** | Динамический контроль Oechsle и температуры. Оптимизирован с помощью **React.memo** для быстрой работы с 200+ бочками. |
-| **Облачная синхронизация** | Движок на базе tRPC и Turso. Использует **инкрементальную синхронизацию (Delta Sync)** для экономии трафика. Стратегия "Last Write Wins" для надежной работы офлайн. |
+| **Мониторинг брожения** | Контроль Oechsle и температуры с логикой **«День 1»** (относительная шкала времени). Поддержка **Bento-пагинации** для молниеносной работы с 500+ бочками. |
+| **Заметки винодела** | Встроенное ведение записей для каждой партии вина с синхронизацией в реальном времени. |
+| **Smart Sync Engine** | Синхронизация с **режимом экономии энергии** (интервал 30 сек) и мобильной консолью управления сбросом данных. |
 | **Энологические инструменты** | Профессиональные расчеты: SO₂, сахара, купажа, кислотности и шаптализации. |
 | **Защищенный доступ** | Административный раздел, защищенный авторизацией на базе JWT. |
 

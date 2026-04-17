@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab } from "@heroui/react";
+import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Pagination } from "@heroui/react";
 import { Plus, Wine, Search, Filter } from "lucide-react";
 import { useFermentationStore } from '@/lib/store/useFermentationStore';
 import { BarrelCard } from '@/components/fermentation/BarrelCard';
@@ -24,9 +24,13 @@ export default function FermentationDashboard() {
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<'active' | 'finished'>('active');
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 8;
 
-    // Синхронизация теперь управляется централизованно через SyncEngine в layout.tsx
-    // Убираем локальный вызов, чтобы не дублировать запросы
+    // Reset page to 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [statusFilter, searchQuery]);
 
     
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -48,6 +52,12 @@ export default function FermentationDashboard() {
         b.status === statusFilter &&
         b.number.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredBarrels.length / rowsPerPage);
+    const paginatedBarrels = React.useMemo(() => {
+        const start = (currentPage - 1) * rowsPerPage;
+        return filteredBarrels.slice(start, start + rowsPerPage);
+    }, [filteredBarrels, currentPage]);
 
     return (
         <div className="max-w-7xl mx-auto px-6 pt-16 pb-24 md:py-12 space-y-12">
@@ -117,8 +127,8 @@ export default function FermentationDashboard() {
             {/* Barrels Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <AnimatePresence mode="popLayout">
-                    {filteredBarrels.length > 0 ? (
-                        filteredBarrels.map((barrel) => (
+                    {paginatedBarrels.length > 0 ? (
+                        paginatedBarrels.map((barrel) => (
                             <BarrelCard 
                                 key={barrel.id} 
                                 barrel={barrel} 
@@ -144,6 +154,26 @@ export default function FermentationDashboard() {
                     )}
                 </AnimatePresence>
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <div className="flex justify-center pt-8">
+                    <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={currentPage}
+                        total={totalPages}
+                        onChange={setCurrentPage}
+                        classNames={{
+                            cursor: "bg-brand-600 text-white font-black",
+                            item: "font-bold text-xs opacity-70 hover:opacity-100",
+                        }}
+                        radius="full"
+                    />
+                </div>
+            )}
 
             {/* Add Barrel Modal */}
             <Modal 

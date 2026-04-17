@@ -251,6 +251,8 @@
         "no-chart-data": "No data for chart",
         "total-readings": "Total readings",
         "no-readings": "No readings yet",
+        "notes": "Barrel Notes",
+        "notes-placeholder": "Record batch details, ingredients, or fermentation plans here...",
         "add-addition": "Add Ingredient",
         "ingredient": "Ingredient",
         "select-ingredient": "Select ingredient",

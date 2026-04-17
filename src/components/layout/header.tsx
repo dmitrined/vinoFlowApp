@@ -108,7 +108,7 @@ export const Header = () => {
               </button>
             ))}
           </div>
-          <div className="hidden sm:flex ml-1 relative">
+          <div className="flex ml-1 relative">
             <CloudIndicator />
           </div>
         </NavbarContent>
