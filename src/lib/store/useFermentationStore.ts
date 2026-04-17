@@ -229,15 +229,15 @@ export const useFermentationStore = create<FermentationState>()(
             })),
             
             hydrateFromServer: (serverData) => set((state) => {
-                // Создаем плоские карты серверных данных
+                // 1. Группируем входящие серверные данные по ID бочки
                 const serverReadingsByBarrel: Record<string, Reading[]> = {};
                 serverData.readings.forEach(sr => {
                     if (!serverReadingsByBarrel[sr.barrelId]) serverReadingsByBarrel[sr.barrelId] = [];
                     serverReadingsByBarrel[sr.barrelId].push({
                         id: sr.id,
                         date: sr.date,
-                        oechsle: sr.oechsle || 0,
-                        temperature: sr.temperature || 0,
+                        oechsle: sr.oechsle ?? 0,
+                        temperature: sr.temperature ?? 0,
                         updatedAt: sr.updatedAt,
                         isDeleted: sr.isDeleted,
                         synced: true
@@ -259,33 +259,40 @@ export const useFermentationStore = create<FermentationState>()(
                     });
                 });
 
-                // Подготавливаем серверные бочки (shell barrels)
+                // 2. Подготавливаем серверные бочки для слияния метаданных
                 const serverBarrels = serverData.barrels.map(sb => ({
                     id: sb.id,
                     number: sb.name || '',
                     status: sb.status as any,
                     volume: sb.volume || 0,
-                    startDate: sb.updatedAt.split('T')[0],
+                    // Мы не кладем сюда readings/additions, чтобы mergeEntities не затер локальные списки
                     updatedAt: sb.updatedAt,
                     isDeleted: sb.isDeleted,
-                    synced: true,
-                    readings: serverReadingsByBarrel[sb.id] || [],
-                    additions: serverAdditionsByBarrel[sb.id] || []
+                    synced: true
                 }));
 
-                // Мержим бочки верхнего уровня
-                const mergedBarrels = mergeEntities(state.barrels, serverBarrels);
+                // 3. Мержим метаданные бочек (имена, статусы, объем)
+                const mergedBarrelsMetadata = mergeEntities(state.barrels, serverBarrels as any);
 
-                // Теперь мержим вложенные сущности (замеры и добавки) внутри каждой бочки
-                const finalBarrels = mergedBarrels.map(b => {
-                    const sReadings = serverReadingsByBarrel[b.id] || [];
-                    const sAdditions = serverAdditionsByBarrel[b.id] || [];
+                // 4. Финальный проход: восстанавливаем и мержим вложенные сущности
+                const finalBarrels = mergedBarrelsMetadata.map(b => {
+                    // Ищем локальную версию этой бочки, чтобы достать из нее исторические данные
+                    const localVersion = state.barrels.find(lb => lb.id === b.id);
+                    const localReadings = localVersion?.readings || [];
+                    const localAdditions = localVersion?.additions || [];
+                    
+                    // Берем новые данные из текущего пакета синхронизации
+                    const incomingReadings = serverReadingsByBarrel[b.id] || [];
+                    const incomingAdditions = serverAdditionsByBarrel[b.id] || [];
 
                     return {
                         ...b,
-                        readings: mergeEntities(b.readings || [], sReadings),
-                        additions: mergeEntities(b.additions || [], sAdditions)
-                    };
+                        // Если startDate не пришел в метаданных (а в БД его нет), сохраняем локальный
+                        startDate: localVersion?.startDate || b.updatedAt.split('T')[0],
+                        // Самое важное: мержим локальную историю с новыми данными
+                        readings: mergeEntities(localReadings, incomingReadings),
+                        additions: mergeEntities(localAdditions, incomingAdditions)
+                    } as Barrel;
                 });
 
                 return { barrels: finalBarrels };

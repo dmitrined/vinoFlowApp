@@ -15,6 +15,7 @@ interface SyncState {
   setSyncing: (status: boolean) => void;
   updateLastSyncTime: () => void;
   setLastSyncTimestamp: (timestamp: string) => void;
+  resetSync: () => void;
 }
 
 export const useSyncStore = create<SyncState>()(
@@ -26,6 +27,7 @@ export const useSyncStore = create<SyncState>()(
       setSyncing: (status) => set({ isSyncing: status }),
       updateLastSyncTime: () => set({ lastSyncTime: Date.now() }),
       setLastSyncTimestamp: (timestamp) => set({ lastSyncTimestamp: timestamp }),
+      resetSync: () => set({ lastSyncTimestamp: null, lastSyncTime: 0 }),
     }),
     {
       name: 'vinoflow-sync-meta-storage',

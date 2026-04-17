@@ -18,6 +18,7 @@ export const CloudIndicator = () => {
   const t = useTranslations("SyncEngine");
   const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
+  const resetSync = useSyncStore(s => s.resetSync);
 
   // Глобальное состояние процесса синхронизации
   const isGlobalSyncing = useSyncStore((s) => s.isSyncing);
@@ -75,9 +76,17 @@ export const CloudIndicator = () => {
   }
 
   // Состояние: Все данные в облаке
+  
   return (
-    <Tooltip content={t("synced")} placement="bottom">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-600">
+    <Tooltip content={t("synced") + " (Click to force full sync)"} placement="bottom">
+      <div 
+        className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-600 cursor-pointer hover:bg-green-500/20 transition-colors"
+        onClick={() => {
+          resetSync();
+          // Перезагрузка страницы самый простой способ запустить новый цикл с чистым флагом since
+          window.location.reload();
+        }}
+      >
         <Cloud size={16} />
         <CheckCircle2 size={8} className="absolute bottom-1 right-1 text-green-500 bg-white dark:bg-zinc-900 rounded-full" />
       </div>
