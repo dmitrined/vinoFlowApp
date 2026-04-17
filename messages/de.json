@@ -218,7 +218,7 @@
         "seo-description": "Verfolgen Sie den Gärprozess jedes Fasses. Echtzeit-Visualisierung von Oechsle und Temperatur.",
         "add-barrel": "Fass hinzufügen",
         "edit-barrel": "Fass bearbeiten",
-        "barrel-number": "Fass Nr.",
+        "barrel-number": "",
         "volume": "Volumen",
         "unit-liters": "L",
         "barrel-placeholder": "z.B. T-42 oder Fass 1",

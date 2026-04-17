@@ -223,7 +223,7 @@
         "seo-description": "Track the fermentation process of each barrel. Real-time visualization of Oechsle and temperature.",
         "add-barrel": "Add Barrel",
         "edit-barrel": "Edit Barrel",
-        "barrel-number": "Barrel #",
+        "barrel-number": "",
         "volume": "Volume",
         "unit-liters": "L",
         "barrel-placeholder": "e.g. T-42 or Barrel 1",

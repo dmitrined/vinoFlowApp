@@ -223,7 +223,7 @@
         "seo-description": "Отслеживайте процесс ферментации каждой бочки. Визуализация Oechsle и температуры в реальном времени.",
         "add-barrel": "Добавить бочку",
         "edit-barrel": "Изменить бочку",
-        "barrel-number": "Бочка №",
+        "barrel-number": "",
         "volume": "Объем",
         "unit-liters": "л",
         "barrel-placeholder": "Например: T-42 или Бочка 1",

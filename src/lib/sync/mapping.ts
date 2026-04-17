@@ -18,6 +18,7 @@ export function mapBarrelToSync(b: Barrel): SyncBarrel {
     type: "wine",
     variant: null,
     year: b.startDate?.split("-")[0] || new Date().getFullYear().toString(),
+    volume: b.volume || 0,
     status: b.status,
     updatedAt: b.updatedAt,
     isDeleted: b.isDeleted || false,
