@@ -19,7 +19,6 @@ describe('Sync Mapping Functions', () => {
             id: 'uuid-1',
             number: 'A-101',
             status: 'active',
-            startDate: '2024-03-01',
             readings: [],
             additions: [],
             updatedAt: '2024-03-01T10:00:00Z',
@@ -30,7 +29,6 @@ describe('Sync Mapping Functions', () => {
         
         expect(result.id).toBe('uuid-1');
         expect(result.name).toBe('A-101');
-        expect(result.year).toBe('2024');
         expect(result.updatedAt).toBe('2024-03-01T10:00:00Z');
         expect(result.isDeleted).toBe(false);
     });
@@ -40,7 +38,6 @@ describe('Sync Mapping Functions', () => {
             id: 'uuid-2',
             number: '',
             status: 'active',
-            startDate: '2023-10-01',
             readings: [],
             additions: [],
             updatedAt: '2023-10-01T12:00:00Z',
@@ -49,7 +46,6 @@ describe('Sync Mapping Functions', () => {
 
         const result = mapBarrelToSync(barrel);
         expect(result.name).toBe('Unknown');
-        expect(result.year).toBe('2023');
     });
 
     it('should correctly map a Reading to SyncReading', () => {

@@ -50,7 +50,7 @@ export const useFermentationStore = create<FermentationState>()(
                         id: crypto.randomUUID(),
                         number,
                         status: 'active',
-                        startDate: new Date().toISOString().split('T')[0],
+                        notes: '',
                         readings: [],
                         additions: [],
                         updatedAt: new Date().toISOString(),
@@ -265,7 +265,7 @@ export const useFermentationStore = create<FermentationState>()(
                     number: sb.name || '',
                     status: sb.status as any,
                     volume: sb.volume || 0,
-                    // Мы не кладем сюда readings/additions, чтобы mergeEntities не затер локальные списки
+                    notes: sb.notes || '',
                     updatedAt: sb.updatedAt,
                     isDeleted: sb.isDeleted,
                     synced: true
@@ -287,8 +287,6 @@ export const useFermentationStore = create<FermentationState>()(
 
                     return {
                         ...b,
-                        // Если startDate не пришел в метаданных (а в БД его нет), сохраняем локальный
-                        startDate: localVersion?.startDate || b.updatedAt.split('T')[0],
                         // Самое важное: мержим локальную историю с новыми данными
                         readings: mergeEntities(localReadings, incomingReadings),
                         additions: mergeEntities(localAdditions, incomingAdditions)

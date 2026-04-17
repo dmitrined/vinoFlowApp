@@ -11,11 +11,9 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 const barrelSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.string(),
-  variant: z.string().nullable().optional(),
-  year: z.string(),
   volume: z.number().nullable().optional(),
   status: z.string(),
+  notes: z.string().nullable().optional(),
   updatedAt: z.string(),
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
@@ -27,9 +25,6 @@ const readingSchema = z.object({
   date: z.string(),
   oechsle: z.number().nullable().optional(),
   temperature: z.number().nullable().optional(),
-  density: z.number().nullable().optional(),
-  ph: z.number().nullable().optional(),
-  notes: z.string().nullable().optional(),
   updatedAt: z.string(),
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
@@ -109,11 +104,9 @@ export const syncRouter = createTRPCRouter({
         if (incomingTime > existingTime) {
           const data = {
             name: barrel.name,
-            type: barrel.type,
-            variant: barrel.variant || null,
-            year: barrel.year,
             volume: barrel.volume || null,
             status: barrel.status,
+            notes: barrel.notes || null,
             updatedAt: new Date(barrel.updatedAt),
             isDeleted: barrel.isDeleted,
           };
@@ -154,9 +147,6 @@ export const syncRouter = createTRPCRouter({
             date: item.date,
             oechsle: item.oechsle || null,
             temperature: item.temperature || null,
-            density: item.density || null,
-            ph: item.ph || null,
-            notes: item.notes || null,
             updatedAt: new Date(item.updatedAt),
             isDeleted: item.isDeleted,
           };

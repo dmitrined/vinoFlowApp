@@ -6,7 +6,7 @@
 
 export interface Reading {
     id: string;
-    date: string; // Формат ISO YYYY-MM-DD
+    date: string; // ISO YYYY-MM-DD
     oechsle: number;
     temperature: number;
     updatedAt: string;
@@ -29,10 +29,10 @@ export type BarrelStatus = 'active' | 'finished';
 
 export interface Barrel {
     id: string;
-    number: string; // Номер бочки (например "Barrel #42")
+    number: string;
     status: BarrelStatus;
-    startDate: string;
     volume?: number;
+    notes?: string;
     readings: Reading[];
     additions: Addition[];
     updatedAt: string;

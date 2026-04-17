@@ -52,7 +52,7 @@ const CustomTooltip = ({ active, payload, label, t }: CustomTooltipProps) => {
         return (
             <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl p-4 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl">
                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 border-b border-zinc-100 dark:border-zinc-800 pb-1">
-                    {formatDate(label || '')}
+                    {String(payload[0].payload.fullDay)} ({formatDate(label || '')})
                 </p>
                 {payload.map((entry: TooltipPayload, index: number) => {
                     if (entry.dataKey === 'additionVal') {
@@ -81,19 +81,29 @@ const CustomTooltip = ({ active, payload, label, t }: CustomTooltipProps) => {
 export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => {
     const t = useTranslations('Fermentation');
 
-    // Подготовка данных: объединяем замеры и добавки
+    // Подготовка данных: объединяем замеры и добавки, рассчитываем номера дней
     const chartData = useMemo(() => {
+        if (!data || data.length === 0) return [];
+        
         const sorted = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const firstReadingDate = new Date(sorted[0].date);
         
         return sorted.map(reading => {
+            const currentDate = new Date(reading.date);
+            const diffTime = Math.abs(currentDate.getTime() - firstReadingDate.getTime());
+            // Добавляем 1, чтобы первый день был "День 1"
+            const dayNumber = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
             const dayAdditions = additions.filter(a => a.date === reading.date);
             return {
                 ...reading,
+                dayNumber: `D${dayNumber}`, // Префикс D для краткости на оси
+                fullDay: `${t('date')} ${dayNumber}`, // Для тултипа
                 additionVal: dayAdditions.length > 0 ? 100 : 0,
                 additionNames: dayAdditions.map(a => a.name).join(', ')
             };
         });
-    }, [data, additions]);
+    }, [data, additions, t]);
 
     return (
         <div className="w-full h-[400px] p-4 bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800/50 relative group">
@@ -111,6 +121,10 @@ export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => 
                         dataKey="date" 
                         axisLine={false}
                         tickLine={false}
+                        tickFormatter={(val, index) => {
+                            const item = chartData[index];
+                            return item ? item.dayNumber : val;
+                        }}
                         tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 700 }}
                         dy={10}
                     />

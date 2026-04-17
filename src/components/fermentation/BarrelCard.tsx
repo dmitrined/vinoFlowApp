@@ -81,10 +81,11 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase">
-                        <Calendar size={12} />
-                        <span>{t('start-date')}: {formatDate(barrel.startDate)}</span>
-                    </div>
+                    {barrel.volume && (
+                        <div className="text-[10px] text-zinc-400 font-black uppercase italic">
+                            {barrel.volume} {t('unit-liters')}
+                        </div>
+                    )}
 
                     <div className="flex justify-between items-center pt-2">
                         <div onClick={(e) => e.stopPropagation()}>

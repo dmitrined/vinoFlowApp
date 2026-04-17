@@ -25,6 +25,7 @@ import {
     Breadcrumbs,
     BreadcrumbItem,
     Input,
+    Textarea,
     Modal,
     ModalContent,
     ModalHeader,
@@ -188,6 +189,29 @@ export default function BarrelDetailPage() {
                     </Button>
                 </div>
             </div>
+
+            {/* Barrel Notes Section */}
+            <Card className="bento-card border-none shadow-none bg-white dark:bg-zinc-900">
+                <CardHeader className="px-6 pt-6 flex items-center gap-3">
+                    <div className="p-1.5 bg-brand-500/10 text-brand-600 rounded-lg">
+                        <Info size={16} />
+                    </div>
+                    <h3 className="text-sm font-black uppercase tracking-widest text-zinc-400">{t('notes')}</h3>
+                </CardHeader>
+                <CardBody className="px-6 pb-6 pt-2">
+                    <Textarea
+                        variant="flat"
+                        placeholder={t('notes-placeholder')}
+                        value={barrel.notes || ''}
+                        onValueChange={(val) => updateBarrel(barrel.id, { notes: val })}
+                        classNames={{
+                            input: "text-sm font-medium",
+                            inputWrapper: "bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                        }}
+                        minRows={2}
+                    />
+                </CardBody>
+            </Card>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left: Chart Section */}

@@ -7,11 +7,9 @@
 export interface SyncBarrel {
   id: string;
   name: string;
-  type: string;
-  variant?: string | null;
-  year: string;
   volume?: number | null;
   status: string;
+  notes?: string | null;
   updatedAt: string;
   isDeleted: boolean;
   synced?: boolean;
@@ -23,9 +21,6 @@ export interface SyncReading {
   date: string;
   oechsle?: number | null;
   temperature?: number | null;
-  density?: number | null;
-  ph?: number | null;
-  notes?: string | null;
   updatedAt: string;
   isDeleted: boolean;
   synced?: boolean;

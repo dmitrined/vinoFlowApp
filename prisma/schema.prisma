@@ -13,11 +13,9 @@ datasource db {
 model Barrel {
   id        String     @id @default(uuid())
   name      String
-  type      String     // 'red', 'white', 'rose'
-  variant   String?    // 'wine', 'juice', 'must'
-  year      String
   volume    Float?
   status    String     // 'empty', 'fermenting', 'aging', 'bottled', 'sold'
+  notes     String?
   updatedAt DateTime   @updatedAt @map("updated_at")
   isDeleted Boolean    @default(false) @map("is_deleted")
   
@@ -32,9 +30,6 @@ model Reading {
   date        String
   oechsle     Float?
   temperature Float?
-  density     Float?
-  ph          Float?
-  notes       String?
   barrel      Barrel   @relation(fields: [barrelId], references: [id], onDelete: Cascade)
   barrelId    String   @map("barrel_id")
   updatedAt   DateTime @updatedAt @map("updated_at")

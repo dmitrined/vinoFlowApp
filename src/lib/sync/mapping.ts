@@ -15,11 +15,9 @@ export function mapBarrelToSync(b: Barrel): SyncBarrel {
   return {
     id: b.id,
     name: b.number || "Unknown",
-    type: "wine",
-    variant: null,
-    year: b.startDate?.split("-")[0] || new Date().getFullYear().toString(),
     volume: b.volume || 0,
     status: b.status,
+    notes: b.notes || null,
     updatedAt: b.updatedAt,
     isDeleted: b.isDeleted || false,
     synced: b.synced
@@ -36,9 +34,6 @@ export function mapReadingToSync(r: any, barrelId: string): SyncReading {
     date: r.date,
     oechsle: r.oechsle,
     temperature: r.temperature,
-    density: r.density,
-    ph: r.ph,
-    notes: r.notes,
     updatedAt: r.updatedAt,
     isDeleted: r.isDeleted || false
   };
