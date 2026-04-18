@@ -1,6 +1,10 @@
 import { SignJWT, jwtVerify } from "jose";
 
 // Using a fallback for type safety, but the real key is in .env or .env.local
+/**
+ * ВНИМАНИЕ: В production-окружении (Vercel/Docker) переменная среды JWT_SECRET
+ * должна быть строго задана. Использование fallback-ключа допустимо только локально.
+ */
 const secretKey = process.env.JWT_SECRET || "fallback_super_secret_for_dev_only";
 const key = new TextEncoder().encode(secretKey);
 

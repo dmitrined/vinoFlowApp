@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
     ComposedChart,
     Line,
@@ -80,6 +80,13 @@ const CustomTooltip = ({ active, payload, label, t }: CustomTooltipProps) => {
 
 export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => {
     const t = useTranslations('Fermentation');
+
+    const [isInitialMount, setIsInitialMount] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsInitialMount(false), 1500);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Подготовка данных: объединяем замеры и добавки, рассчитываем номера дней
     const chartData = useMemo(() => {
@@ -195,6 +202,7 @@ export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => 
                         strokeWidth={4}
                         dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#6453e9' }}
                         activeDot={{ r: 8, strokeWidth: 0 }}
+                        isAnimationActive={isInitialMount}
                         animationDuration={1500}
                     />
                     <Line
@@ -206,6 +214,7 @@ export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => 
                         strokeWidth={4}
                         dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#f97316' }}
                         activeDot={{ r: 8, strokeWidth: 0 }}
+                        isAnimationActive={isInitialMount}
                         animationDuration={1500}
                     />
                 </ComposedChart>

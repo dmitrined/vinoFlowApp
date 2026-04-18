@@ -2,6 +2,11 @@
     "Layout": {
         "title": "VinoFlow",
         "developer": "Dmitri Nedioglo",
+        "metadata": {
+            "title": "VinoFlow",
+            "description": "Professional tools for enological calculations in your cellar.",
+            "keywords": "winemaking, calculations, enology, alcohol, sugar, VinoFlow"
+        },
         "menu": {
             "home": "Home",
             "more": "More",

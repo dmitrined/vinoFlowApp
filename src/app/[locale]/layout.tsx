@@ -11,34 +11,39 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { BottomHeader } from "@/components/layout/BottomHeader";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 
-export const metadata: Metadata = {
-    title: "VinoFlow",
-    description: "Профессиональные инструменты для энологических расчетов в вашем погребе.",
-    keywords: ["виноделие", "расчеты", "энология", "алкоголь", "сахар", "VinoFlow"],
-    manifest: "/manifest.json",
-    openGraph: {
-        title: "VinoFlow",
-        description: "Профессиональные инструменты для энологических расчетов.",
-        url: "https://vinoflow.app",
-        siteName: "VinoFlow",
-        locale: "ru_RU",
-        type: "website",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "VinoFlow",
-        description: "Your wine tracking application",
-    },
-    icons: {
-        icon: [
-            { url: "/icon-192x192.png?v=2", sizes: "192x192", type: "image/png" },
-        ],
-    },
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'Layout.metadata' });
+
+    return {
+        title: t('title'),
+        description: t('description'),
+        keywords: t('keywords').split(',').map(k => k.trim()),
+        manifest: "/manifest.json",
+        openGraph: {
+            title: t('title'),
+            description: t('description'),
+            url: "https://vinoflow.app",
+            siteName: t('title'),
+            locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_US' : 'de_DE',
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: t('title'),
+            description: t('description'),
+        },
+        icons: {
+            icon: [
+                { url: "/icon-192x192.png?v=2", sizes: "192x192", type: "image/png" },
+            ],
+        },
+    };
+}
 
 export const viewport: Viewport = {
     themeColor: "#800020", // Burgundy

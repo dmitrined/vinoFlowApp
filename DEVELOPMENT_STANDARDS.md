@@ -122,6 +122,7 @@ DEVELOPMENT_STANDARDS.md (Knowledge Item /Users/dmitrinedioglo/.gemini/antigravi
         npm run build       # Production build — ноль ошибок предрендеринга
         ```
     *   Сборка `npm run build` является **финальной проверкой**. `lint` и `tsc` могут пропускать ошибки, которые проявляются только при SSR/предрендеринге.
+7.  **Финальный шаг (Коммит)**: После успешного выполнения и проверки плана, всегда завершай работу коротким текстом для коммита в формате Conventional Commits. ПРИМЕР: `feat(seo): add dynamic i18n metadata and fix chart animations`.
 
 ---
 

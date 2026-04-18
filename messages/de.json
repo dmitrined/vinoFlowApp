@@ -2,6 +2,11 @@
     "Layout": {
         "title": "VinoFlow",
         "developer": "Dmitri Nedioglo",
+        "metadata": {
+            "title": "VinoFlow",
+            "description": "Professionelle Werkzeuge für önologische Berechnungen in Ihrem Keller.",
+            "keywords": "Weinbau, Berechnungen, Önologie, Alkohol, Zucker, VinoFlow"
+        },
         "menu": {
             "home": "Home",
             "more": "Mehr",
