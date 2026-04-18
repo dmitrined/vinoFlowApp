@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
-import { Calculator, ArrowRightLeft, GlassWater, Milestone, Cpu } from "lucide-react";
+import { ArrowRightLeft, GlassWater, Milestone, Cpu } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const FractionDisplay: React.FC<{ numerator: React.ReactNode; denominator: React.ReactNode }> = ({ numerator, denominator }) => (

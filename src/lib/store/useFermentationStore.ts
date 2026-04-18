@@ -35,7 +35,36 @@ interface FermentationState {
     markAdditionsSynced: (ids: string[]) => void;
     
     // Гидратация с сервера (для скачивания изменений от других устройств)
-    hydrateFromServer: (serverData: { barrels: any[]; readings: any[]; additions: any[] }) => void;
+    hydrateFromServer: (serverData: { 
+        barrels: { 
+            id: string; 
+            name: string; 
+            status: string; 
+            volume: number | null; 
+            notes: string | null; 
+            updatedAt: string; 
+            isDeleted: boolean; 
+        }[]; 
+        readings: { 
+            id: string; 
+            barrelId: string; 
+            date: string; 
+            oechsle: number | null; 
+            temperature: number | null; 
+            updatedAt: string; 
+            isDeleted: boolean; 
+        }[]; 
+        additions: { 
+            id: string; 
+            barrelId: string; 
+            date: string; 
+            name: string; 
+            dosage: string; 
+            unit: string; 
+            updatedAt: string; 
+            isDeleted: boolean; 
+        }[] 
+    }) => void;
 }
 
 export const useFermentationStore = create<FermentationState>()(
@@ -259,11 +288,10 @@ export const useFermentationStore = create<FermentationState>()(
                     });
                 });
 
-                // 2. Подготавливаем серверные бочки для слияния метаданных
                 const serverBarrels = serverData.barrels.map(sb => ({
                     id: sb.id,
                     number: sb.name || '',
-                    status: sb.status as any,
+                    status: sb.status as 'active' | 'finished',
                     volume: sb.volume || 0,
                     notes: sb.notes || '',
                     updatedAt: sb.updatedAt,
@@ -272,7 +300,7 @@ export const useFermentationStore = create<FermentationState>()(
                 }));
 
                 // 3. Мержим метаданные бочек (имена, статусы, объем)
-                const mergedBarrelsMetadata = mergeEntities(state.barrels, serverBarrels as any);
+                const mergedBarrelsMetadata = mergeEntities(state.barrels, serverBarrels as Barrel[]);
 
                 // 4. Финальный проход: восстанавливаем и мержим вложенные сущности
                 const finalBarrels = mergedBarrelsMetadata.map(b => {

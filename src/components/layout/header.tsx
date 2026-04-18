@@ -11,17 +11,13 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  Button,
-  Image,
-  Chip,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem
 } from '@heroui/react';
 import NextImage from 'next/image';
-import { Globe, Zap, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 import { CloudIndicator } from '@/components/CloudIndicator';

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
-import { Calculator, Info, Beaker, Percent, Wine } from "lucide-react";
+import { Info, Beaker, Percent, Wine } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const VariableDisplay: React.FC<{ symbol: React.ReactNode; description: string; icon: React.ReactNode }> = ({ symbol, description, icon }) => (

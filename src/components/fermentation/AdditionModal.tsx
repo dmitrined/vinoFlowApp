@@ -31,7 +31,6 @@ interface Props {
 export const AdditionModal: React.FC<Props> = ({ isOpen, onClose, onSave, initialData }) => {
     const t = useTranslations('Fermentation');
     const [name, setName] = useState('');
-    const [customName, setCustomName] = useState('');
     const [dosage, setDosage] = useState('');
     const [unit, setUnit] = useState('g/L');
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);

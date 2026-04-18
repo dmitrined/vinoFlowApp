@@ -13,8 +13,7 @@ import {
   CardBody,
   Input,
   Button,
-  Divider,
-  Tooltip
+  Divider
 } from "@heroui/react";
 import {
   Layers,

@@ -20,7 +20,6 @@ import {
     TableBody, 
     TableRow, 
     TableCell,
-    Tooltip,
     Chip,
     Breadcrumbs,
     BreadcrumbItem,
@@ -33,11 +32,9 @@ import {
     ModalFooter
 } from "@heroui/react";
 import { 
-    Plus, 
     ArrowLeft, 
     Trash2, 
     Edit2, 
-    FlaskConical, 
     Activity, 
     Info, 
     ChevronLeft
@@ -51,7 +48,6 @@ import { ReadingModal } from '@/components/fermentation/ReadingModal';
 import { AdditionModal } from '@/components/fermentation/AdditionModal';
 import { AdditionsList } from '@/components/fermentation/AdditionsList';
 import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
-import { useSyncEngine } from '@/hooks/useSyncEngine';
 import { Reading, Addition } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
@@ -61,8 +57,6 @@ export default function BarrelDetailPage() {
     const params = useParams();
     const id = params.id as string;
     const t = useTranslations('Fermentation');
-    const { syncAll } = useSyncEngine();
-    
     const { 
         barrels, 
         addReading, 
@@ -391,7 +385,6 @@ export default function BarrelDetailPage() {
                             <ModalBody className="py-6">
                                 <Input
                                     autoFocus
-                                    label={t('barrel-number')}
                                     placeholder={t('barrel-placeholder')}
                                     variant="flat"
                                     labelPlacement="outside"

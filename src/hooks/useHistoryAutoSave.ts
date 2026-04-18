@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useHistoryStore } from '@/lib/store/useHistoryStore';
 import { useDebounce } from './useDebounce';
-import { CalculationType, AutoSaveRecord } from '@/types/calculations';
+import { AutoSaveRecord } from '@/types/calculations';
 
 /**
  * Хук для автоматического сохранения результатов расчетов в историю с дебаунсом.
@@ -12,7 +12,7 @@ import { CalculationType, AutoSaveRecord } from '@/types/calculations';
  */
 export function useHistoryAutoSave(
     records: AutoSaveRecord | (AutoSaveRecord | null)[] | null,
-    trigger: any,
+    trigger: unknown,
     delay: number = 10000
 ) {
     const { addRecord } = useHistoryStore();

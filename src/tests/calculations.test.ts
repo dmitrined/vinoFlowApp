@@ -8,8 +8,7 @@ import {
     calcMultiBlended, 
     calcSO2Addition,
     calcChaptalization,
-    calcAcidManagement,
-    WINE_CONSTANTS
+    calcAcidManagement
 } from '../lib/calculations';
 
 describe('Enological Calculations', () => {

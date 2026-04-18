@@ -6,8 +6,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardHeader, CardBody, Divider, Chip } from "@heroui/react";
-import { Info, Layers, Beaker, MoveRight, Wine } from "lucide-react";
+import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
+import { Info, Beaker, MoveRight, Wine } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const FormulMultiCalc: React.FC = () => {

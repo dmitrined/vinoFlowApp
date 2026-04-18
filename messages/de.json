@@ -218,7 +218,6 @@
         "seo-description": "Verfolgen Sie den Gärprozess jedes Fasses. Echtzeit-Visualisierung von Oechsle und Temperatur.",
         "add-barrel": "Fass hinzufügen",
         "edit-barrel": "Fass bearbeiten",
-        "barrel-number": "",
         "volume": "Volumen",
         "unit-liters": "L",
         "barrel-placeholder": "z.B. T-42 oder Fass 1",
@@ -273,7 +272,14 @@
     "SyncEngine": {
         "offline": "Offline. Warte auf Internet...",
         "syncing": "Synchronisieren...",
-        "synced": "Cloud synchronisiert"
+        "synced": "Cloud synchronisiert",
+        "title": "Cloud Status",
+        "reset_warning": "Verwenden Sie dies только wenn Ihre Daten nicht synchronisiert sind oder wenn Sie die Datenbank zurückgesetzt haben. Diese Aktion lädt die Seite neu.",
+        "reset_btn": "Reset & Volle Synchronisation",
+        "confirm_reset_title": "Reset bestätigen",
+        "confirm_reset_msg": "Sind Sie sicher? Dies setzt die Metadaten der aktuellen Synchronisationssitzung zurück und lädt die App neu.",
+        "confirm_reset_btn": "Zurücksetzen",
+        "cancel": "Abbrechen"
     },
     "LoginView": {
         "title": "Geschützter Bereich",

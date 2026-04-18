@@ -7,7 +7,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { CalculationType, CalculationRecord } from '@/types/calculations';
+import { CalculationRecord } from '@/types/calculations';
 
 import { mergeEntities } from '@/lib/sync/mergeUtils';
 
@@ -73,7 +73,7 @@ export const useHistoryStore = create<HistoryState>()(
                 }
                 return state;
             },
-            onRehydrateStorage: (state) => {
+            onRehydrateStorage: () => {
                 return (rehydratedState, error) => {
                     if (!error && rehydratedState) {
                         rehydratedState.setHasHydrated(true);

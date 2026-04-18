@@ -6,18 +6,14 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFermentationStore } from "@/lib/store/useFermentationStore";
-import { useHistoryStore } from "@/lib/store/useHistoryStore";
+import { useEffect } from "react";
 import { useSyncEngine } from "@/hooks/useSyncEngine";
 
 export function SyncEngine() {
-  const [isMounted, setIsMounted] = useState(false);
-  const { syncAll, pushLocalData } = useSyncEngine();
+  const { syncAll } = useSyncEngine();
 
   // Первоначальная загрузка из БД при монтировании
   useEffect(() => {
-    setIsMounted(true);
     if (navigator.onLine) {
         syncAll();
     }

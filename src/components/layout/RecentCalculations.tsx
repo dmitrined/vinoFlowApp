@@ -6,14 +6,13 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardBody, Button, Divider } from "@heroui/react";
 import { 
     History, 
     Trash2, 
     Calculator, 
-    Beaker, 
     Droplets, 
     Layers, 
     RefreshCcw,

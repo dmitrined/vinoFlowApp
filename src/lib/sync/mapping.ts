@@ -4,7 +4,7 @@
  * ОСОБЕННОСТИ: Используются SyncEngine для подготовки данных к отправке в облако
  */
 
-import { Barrel } from "@/types/fermentation";
+import { Barrel, Reading, Addition } from "@/types/fermentation";
 import { CalculationRecord } from "@/types/calculations";
 import { SyncBarrel, SyncReading, SyncAddition, SyncHistoryRecord } from "@/types/sync";
 
@@ -27,7 +27,7 @@ export function mapBarrelToSync(b: Barrel): SyncBarrel {
 /**
  * Преобразование локального замера в формат для синхронизации
  */
-export function mapReadingToSync(r: any, barrelId: string): SyncReading {
+export function mapReadingToSync(r: Reading, barrelId: string): SyncReading {
   return {
     id: r.id,
     barrelId: barrelId,
@@ -42,7 +42,7 @@ export function mapReadingToSync(r: any, barrelId: string): SyncReading {
 /**
  * Преобразование локальной добавки в формат для синхронизации
  */
-export function mapAdditionToSync(a: any, barrelId: string): SyncAddition {
+export function mapAdditionToSync(a: Addition, barrelId: string): SyncAddition {
   return {
     id: a.id,
     barrelId: barrelId,

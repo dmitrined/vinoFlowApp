@@ -152,7 +152,7 @@ export const FermentationChart: React.FC<Props> = ({ data, additions = [] }) => 
                         verticalAlign="top" 
                         align="right" 
                         iconType="circle"
-                        content={(props) => (
+                        content={() => (
                             <div className="flex justify-end gap-6 mb-8">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-brand-600" />

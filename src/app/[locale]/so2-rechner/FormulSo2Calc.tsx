@@ -7,8 +7,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Card, CardHeader, CardBody, Input, Tabs, Tab, Divider, Button } from "@heroui/react";
-import { FlaskConical, Beaker, Wind, Info, Eye, EyeOff, Zap, Wine } from "lucide-react";
+import { Card, CardHeader, CardBody, Input, Button } from "@heroui/react";
+import { Info, Eye, EyeOff, Zap, Wine } from "lucide-react";
 import ProductTypeSelector from '@/components/ui/ProductTypeSelector';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { calcSO2Addition, WINE_CONSTANTS } from '@/lib/calculations';

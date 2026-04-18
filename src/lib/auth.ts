@@ -20,7 +20,7 @@ export async function verifyAuthToken(token: string | undefined): Promise<boolea
     // As long as the signature is valid and hasn't expired, we accept it.
     // We only have one role/user right now.
     return payload?.role === "admin";
-  } catch (error) {
+  } catch {
     return false;
   }
 }

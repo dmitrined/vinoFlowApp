@@ -6,8 +6,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
-import { Calculator, Info, Beaker, ChevronRight, Wine } from "lucide-react";
+import { Card, CardHeader, CardBody } from "@heroui/react";
+import { Info, Beaker, ChevronRight, Wine } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 const FormulaVariable: React.FC<{

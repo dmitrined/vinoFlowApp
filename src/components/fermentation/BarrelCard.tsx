@@ -8,12 +8,11 @@
 
 import React from 'react';
 import { Card, CardHeader, CardBody, Chip, Button } from "@heroui/react";
-import { FlaskConical, Calendar, ArrowRight, Trash2 } from "lucide-react";
+import { FlaskConical, ArrowRight, Trash2 } from "lucide-react";
 import { Barrel } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { motion } from "framer-motion";
-import { formatDate } from '@/lib/dateUtils';
 
 interface Props {
     barrel: Barrel;
@@ -43,9 +42,6 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
                             <FlaskConical size={20} />
                         </div>
                         <div className="flex flex-col items-start">
-                            <h3 className="text-sm font-black uppercase tracking-widest text-zinc-400">
-                                {t('barrel-number')}
-                            </h3>
                             <p className="text-xl font-black text-tech-gradient">
                                 {barrel.number}
                             </p>
@@ -108,3 +104,4 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
         </motion.div>
     );
 });
+BarrelCard.displayName = 'BarrelCard';

@@ -20,7 +20,7 @@ export default function ChaptalizationCalc() {
     const [targetUnit, setTargetUnit] = useState<'percent' | 'gl' | 'gl-sugar' | 'oechsle'>('percent');
 
     const convertValue = (valStr: string, fromUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle', toUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
-        let v = parseFloat(valStr);
+        const v = parseFloat(valStr);
         if (isNaN(v)) return valStr;
 
         let vol = v;
@@ -35,13 +35,13 @@ export default function ChaptalizationCalc() {
         return valStr;
     };
 
-    const handleCurrentUnitChange = (k: any) => {
+    const handleCurrentUnitChange = (k: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
         if (k === currentUnit) return;
         setCurrentAbv(convertValue(currentAbv, currentUnit, k));
         setCurrentUnit(k);
     };
 
-    const handleTargetUnitChange = (k: any) => {
+    const handleTargetUnitChange = (k: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
         if (k === targetUnit) return;
         setTargetAbv(convertValue(targetAbv, targetUnit, k));
         setTargetUnit(k);
@@ -174,7 +174,7 @@ export default function ChaptalizationCalc() {
                                         </DropdownTrigger>
                                         <DropdownMenu 
                                             aria-label="Current Unit" 
-                                            onAction={(k) => handleCurrentUnitChange(k)}
+                                            onAction={(k) => handleCurrentUnitChange(k as 'percent' | 'gl' | 'gl-sugar' | 'oechsle')}
                                         >
                                             <DropdownItem key="percent">% Vol</DropdownItem>
                                             <DropdownItem key="gl">g/L Alc</DropdownItem>
@@ -215,7 +215,7 @@ export default function ChaptalizationCalc() {
                                         </DropdownTrigger>
                                         <DropdownMenu 
                                             aria-label="Target Unit" 
-                                            onAction={(k) => handleTargetUnitChange(k)}
+                                            onAction={(k) => handleTargetUnitChange(k as 'percent' | 'gl' | 'gl-sugar' | 'oechsle')}
                                         >
                                             <DropdownItem key="percent">% Vol</DropdownItem>
                                             <DropdownItem key="gl">g/L Alc</DropdownItem>

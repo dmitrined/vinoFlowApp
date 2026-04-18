@@ -87,7 +87,7 @@ export const syncRouter = createTRPCRouter({
   pushBarrels: protectedProcedure
     .input(z.array(barrelSchema))
     .mutation(async ({ ctx, input }) => {
-      let syncedIds: string[] = [];
+      const syncedIds: string[] = [];
       const dbIds = input.map(i => i.id);
       
       const existing = await ctx.db.barrel.findMany({
@@ -128,7 +128,7 @@ export const syncRouter = createTRPCRouter({
   pushReadings: protectedProcedure
     .input(z.array(readingSchema))
     .mutation(async ({ ctx, input }) => {
-      let syncedIds: string[] = [];
+      const syncedIds: string[] = [];
       const dbIds = input.map(i => i.id);
       
       const existing = await ctx.db.reading.findMany({
@@ -168,7 +168,7 @@ export const syncRouter = createTRPCRouter({
   pushAdditions: protectedProcedure
     .input(z.array(additionSchema))
     .mutation(async ({ ctx, input }) => {
-      let syncedIds: string[] = [];
+      const syncedIds: string[] = [];
       const dbIds = input.map(i => i.id);
       
       const existing = await ctx.db.addition.findMany({
@@ -209,7 +209,7 @@ export const syncRouter = createTRPCRouter({
   pushHistory: protectedProcedure
     .input(z.array(calculationSchema))
     .mutation(async ({ ctx, input }) => {
-      let syncedIds: string[] = [];
+      const syncedIds: string[] = [];
       const dbIds = input.map(i => i.id);
       
       const existing = await ctx.db.calculationRecord.findMany({

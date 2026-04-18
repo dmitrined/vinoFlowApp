@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Image } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { 
   Home, 
   Beaker, 

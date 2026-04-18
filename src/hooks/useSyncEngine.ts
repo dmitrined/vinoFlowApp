@@ -15,6 +15,7 @@ import {
   mapAdditionToSync, 
   mapHistoryToSync 
 } from "@/lib/sync/mapping";
+import { CalculationRecord } from "@/types/calculations";
 
 const MIN_SYNC_INTERVAL = 30000; // 30 секунд между проверками облака для экономии батареи
 
@@ -74,7 +75,7 @@ export function useSyncEngine() {
 
       if (allBarrelsToSync.length > 0) {
         syncPromises.push(
-          pushBarrels.mutateAsync(allBarrelsToSync as any).then((res) => {
+          pushBarrels.mutateAsync(allBarrelsToSync).then((res) => {
             markBarrelsSynced(res.syncedIds);
           })
         );
@@ -132,11 +133,11 @@ export function useSyncEngine() {
       const { data } = await pullQuery.refetch();
       if (data) {
         hydrateFermentation({
-          barrels: data.barrels as any[],
+          barrels: data.barrels,
           readings: data.readings,
           additions: data.additions
         });
-        hydrateHistory(data.history as any[]);
+        hydrateHistory(data.history as CalculationRecord[]);
         
         if (data.serverTime) {
           setLastSyncTimestamp(data.serverTime);
@@ -145,7 +146,7 @@ export function useSyncEngine() {
     } catch (e) {
       console.error("SyncEngine: Ошибка скачивания:", e);
     }
-  }, [pullQuery, hydrateFermentation, hydrateHistory]);
+  }, [pullQuery, hydrateFermentation, hydrateHistory, setLastSyncTimestamp]);
 
   const syncAll = useCallback(async () => {
     if (isSyncing) return;
