@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # Задаем "заглушки" (mock secrets), чтобы проект собирался локально без доступа к реальной базе данных Turso
+    env:
+      DATABASE_URL: "file:./dev.db"             # Фиктивная база для Prisma/LibSQL
+      JWT_SECRET: "mock_secret_for_ci_pipeline"   # Заглушка для аутентификации
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    # Prisma Client генерируется автоматически через postinstall скрипт в package.json
+
+    - name: Run Linter (ESLint)
+      run: npm run lint
+
+    - name: Run Typecheck (TypeScript)
+      run: npm run typecheck
+
+    - name: Run Tests (Vitest)
+      run: npm run test
+
+    - name: Setup Next.js Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/.next/cache
+        # Генерируем уникальный ключ на основе lock файла и всех исходников. 
+        # Если исходники не менялись, кэш восстановится.
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+    - name: Test Production Build (Next.js)
+      run: npm run build
