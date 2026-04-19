@@ -25,7 +25,7 @@ export interface Addition {
     synced: boolean;
 }
 
-export type BarrelStatus = 'active' | 'finished';
+export type BarrelStatus = 'active' | 'finished' | 'archived';
 
 export interface Barrel {
     id: string;

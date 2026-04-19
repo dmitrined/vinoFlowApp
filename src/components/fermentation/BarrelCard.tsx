@@ -17,14 +17,15 @@ import { motion } from "framer-motion";
 interface Props {
     barrel: Barrel;
     onDelete: (id: string) => void;
+    onToggleStatus: (id: string, currentStatus: string) => void;
 }
 
-export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
+export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus }) => {
     const t = useTranslations('Fermentation');
     const router = useRouter();
 
-    const lastReading = barrel.readings.length > 0 
-        ? barrel.readings[barrel.readings.length - 1] 
+    const lastReading = barrel.readings && barrel.readings.length > 0 
+        ? [...barrel.readings].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] 
         : null;
 
     return (
@@ -48,33 +49,29 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
                         </div>
                     </div>
                     <Chip 
+                        as="button"
+                        onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            const nextStatus = barrel.status === 'active' ? 'finished' : (barrel.status === 'finished' ? 'archived' : 'active');
+                            onToggleStatus(barrel.id, nextStatus);
+                        }}
                         size="sm" 
                         variant="flat" 
-                        color={barrel.status === 'active' ? 'success' : 'default'}
-                        className="font-black uppercase text-[9px] tracking-widest border-none"
+                        color={barrel.status === 'active' ? 'success' : barrel.status === 'finished' ? 'primary' : 'default'}
+                        className="font-black uppercase text-[9px] tracking-widest border-none cursor-pointer hover:scale-105 transition-transform"
                     >
-                        {barrel.status === 'active' ? t('status-active') : t('status-finished')}
+                        {barrel.status === 'active' ? t('status-active') : barrel.status === 'finished' ? t('status-finished') : t('status-archived')}
                     </Chip>
                 </CardHeader>
 
                 <CardBody className="px-4 py-2 space-y-4 bg-transparent border-none">
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                            <p className="text-[9px] font-black uppercase tracking-tighter text-zinc-400 mb-1">
-                                {t('last-oechsle')}
-                            </p>
-                            <p className="text-lg font-black text-brand-600">
-                                {lastReading ? `${lastReading.oechsle}°` : '—'}
-                            </p>
-                        </div>
-                        <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                            <p className="text-[9px] font-black uppercase tracking-tighter text-zinc-400 mb-1">
-                                {t('last-temp')}
-                            </p>
-                            <p className="text-lg font-black text-orange-500">
-                                {lastReading ? `${lastReading.temperature}°C` : '—'}
-                            </p>
-                        </div>
+                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+                        <p className="text-[9px] font-black uppercase tracking-tighter text-zinc-400">
+                            {t('last-oechsle')}
+                        </p>
+                        <p className="text-xl font-black text-brand-600">
+                            {lastReading ? `${lastReading.oechsle}°` : '—'}
+                        </p>
                     </div>
 
                     {barrel.volume && (

@@ -62,7 +62,7 @@ export default function BarrelDetailPage() {
         addReading, 
         updateReading, 
         deleteReading, 
-        toggleStatus, 
+        changeStatus, 
         updateBarrel,
         addAddition,
         updateAddition,
@@ -175,11 +175,14 @@ export default function BarrelDetailPage() {
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                     <Button
                         variant="flat"
-                        color={barrel.status === 'active' ? 'default' : 'success'}
-                        onPress={() => toggleStatus(barrel.id)}
+                        color={barrel.status === 'active' ? 'primary' : barrel.status === 'finished' ? 'default' : 'success'}
+                        onPress={() => {
+                            const next = barrel.status === 'active' ? 'finished' : barrel.status === 'finished' ? 'archived' : 'active';
+                            changeStatus(barrel.id, next);
+                        }}
                         className="font-black uppercase tracking-widest text-[10px] h-11 flex-1 sm:flex-none"
                     >
-                        {barrel.status === 'active' ? t('finish') : t('activate')}
+                        {barrel.status === 'active' ? t('finish') : barrel.status === 'finished' ? t('archive') : t('activate')}
                     </Button>
                 </div>
             </div>
