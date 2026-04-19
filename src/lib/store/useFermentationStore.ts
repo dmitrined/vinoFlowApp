@@ -6,7 +6,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Barrel, Reading, Addition } from '@/types/fermentation';
+import { Barrel, Reading, Addition, BarrelStatus } from '@/types/fermentation';
 import { mergeEntities } from '@/lib/sync/mergeUtils';
 import { idbStorage } from './idb-storage';
 
