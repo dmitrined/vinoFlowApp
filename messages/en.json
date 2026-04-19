@@ -253,6 +253,8 @@
         "back-to-list": "Back to list",
         "finish": "Finish",
         "activate": "Activate",
+        "confirm-finish": "Finish fermentation process?",
+        "confirm-active": "Return barrel to active fermentation?",
         "no-chart-data": "No data for chart",
         "total-readings": "Total readings",
         "no-readings": "No readings yet",

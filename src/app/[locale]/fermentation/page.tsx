@@ -17,7 +17,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function FermentationDashboard() {
     const t = useTranslations('Fermentation');
-    const { barrels, addBarrel, deleteBarrel } = useFermentationStore();
+    const { barrels, addBarrel, deleteBarrel, toggleStatus } = useFermentationStore();
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +33,9 @@ export default function FermentationDashboard() {
     
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [barrelToDelete, setBarrelToDelete] = useState<string | null>(null);
+
+    const [isStatusConfirmOpen, setIsStatusConfirmOpen] = useState(false);
+    const [barrelToToggle, setBarrelToToggle] = useState<{id: string, status: string} | null>(null);
 
     const handleAddBarrel = (onClose: () => void) => {
         if (newBarrelNumber.trim()) {
@@ -134,6 +137,10 @@ export default function FermentationDashboard() {
                                     setBarrelToDelete(id);
                                     setIsConfirmOpen(true);
                                 }}
+                                onToggleStatus={(id, status) => {
+                                    setBarrelToToggle({id, status});
+                                    setIsStatusConfirmOpen(true);
+                                }}
                             />
                         ))
                     ) : (
@@ -230,6 +237,22 @@ export default function FermentationDashboard() {
                 }}
                 title={t('actions')}
                 message={t('delete-barrel-confirm')}
+            />
+
+            <ConfirmModal 
+                isOpen={isStatusConfirmOpen}
+                onClose={() => setIsStatusConfirmOpen(false)}
+                onConfirm={() => {
+                    if (barrelToToggle) {
+                        toggleStatus(barrelToToggle.id);
+                        setBarrelToToggle(null);
+                        setIsStatusConfirmOpen(false);
+                    }
+                }}
+                title={t('actions')}
+                message={barrelToToggle?.status === 'active' ? t('confirm-finish') : t('confirm-active')}
+                confirmText={barrelToToggle?.status === 'active' ? t('finish') : t('activate')}
+                color="primary"
             />
         </div>
     );

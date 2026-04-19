@@ -247,6 +247,8 @@
         "back-to-list": "Zurück zur Liste",
         "finish": "Beenden",
         "activate": "Aktivieren",
+        "confirm-finish": "Gärprozess beenden?",
+        "confirm-active": "Fass wieder in Gärung setzen?",
         "no-chart-data": "Keine Daten für das Diagramm",
         "total-readings": "Gesamtzahl der Messungen",
         "no-readings": "Noch keine Messungen",
