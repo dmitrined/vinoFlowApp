@@ -246,7 +246,7 @@ export default function FermentationDashboard() {
                 onClose={() => setIsStatusConfirmOpen(false)}
                 onConfirm={() => {
                     if (barrelToToggle) {
-                        changeStatus(barrelToToggle.id, barrelToToggle.status as any);
+                        changeStatus(barrelToToggle.id, barrelToToggle.status as 'active' | 'finished' | 'archived');
                         setBarrelToToggle(null);
                         setIsStatusConfirmOpen(false);
                     }

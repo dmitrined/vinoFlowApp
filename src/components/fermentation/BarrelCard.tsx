@@ -50,7 +50,7 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
                     </div>
                     <Chip 
                         as="button"
-                        onClick={(e: any) => {
+                        onClick={(e: React.MouseEvent) => {
                             e.stopPropagation();
                             const nextStatus = barrel.status === 'active' ? 'finished' : (barrel.status === 'finished' ? 'archived' : 'active');
                             onToggleStatus(barrel.id, nextStatus);
