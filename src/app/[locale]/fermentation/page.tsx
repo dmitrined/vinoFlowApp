@@ -17,11 +17,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function FermentationDashboard() {
     const t = useTranslations('Fermentation');
-    const { barrels, addBarrel, deleteBarrel, toggleStatus } = useFermentationStore();
+    const { barrels, addBarrel, deleteBarrel, changeStatus } = useFermentationStore();
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'active' | 'finished'>('active');
+    const [statusFilter, setStatusFilter] = useState<'active' | 'finished' | 'archived'>('active');
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 8;
 
@@ -47,6 +47,7 @@ export default function FermentationDashboard() {
 
     const activeCount = React.useMemo(() => barrels.filter(b => !b.isDeleted && b.status === 'active').length, [barrels]);
     const finishedCount = React.useMemo(() => barrels.filter(b => !b.isDeleted && b.status === 'finished').length, [barrels]);
+    const archivedCount = React.useMemo(() => barrels.filter(b => !b.isDeleted && b.status === 'archived').length, [barrels]);
 
     const filteredBarrels = barrels.filter(b => 
         !b.isDeleted && 
@@ -107,6 +108,7 @@ export default function FermentationDashboard() {
                 >
                     <Tab key="active" title={`${t('status-active')} (${activeCount})`} />
                     <Tab key="finished" title={`${t('status-finished')} (${finishedCount})`} />
+                    <Tab key="archived" title={`${t('tab-archived')} (${archivedCount})`} />
                 </Tabs>
 
                 <div className="flex flex-1 w-full gap-4">
@@ -244,15 +246,15 @@ export default function FermentationDashboard() {
                 onClose={() => setIsStatusConfirmOpen(false)}
                 onConfirm={() => {
                     if (barrelToToggle) {
-                        toggleStatus(barrelToToggle.id);
+                        changeStatus(barrelToToggle.id, barrelToToggle.status as any);
                         setBarrelToToggle(null);
                         setIsStatusConfirmOpen(false);
                     }
                 }}
                 title={t('actions')}
-                message={barrelToToggle?.status === 'active' ? t('confirm-finish') : t('confirm-active')}
-                confirmText={barrelToToggle?.status === 'active' ? t('finish') : t('activate')}
-                color="primary"
+                message={barrelToToggle?.status === 'finished' ? t('confirm-finish') : barrelToToggle?.status === 'archived' ? t('confirm-archive') : t('confirm-active')}
+                confirmText={barrelToToggle?.status === 'finished' ? t('finish') : barrelToToggle?.status === 'archived' ? t('archive') : t('activate')}
+                color={barrelToToggle?.status === 'archived' ? 'default' : 'primary'}
             />
         </div>
     );

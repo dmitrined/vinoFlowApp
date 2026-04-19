@@ -52,14 +52,15 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
                         as="button"
                         onClick={(e: any) => {
                             e.stopPropagation();
-                            onToggleStatus(barrel.id, barrel.status);
+                            const nextStatus = barrel.status === 'active' ? 'finished' : (barrel.status === 'finished' ? 'archived' : 'active');
+                            onToggleStatus(barrel.id, nextStatus);
                         }}
                         size="sm" 
                         variant="flat" 
-                        color={barrel.status === 'active' ? 'success' : 'default'}
+                        color={barrel.status === 'active' ? 'success' : barrel.status === 'finished' ? 'primary' : 'default'}
                         className="font-black uppercase text-[9px] tracking-widest border-none cursor-pointer hover:scale-105 transition-transform"
                     >
-                        {barrel.status === 'active' ? t('status-active') : t('status-finished')}
+                        {barrel.status === 'active' ? t('status-active') : barrel.status === 'finished' ? t('status-finished') : t('status-archived')}
                     </Chip>
                 </CardHeader>
 

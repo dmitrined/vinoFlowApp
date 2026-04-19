@@ -16,7 +16,7 @@ interface FermentationState {
     // Действия с бочками
     addBarrel: (number: string) => void;
     deleteBarrel: (id: string) => void;
-    toggleStatus: (id: string) => void;
+    changeStatus: (id: string, status: BarrelStatus) => void;
     updateBarrel: (id: string, data: Partial<Barrel>) => void;
     
     // Действия с замерами параметров (плотность, температура и т.д.)
@@ -94,11 +94,11 @@ export const useFermentationStore = create<FermentationState>()(
                 )
             })),
 
-            toggleStatus: (id) => set((state) => ({
+            changeStatus: (id, newStatus) => set((state) => ({
                 barrels: state.barrels.map(b => 
                     b.id === id ? { 
                         ...b, 
-                        status: b.status === 'active' ? 'finished' : 'active',
+                        status: newStatus,
                         updatedAt: new Date().toISOString(),
                         synced: false
                     } : b
@@ -291,7 +291,7 @@ export const useFermentationStore = create<FermentationState>()(
                 const serverBarrels = serverData.barrels.map(sb => ({
                     id: sb.id,
                     number: sb.name || '',
-                    status: sb.status as 'active' | 'finished',
+                    status: sb.status as 'active' | 'finished' | 'archived',
                     volume: sb.volume || 0,
                     notes: sb.notes || '',
                     updatedAt: sb.updatedAt,
