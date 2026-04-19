@@ -23,8 +23,8 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete }) => {
     const t = useTranslations('Fermentation');
     const router = useRouter();
 
-    const lastReading = barrel.readings.length > 0 
-        ? barrel.readings[barrel.readings.length - 1] 
+    const lastReading = barrel.readings && barrel.readings.length > 0 
+        ? [...barrel.readings].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] 
         : null;
 
     return (
