@@ -21,7 +21,7 @@ import {
     FlaskConical,
     Activity
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useHistoryStore } from '@/lib/store/useHistoryStore';
 import { CalculationType } from '@/types/calculations';
 
@@ -85,7 +85,7 @@ export const RecentCalculations: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <AnimatePresence mode='popLayout'>
                     {activeRecords.map((record) => (
-                        <motion.div
+                        <m.div
                             key={record.id}
                             layout
                             initial={{ opacity: 0, y: 10 }}
@@ -145,7 +145,7 @@ export const RecentCalculations: React.FC = () => {
                                     </div>
                                 </CardBody>
                             </Card>
-                        </motion.div>
+                        </m.div>
                     ))}
                 </AnimatePresence>
             </div>

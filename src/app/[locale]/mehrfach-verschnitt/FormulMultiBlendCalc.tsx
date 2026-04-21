@@ -26,7 +26,7 @@ import {
   Droplets,
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { m, AnimatePresence, LayoutGroup } from "framer-motion";
 import { calcMultiBlended } from '@/lib/calculations';
 import FormulMultiCalc from './FormulMultiCalc';
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
@@ -103,7 +103,7 @@ const FormulMultiBlendCalc: React.FC = () => {
 
   return (
     <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-5xl"
@@ -180,7 +180,7 @@ const FormulMultiBlendCalc: React.FC = () => {
               <LayoutGroup>
                 <AnimatePresence>
                   {wines.map((wine, index) => (
-                    <motion.div
+                    <m.div
                       layout
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
@@ -260,7 +260,7 @@ const FormulMultiBlendCalc: React.FC = () => {
                           <Trash2 size={20} />
                         </Button>
                       </div>
-                    </motion.div>
+                    </m.div>
                   ))}
                 </AnimatePresence>
               </LayoutGroup>
@@ -288,18 +288,18 @@ const FormulMultiBlendCalc: React.FC = () => {
             </Button>
           </CardBody>
         </Card>
-      </motion.div>
+      </m.div>
 
       <AnimatePresence>
         {showFormula && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="w-full max-w-5xl"
           >
             <FormulMultiCalc />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

@@ -13,7 +13,7 @@ import { useFermentationStore } from '@/lib/store/useFermentationStore';
 import { BarrelCard } from '@/components/fermentation/BarrelCard';
 import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 export default function FermentationDashboard() {
     const t = useTranslations('Fermentation');
@@ -146,7 +146,7 @@ export default function FermentationDashboard() {
                             />
                         ))
                     ) : (
-                        <motion.div 
+                        <m.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             className="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400 space-y-4"
@@ -157,7 +157,7 @@ export default function FermentationDashboard() {
                             <p className="font-bold uppercase tracking-widest text-xs">
                                 {t('no-barrels')}
                             </p>
-                        </motion.div>
+                        </m.div>
                     )}
                 </AnimatePresence>
             </div>

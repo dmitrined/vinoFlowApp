@@ -26,6 +26,7 @@ const withPWA = withPWAInit({
 const nextConfig = {
   experimental: {
     reactCompiler: true,
+    optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion', '@heroui/react'],
   },
   eslint: {
     ignoreDuringBuilds: true,

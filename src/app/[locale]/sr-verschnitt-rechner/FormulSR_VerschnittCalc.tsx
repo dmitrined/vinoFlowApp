@@ -25,7 +25,7 @@ import {
   Info
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { calcSRVerschnitt } from '@/lib/calculations';
 import FormulSRCalc from './FormulSRCalc';
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
@@ -98,7 +98,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
 
   return (
     <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl"
@@ -216,7 +216,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
                             </div>
                             
                             {results && (
-                                <motion.div 
+                                <m.div 
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="mt-4 flex items-center gap-2 px-3 py-1 bg-brand-500/10 rounded-full border border-brand-500/20"
@@ -225,7 +225,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
                                     <span className="text-[9px] font-black text-brand-400 uppercase tracking-widest">
                                         Total: {results.gesamt_Liter.toFixed(2)} L
                                     </span>
-                                </motion.div>
+                                </m.div>
                             )}
                         </CardBody>
                         <div className="absolute -bottom-10 -right-10 opacity-10 rotate-12">
@@ -247,18 +247,18 @@ const FormulSR_VerschnittCalc: React.FC = () => {
             </Button>
           </CardBody>
         </Card>
-      </motion.div>
+      </m.div>
 
       <AnimatePresence>
         {showFormula && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="w-full max-w-2xl"
           >
             <FormulSRCalc />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

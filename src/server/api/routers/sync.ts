@@ -12,9 +12,9 @@ const barrelSchema = z.object({
   id: z.string(),
   name: z.string(),
   volume: z.number().nullable().optional(),
-  status: z.string(),
+  status: z.enum(['empty', 'fermenting', 'aging', 'bottled', 'sold', 'archived', 'active', 'finished']),
   notes: z.string().nullable().optional(),
-  updatedAt: z.string(),
+  updatedAt: z.string().datetime({ offset: true }).or(z.string()), // Accept ISO string
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
 });
@@ -25,7 +25,7 @@ const readingSchema = z.object({
   date: z.string(),
   oechsle: z.number().nullable().optional(),
   temperature: z.number().nullable().optional(),
-  updatedAt: z.string(),
+  updatedAt: z.string().datetime({ offset: true }).or(z.string()),
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
 });
@@ -34,21 +34,21 @@ const additionSchema = z.object({
   id: z.string(),
   barrelId: z.string(),
   date: z.string(),
-  name: z.string(),
+  name: z.string().min(1),
   dosage: z.string(),
-  unit: z.string(),
-  updatedAt: z.string(),
+  unit: z.string().min(1),
+  updatedAt: z.string().datetime({ offset: true }).or(z.string()),
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
 });
 
 const calculationSchema = z.object({
   id: z.string(),
-  type: z.string(),
+  type: z.string().min(1),
   date: z.number(),
   result: z.string(),
   unit: z.string().nullable().optional(),
-  updatedAt: z.string(),
+  updatedAt: z.string().datetime({ offset: true }).or(z.string()),
   isDeleted: z.boolean(),
   synced: z.boolean().optional(),
 });

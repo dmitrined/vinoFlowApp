@@ -26,7 +26,7 @@ import {
   Cpu
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
 import { useHistoryAutoSave } from "@/hooks/useHistoryAutoSave";
@@ -99,7 +99,7 @@ const FormulSR_AufInCalc = () => {
   return (
     <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl"
@@ -196,18 +196,18 @@ const FormulSR_AufInCalc = () => {
             </Button>
           </CardBody>
         </Card>
-      </motion.div>
+      </m.div>
 
       <AnimatePresence>
         {showFormula && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="w-full max-w-2xl"
           >
             <FormulPercentSRCalc />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

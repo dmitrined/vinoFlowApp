@@ -8,7 +8,7 @@ export interface SyncBarrel {
   id: string;
   name: string;
   volume?: number | null;
-  status: string;
+  status: 'empty' | 'fermenting' | 'aging' | 'bottled' | 'sold' | 'archived' | 'active' | 'finished';
   notes?: string | null;
   updatedAt: string;
   isDeleted: boolean;

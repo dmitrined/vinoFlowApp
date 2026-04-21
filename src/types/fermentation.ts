@@ -25,7 +25,7 @@ export interface Addition {
     synced: boolean;
 }
 
-export type BarrelStatus = 'active' | 'finished' | 'archived';
+export type BarrelStatus = 'active' | 'finished' | 'empty' | 'fermenting' | 'aging' | 'bottled' | 'sold' | 'archived';
 
 export interface Barrel {
     id: string;

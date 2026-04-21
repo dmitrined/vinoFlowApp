@@ -9,7 +9,7 @@
 import { Card, CardBody, Button, Chip } from "@heroui/react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from 'next-intl';
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
     Calculator,
     Layers,
@@ -95,12 +95,12 @@ export default function Home() {
     return (
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
             {/* Hero Section - SaaS Style */}
-            <motion.section
+            <m.section
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col items-center justify-center text-center mb-20"
             >
-                <motion.div 
+                <m.div 
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     className="mb-8"
@@ -113,7 +113,7 @@ export default function Home() {
                     >
                         {t('hero-chip')}
                     </Chip>
-                </motion.div>
+                </m.div>
                 
                 <h1 className="text-6xl sm:text-8xl font-black mb-6 tracking-tight text-tech-gradient">
                     Vino<span className="text-zinc-800 dark:text-zinc-200 italic ml-1">Flow</span>
@@ -141,7 +141,7 @@ export default function Home() {
                         {t('cta-docs')}
                     </Button>
                 </div>
-            </motion.section>
+            </m.section>
 
             {/* Dashboard / History */}
             <RecentCalculations />
@@ -152,14 +152,14 @@ export default function Home() {
                 <h2 className="text-2xl font-black tracking-tight uppercase italic opacity-80">{t('tools-heading')}</h2>
             </div>
 
-            <motion.div
+            <m.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
                 className="grid grid-cols-1 md:grid-cols-3 gap-5"
             >
                 {tools.map((tool) => (
-                    <motion.div key={tool.title} variants={itemVariants} className={tool.className}>
+                    <m.div key={tool.title} variants={itemVariants} className={tool.className}>
                         <Card
                             isPressable
                             as={Link}
@@ -185,7 +185,7 @@ export default function Home() {
                                 </div>
                             </CardBody>
                         </Card>
-                    </motion.div>
+                    </m.div>
                 ))}
 
                 {/* Placeholder Bento Card for Pro features or info */}
@@ -198,7 +198,7 @@ export default function Home() {
                         <p className="text-xs text-white/70 font-bold uppercase tracking-widest">{t('promo-subtitle')}</p>
                     </CardBody>
                 </Card>
-            </motion.div>
+            </m.div>
         </div>
     );
 }
