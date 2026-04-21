@@ -44,10 +44,19 @@ const FermentationChart = dynamic(
     () => import('@/components/fermentation/FermentationChart').then(mod => mod.FermentationChart),
     { ssr: false }
 );
-import { ReadingModal } from '@/components/fermentation/ReadingModal';
-import { AdditionModal } from '@/components/fermentation/AdditionModal';
+const ReadingModal = dynamic(
+    () => import('@/components/fermentation/ReadingModal').then(mod => mod.ReadingModal),
+    { ssr: false }
+);
+const AdditionModal = dynamic(
+    () => import('@/components/fermentation/AdditionModal').then(mod => mod.AdditionModal),
+    { ssr: false }
+);
+const ConfirmModal = dynamic(
+    () => import('@/components/fermentation/ConfirmModal').then(mod => mod.ConfirmModal),
+    { ssr: false }
+);
 import { AdditionsList } from '@/components/fermentation/AdditionsList';
-import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
 import { Reading, Addition } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';

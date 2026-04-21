@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 export const BottomHeader = () => {
   const t = useTranslations('Layout');
@@ -46,7 +46,7 @@ export const BottomHeader = () => {
     <>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -62,7 +62,7 @@ export const BottomHeader = () => {
           {/* Меню инструментов - SaaS Floating Panel */}
           <AnimatePresence>
             {isOpen && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -89,7 +89,7 @@ export const BottomHeader = () => {
                     </button>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 

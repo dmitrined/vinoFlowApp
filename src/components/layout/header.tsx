@@ -104,9 +104,11 @@ export const Header = () => {
               </button>
             ))}
           </div>
-          <div className="flex ml-1 relative">
-            <CloudIndicator />
-          </div>
+          {pathname.includes('fermentation') && (
+            <div className="flex ml-1 relative">
+              <CloudIndicator />
+            </div>
+          )}
         </NavbarContent>
       </Navbar>
     </div>

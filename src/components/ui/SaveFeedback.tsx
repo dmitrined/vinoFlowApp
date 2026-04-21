@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from "framer-motion";
 import { CheckCircle2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -15,7 +15,7 @@ const SaveFeedback: React.FC<SaveFeedbackProps> = ({ show }) => {
     return (
         <AnimatePresence>
             {show && (
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 10 }}
@@ -27,7 +27,7 @@ const SaveFeedback: React.FC<SaveFeedbackProps> = ({ show }) => {
                     <span className="text-xs font-black uppercase tracking-widest">
                         {t('saved')}
                     </span>
-                </motion.div>
+                </m.div>
             )}
         </AnimatePresence>
     );

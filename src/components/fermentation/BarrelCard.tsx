@@ -12,7 +12,7 @@ import { FlaskConical, ArrowRight, Trash2 } from "lucide-react";
 import { Barrel } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface Props {
     barrel: Barrel;
@@ -29,7 +29,7 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
         : null;
 
     return (
-        <motion.div
+        <m.div
             whileHover={{ y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             onClick={() => router.push(`/fermentation/${barrel.id}`)}
@@ -98,7 +98,7 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
                     </div>
                 </CardBody>
             </Card>
-        </motion.div>
+        </m.div>
     );
 });
 BarrelCard.displayName = 'BarrelCard';

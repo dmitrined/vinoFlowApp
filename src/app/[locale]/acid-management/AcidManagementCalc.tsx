@@ -10,7 +10,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, RadioGroup, Radio } from "@heroui/react";
 import { Droplet, Info, Zap } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { WINE_CONSTANTS, calcAcidManagement } from '@/lib/calculations';
@@ -66,7 +66,7 @@ export default function AcidManagementCalc() {
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
@@ -203,7 +203,7 @@ export default function AcidManagementCalc() {
                         </div>
                     </CardBody>
                 </Card>
-            </motion.div>
+            </m.div>
             <SaveFeedback show={showFeedback} />
         </div>
     );

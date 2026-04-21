@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
 import { Beaker, AlertTriangle } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { WINE_CONSTANTS, calcChaptalization } from '@/lib/calculations';
@@ -116,7 +116,7 @@ export default function ChaptalizationCalc() {
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
@@ -250,14 +250,14 @@ export default function ChaptalizationCalc() {
                                             </span>
                                         </div>
                                         {showWarning && (
-                                            <motion.div 
+                                            <m.div 
                                                 initial={{ opacity: 0, y: -10 }} 
                                                 animate={{ opacity: 1, y: 0 }} 
                                                 className="mt-6 flex items-center gap-2 text-[10px] sm:text-[11px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20"
                                             >
                                                 <AlertTriangle size={16} className="shrink-0" />
                                                 <span>{t('warning-limit')}</span>
-                                            </motion.div>
+                                            </m.div>
                                         )}
                                     </div>
                                     
@@ -306,7 +306,7 @@ export default function ChaptalizationCalc() {
                         </div>
                     </CardBody>
                 </Card>
-            </motion.div>
+            </m.div>
             <SaveFeedback show={showFeedback} />
         </div>
     );

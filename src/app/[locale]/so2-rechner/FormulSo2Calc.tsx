@@ -12,7 +12,7 @@ import { Info, Eye, EyeOff, Zap, Wine } from "lucide-react";
 import ProductTypeSelector from '@/components/ui/ProductTypeSelector';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { calcSO2Addition, WINE_CONSTANTS } from '@/lib/calculations';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import FormulSo2Math from './FormulSo2Math';
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import { ProductType } from '@/types/calculations';
@@ -57,7 +57,7 @@ const FormulSo2Calc: React.FC = () => {
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
@@ -179,18 +179,18 @@ const FormulSo2Calc: React.FC = () => {
                         </Button>
                     </CardBody>
                 </Card>
-            </motion.div>
+            </m.div>
 
             <AnimatePresence>
                 {showFormula && (
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         className="w-full"
                     >
                         <FormulSo2Math />
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
 
