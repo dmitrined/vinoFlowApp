@@ -10,11 +10,13 @@
         "menu": {
             "home": "Home",
             "more": "Mehr",
-            "sr-auf-in": "Zuckerrechner (auf/in)",
+            "sr-rechner": "Süßreserve",
             "alkohol": "Eno-Konverter",
             "sr-verschnitt": "SR-Verschnitt",
             "mehrfach": "Multi-Verschnitt",
             "so2-rechner": "SO2-Rechner",
+            "acid-management": "Säuremanagement",
+            "chaptalization": "Chaptalisierung",
             "close": "Schließen"
         },
         "footer": {
@@ -47,8 +49,8 @@
         "clear-history": "Historie löschen",
         "last-result": "Letztes Ergebnis:",
         "tools": {
-            "sr-rechner": "Zuckerrechner",
-            "sr-rechner-desc": "Schnelle Berechnung des Restzuckers im Wein.",
+            "sr-rechner": "Süßreserve-Rechner",
+            "sr-rechner-desc": "Berechnung der Zugabe von Süßreserve, RTK oder stummem Most.",
             "alkohol": "Önologischer Konverter",
             "alkohol-desc": "Hochpräzise Umrechnung von Wein- und Mostparametern nach der Troost-Tabelle.",
             "sr-verschnitt": "SR-Verschnitt",
@@ -95,7 +97,7 @@
             "range": "Zielwert muss zwischen Wein und Zucker liegen"
         },
         "sr-rechner": {
-            "title": "Zuckerrechner",
+            "title": "Süßreserve-Rechner",
             "subtitle": "Präzise Berechnung der Süßreserve für Önologen",
             "seo-title": "Wein-Restzucker (SR) Rechner | VinoFlow",
             "seo-description": "Ermitteln Sie das benötigte Volumen der Süßreserve basierend auf dem gewünschten Restzuckergehalt.",

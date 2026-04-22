@@ -10,7 +10,7 @@
         "menu": {
             "home": "Home",
             "more": "More",
-            "sr-auf-in": "Sugar Calc (on/in)",
+            "sr-rechner": "Sweetening",
             "alkohol": "Eno-Converter",
             "sr-verschnitt": "Sugar Blending",
             "mehrfach": "Multiple Blending",
@@ -47,8 +47,8 @@
         "clear-history": "Clear History",
         "last-result": "Last Result:",
         "tools": {
-            "sr-rechner": "Sugar Calculator",
-            "sr-rechner-desc": "Quick calculation of residual sugar in wine.",
+            "sr-rechner": "Sweetening Calc",
+            "sr-rechner-desc": "Calculate additions of Süßreserve, concentrate or sulphured must.",
             "alkohol": "Enological Converter",
             "alkohol-desc": "High-precision conversion of wine and must parameters using Troost table.",
             "sr-verschnitt": "Sugar Blending",
@@ -95,7 +95,7 @@
             "range": "Target must be between wine and sugar"
         },
         "sr-rechner": {
-            "title": "SR Calculator",
+            "title": "Sweetening Calc",
             "subtitle": "Precise calculation of sugar reserve for wine technologists",
             "seo-title": "Wine Sugar Reserve (SR) Calculator | VinoFlow",
             "seo-description": "Determine the required volume of sweet reserve for your wine based on desired residual sugar percentages.",
