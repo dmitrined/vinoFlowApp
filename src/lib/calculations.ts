@@ -1,7 +1,10 @@
 import { ProductType } from '@/types/calculations';
+import { TROOST_TABLE, TroostRow } from './troostData';
 
 /**
- * ОСОБЕННОСТИ: Экспортированные функции для чистого тестирования
+ * НАЗНАЧЕНИЕ: Энологические расчеты на основе таблицы Трооста
+ * ЗАВИСИМОСТИ: @/lib/troostData
+ * ОСОБЕННОСТИ: Линейная интерполяция для дробных значений Oechsle
  */
 
 export const WINE_CONSTANTS = {
@@ -29,6 +32,88 @@ export const WINE_CONSTANTS = {
         }
     }
 } as const;
+
+export type EnologicalUnit = 'oe' | 'alcVol' | 'alcGl' | 'sugar';
+
+/**
+ * Интерполяция значений из таблицы Трооста
+ * @param value Значение
+ * @param fromUnit Единица измерения значения
+ */
+export const getTroostData = (value: number, fromUnit: EnologicalUnit): TroostRow & { alcGl: number } => {
+    if (isNaN(value) || value < 0) return { oe: 0, sugar: 0, totalAlc: 0, alcVol: 0, alcGl: 0 };
+
+    const minOe = TROOST_TABLE[0].oe;
+    const maxOe = TROOST_TABLE[TROOST_TABLE.length - 1].oe;
+
+    let targetOe: number;
+
+    if (fromUnit === 'oe') {
+        targetOe = value;
+    } else {
+        // РЕВЕРСИВНАЯ ИНТЕРПОЛЯЦИЯ: Находим дробное Oechsle на основе входного значения
+        const searchUnit = (fromUnit === 'alcGl' ? 'totalAlc' : fromUnit) as keyof TroostRow;
+        
+        // Находим интервал в таблице
+        let index = -1;
+        for (let i = 0; i < TROOST_TABLE.length - 1; i++) {
+            const v1 = TROOST_TABLE[i][searchUnit] as number;
+            const v2 = TROOST_TABLE[i+1][searchUnit] as number;
+            
+            // Проверяем, попадает ли значение в интервал [v1, v2]
+            if ((value >= v1 && value <= v2) || (value <= v1 && value >= v2)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) {
+            // Вне диапазона - берем ближайший край
+            if (value <= (TROOST_TABLE[0][searchUnit] as number)) targetOe = minOe;
+            else targetOe = maxOe;
+        } else {
+            const r1 = TROOST_TABLE[index];
+            const r2 = TROOST_TABLE[index + 1];
+            const v1 = r1[searchUnit] as number;
+            const v2 = r2[searchUnit] as number;
+            
+            // Фактор интерполяции внутри интервала значений
+            const t = v1 === v2 ? 0 : (value - v1) / (v2 - v1);
+            // Линейно находим Oechsle между r1.oe и r2.oe
+            targetOe = r1.oe + t * (r2.oe - r1.oe);
+        }
+    }
+
+    const clampedOe = Math.max(minOe, Math.min(maxOe, targetOe));
+    
+    // ПРЯМАЯ ИНТЕРПОЛЯЦИЯ всех выходных параметров на основе найденного Oechsle
+    const findIndex = TROOST_TABLE.findIndex(r => r.oe >= clampedOe);
+    if (findIndex === 0) {
+        const row = TROOST_TABLE[0];
+        return { ...row, alcGl: row.totalAlc };
+    }
+    if (findIndex === -1) {
+        const row = TROOST_TABLE[TROOST_TABLE.length - 1];
+        return { ...row, alcGl: row.totalAlc };
+    }
+
+    const r1 = TROOST_TABLE[findIndex - 1];
+    const r2 = TROOST_TABLE[findIndex];
+
+    if (r1.oe === clampedOe) return { ...r1, alcGl: r1.totalAlc };
+    if (r2.oe === clampedOe) return { ...r2, alcGl: r2.totalAlc };
+
+    const t = (clampedOe - r1.oe) / (r2.oe - r1.oe);
+    const interpolatedTotalAlc = r1.totalAlc + t * (r2.totalAlc - r1.totalAlc);
+
+    return {
+        oe: clampedOe,
+        sugar: r1.sugar + t * (r2.sugar - r1.sugar),
+        totalAlc: interpolatedTotalAlc,
+        alcVol: r1.alcVol + t * (r2.alcVol - r1.alcVol),
+        alcGl: interpolatedTotalAlc
+    };
+};
 
 /**
  * Конвертация г/л в % об.
@@ -141,65 +226,49 @@ export const calcSO2Addition = (
 };
 
 /**
- * Расчет шаптализации
+ * Расчет шаптализации на основе таблицы Трооста
  * @param volume Объем вина (л)
- * @param currentAbv Текущий показатель
- * @param targetAbv Целевой показатель
- * @param currentUnit Единица измерения текущего показателя ('percent' | 'gl' | 'gl-sugar' | 'oechsle')
- * @param targetUnit Единица измерения целевого показателя ('percent' | 'gl' | 'gl-sugar' | 'oechsle')
+ * @param currentVal Текущий показатель
+ * @param targetVal Целевой показатель
+ * @param currentUnit Единица измерения текущего показателя
+ * @param targetUnit Единица измерения целевого показателя
  */
 export const calcChaptalization = (
     volume: number,
-    currentAbv: number,
-    targetAbv: number,
-    currentUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle' = 'percent',
-    targetUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle' = 'percent'
+    currentVal: number,
+    targetVal: number,
+    currentUnit: EnologicalUnit = 'alcVol',
+    targetUnit: EnologicalUnit = 'alcVol'
 ) => {
-    if (isNaN(volume) || isNaN(currentAbv) || isNaN(targetAbv) || volume <= 0 || currentAbv < 0) {
+    if (isNaN(volume) || isNaN(currentVal) || isNaN(targetVal) || volume <= 0 || currentVal < 0) {
         return { sugar: 0, deltaVol: 0, total: volume };
     }
 
-    // Приводим оба значения к % Vol для сравнения и базового расчета
-    let currentVol = currentAbv;
-    if (currentUnit === 'gl') {
-        currentVol = currentAbv * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-    } else if (currentUnit === 'oechsle') {
-        currentVol = (currentAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-    } else if (currentUnit === 'gl-sugar') {
-        currentVol = currentAbv / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-    }
+    const currentData = getTroostData(currentVal, currentUnit);
+    const targetData = getTroostData(targetVal, targetUnit);
 
-    let targetVol = targetAbv;
-    if (targetUnit === 'gl') {
-        targetVol = targetAbv * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-    } else if (targetUnit === 'oechsle') {
-        targetVol = (targetAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-    } else if (targetUnit === 'gl-sugar') {
-        targetVol = targetAbv / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-    }
-
-    if (targetVol <= currentVol) {
+    // Если целевой алкоголь ниже текущего, расчет не требуется
+    if (targetData.totalAlc <= currentData.totalAlc) {
         return { sugar: 0, deltaVol: 0, total: volume };
     }
 
-    let sugarNeeded = 0;
+    // ЛОГИКА ПОЛЬЗОВАТЕЛЯ: (Разница g/l Alc * 2.5 * Объем) / 1000
+    // totalAlc в таблице Трооста соответствует g/l Alc
+    const deltaAlcGl = targetData.totalAlc - currentData.totalAlc;
+    const sugarPerLiter = deltaAlcGl * 2.5; 
+    const sugarNeededKg = (sugarPerLiter * volume) / 1000;
 
-    // Если оба параметра в Эксле или сахаре, считаем напрямую без погрешностей двойной конверсии
-    if (currentUnit === 'oechsle' && targetUnit === 'oechsle') {
-        const diffOe = targetAbv - currentAbv;
-        sugarNeeded = (diffOe * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE * volume) / 1000;
-    } else if (currentUnit === 'gl-sugar' && targetUnit === 'gl-sugar') {
-        const diffGl = targetAbv - currentAbv;
-        sugarNeeded = (diffGl * volume) / 1000;
-    } else {
-        const diffAbv = targetVol - currentVol;
-        sugarNeeded = (diffAbv * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV * volume) / 1000;
-    }
-
-    const volumeIncrease = sugarNeeded * WINE_CONSTANTS.CHAPTALIZATION.VOL_INCREASE_PER_KG;
+    const volumeIncrease = sugarNeededKg * WINE_CONSTANTS.CHAPTALIZATION.VOL_INCREASE_PER_KG;
     const totalVolume = volume + volumeIncrease;
 
-    return { sugar: sugarNeeded, deltaVol: volumeIncrease, total: totalVolume };
+    return { 
+        sugar: sugarNeededKg, 
+        deltaVol: volumeIncrease, 
+        total: totalVolume,
+        // Данные для отображения в UI (по Троосту)
+        currentData,
+        targetData
+    };
 };
 
 /**
