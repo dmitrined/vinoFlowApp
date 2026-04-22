@@ -23,6 +23,13 @@
         },
         "fermentation": "Fermentation"
     },
+    "NotFound": {
+        "title": "404 - Page Not Found",
+        "description": "It seems this barrel is empty. We can't find the page you're looking for.",
+        "back-home": "Back to Home",
+        "back-button": "Back",
+        "error-code": "Error 404"
+    },
     "HomePage": {
         "title": "VinoFlow - Winemaker Tools",
         "description": "Professional calculators for oenology, blending and cellar management.",

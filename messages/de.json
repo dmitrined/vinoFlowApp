@@ -23,6 +23,13 @@
         },
         "fermentation": "Gärung"
     },
+    "NotFound": {
+        "title": "404 - Seite nicht gefunden",
+        "description": "Es scheint, dieses Fass ist leer. Wir können die gesuchte Seite nicht finden.",
+        "back-home": "Zurück zur Startseite",
+        "back-button": "Zurück",
+        "error-code": "Fehler 404"
+    },
     "HomePage": {
         "title": "VinoFlow - Winzerwerkzeuge",
         "description": "Professionelle Rechner für Önologie, Verschnitt und Kellerwirtschaft.",
