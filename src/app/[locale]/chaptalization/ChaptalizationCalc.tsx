@@ -1,99 +1,81 @@
+/**
+ * НАЗНАЧЕНИЕ: Калькулятор шаптализации на основе таблицы Трооста
+ * ЗАВИСИМОСТИ: useTranslations, useFermentationStore, calcChaptalization
+ * ОСОБЕННОСТЬ: 4 единицы измерения, высокоточная интерполяция, Mobile-first
+ */
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
-import { Beaker, AlertTriangle } from "lucide-react";
+import { Beaker, AlertTriangle, ChevronDown } from "lucide-react";
 import { m } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
-import { WINE_CONSTANTS, calcChaptalization } from '@/lib/calculations';
+import { calcChaptalization, EnologicalUnit, getTroostData } from '@/lib/calculations';
 
 export default function ChaptalizationCalc() {
     const t = useTranslations('Calculators.chaptalization');
     const locale = useLocale();
 
     const [volume, setVolume] = useState<string>('');
-    const [currentAbv, setCurrentAbv] = useState<string>('');
-    const [targetAbv, setTargetAbv] = useState<string>('');
-    const [currentUnit, setCurrentUnit] = useState<'percent' | 'gl' | 'gl-sugar' | 'oechsle'>('percent');
-    const [targetUnit, setTargetUnit] = useState<'percent' | 'gl' | 'gl-sugar' | 'oechsle'>('percent');
+    const [currentVal, setCurrentVal] = useState<string>('');
+    const [targetVal, setTargetVal] = useState<string>('');
+    const [currentUnit, setCurrentUnit] = useState<EnologicalUnit>('alcVol');
+    const [targetUnit, setTargetUnit] = useState<EnologicalUnit>('alcVol');
 
-    const convertValue = (valStr: string, fromUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle', toUnit: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
-        const v = parseFloat(valStr);
+    const handleUnitChange = (valStr: string, fromUnit: EnologicalUnit, toUnit: EnologicalUnit) => {
+        const v = parseFloat(valStr.replace(',', '.'));
         if (isNaN(v)) return valStr;
 
-        let vol = v;
-        if (fromUnit === 'gl') vol = v * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-        else if (fromUnit === 'gl-sugar') vol = v / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-        else if (fromUnit === 'oechsle') vol = (v * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-
-        if (toUnit === 'percent') return vol.toFixed(1);
-        if (toUnit === 'gl') return (vol / WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR).toFixed(1);
-        if (toUnit === 'gl-sugar') return (vol * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV).toFixed(1);
-        if (toUnit === 'oechsle') return ((vol * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE).toFixed(0);
-        return valStr;
+        const data = getTroostData(v, fromUnit);
+        const result = data[toUnit as keyof typeof data];
+        
+        return typeof result === 'number' 
+            ? result.toLocaleString(locale, { maximumFractionDigits: toUnit === 'oe' ? 0 : 2 }) 
+            : valStr;
     };
 
-    const handleCurrentUnitChange = (k: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
+    const handleCurrentUnitChange = (k: EnologicalUnit) => {
         if (k === currentUnit) return;
-        setCurrentAbv(convertValue(currentAbv, currentUnit, k));
+        setCurrentVal(handleUnitChange(currentVal, currentUnit, k));
         setCurrentUnit(k);
     };
 
-    const handleTargetUnitChange = (k: 'percent' | 'gl' | 'gl-sugar' | 'oechsle') => {
+    const handleTargetUnitChange = (k: EnologicalUnit) => {
         if (k === targetUnit) return;
-        setTargetAbv(convertValue(targetAbv, targetUnit, k));
+        setTargetVal(handleUnitChange(targetVal, targetUnit, k));
         setTargetUnit(k);
     };
 
-    const error = useMemo(() => {
-        const c = parseFloat(currentAbv) || 0;
-        const target = parseFloat(targetAbv) || 0;
+    const results = useMemo(() => {
+        const v = parseFloat(volume.replace(',', '.')) || 0;
+        const c = parseFloat(currentVal.replace(',', '.')) || 0;
+        const target = parseFloat(targetVal.replace(',', '.')) || 0;
         
-        let cVol = c;
-        if (currentUnit === 'gl') cVol = c * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-        else if (currentUnit === 'gl-sugar') cVol = c / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-        else if (currentUnit === 'oechsle') cVol = (c * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
+        return calcChaptalization(v, c, target, currentUnit, targetUnit);
+    }, [volume, currentVal, targetVal, currentUnit, targetUnit]);
 
-        let tVol = target;
-        if (targetUnit === 'gl') tVol = target * WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-        else if (targetUnit === 'gl-sugar') tVol = target / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-        else if (targetUnit === 'oechsle') tVol = (target * WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_OECHSLE) / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-
-        if (tVol > 0 && tVol <= cVol) {
+    const error = useMemo(() => {
+        if (!currentVal || !targetVal) return null;
+        if (results.sugar === 0 && parseFloat(targetVal) > 0) {
             return t('error-target');
         }
         return null;
-    }, [currentAbv, targetAbv, currentUnit, targetUnit, t]);
-
-    const results = useMemo(() => {
-        const v = parseFloat(volume) || 0;
-        const c = parseFloat(currentAbv) || 0;
-        const target = parseFloat(targetAbv) || 0;
-        
-        return calcChaptalization(v, c, target, currentUnit, targetUnit);
-    }, [volume, currentAbv, targetAbv, currentUnit, targetUnit]);
+    }, [currentVal, targetVal, results.sugar, t]);
 
     const formattedResult = results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0';
 
-    const sugarPerLiter = useMemo(() => {
-        const v = parseFloat(volume);
-        if (v > 0 && results.sugar > 0) {
-            return (results.sugar * 1000) / v;
+    const alcGlDifference = useMemo(() => {
+        if (results.targetData && results.currentData) {
+            const diff = results.targetData.totalAlc - results.currentData.totalAlc;
+            return diff > 0 ? diff : 0;
         }
         return 0;
-    }, [volume, results.sugar]);
+    }, [results.targetData, results.currentData]);
 
-    const diffAlcGl = useMemo(() => {
-        if (sugarPerLiter > 0) {
-             const diffVol = sugarPerLiter / WINE_CONSTANTS.CHAPTALIZATION.SUGAR_PER_ABV;
-             return diffVol / WINE_CONSTANTS.ALCOHOL_CONVERSION_FACTOR;
-        }
-        return 0;
-    }, [sugarPerLiter]);
-
-    const showWarning = diffAlcGl > 24;
+    const showWarning = (results.targetData?.alcVol || 0) - (results.currentData?.alcVol || 0) > 3.0; // Примерный порог 3% Vol
 
     const { showFeedback } = useHistoryAutoSave(
         {
@@ -104,15 +86,17 @@ export default function ChaptalizationCalc() {
         results.sugar > 0 ? results.sugar : null
     );
 
-    const baseCurrentLabel = (currentUnit === 'oechsle' ? t('input-current-oechsle') : t('input-current-abv')).split('(')[0].trim();
-    const baseTargetLabel = (targetUnit === 'oechsle' ? t('input-target-oechsle') : t('input-target-abv')).split('(')[0].trim();
-
-    const getUnitDisplay = (unitType: string) => {
-        if (unitType === 'percent') return '% Vol';
-        if (unitType === 'gl') return 'g/L Alc';
-        if (unitType === 'gl-sugar') return 'g/L Sugar';
-        return '°Oe';
+    const getUnitDisplay = (u: EnologicalUnit) => {
+        switch(u) {
+            case 'oe': return '°Oe';
+            case 'alcVol': return '% Vol';
+            case 'alcGl': return 'g/L Alc';
+            case 'sugar': return 'g/L Sugar';
+            default: return u;
+        }
     };
+
+    const units: EnologicalUnit[] = ['oe', 'alcVol', 'alcGl', 'sugar'];
 
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
@@ -122,7 +106,7 @@ export default function ChaptalizationCalc() {
                 className="w-full"
             >
                 <Card className="bento-card border-none shadow-none">
-                    <CardHeader className="flex gap-5 p-8">
+                    <CardHeader className="flex gap-5 p-8 pb-4">
                         <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
                             <Beaker size={32} />
                         </div>
@@ -135,7 +119,8 @@ export default function ChaptalizationCalc() {
                     <CardBody className="p-8 space-y-10">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <Input
-                                type="number"
+                                type="text"
+                                inputMode="decimal"
                                 label={t('input-volume')}
                                 placeholder="0"
                                 value={volume}
@@ -145,18 +130,19 @@ export default function ChaptalizationCalc() {
                                 size="lg"
                                 radius="lg"
                                 classNames={{
-                                    input: "[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
                                     inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
                                     label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
                                 }}
+                                endContent={<span className="text-zinc-400 font-black text-[10px]">L</span>}
                             />
 
                             <Input
-                                type="number"
-                                label={baseCurrentLabel}
+                                type="text"
+                                inputMode="decimal"
+                                label={t('input-current')}
                                 placeholder="0"
-                                value={currentAbv}
-                                onValueChange={setCurrentAbv}
+                                value={currentVal}
+                                onValueChange={setCurrentVal}
                                 variant="flat"
                                 labelPlacement="outside"
                                 size="lg"
@@ -168,34 +154,34 @@ export default function ChaptalizationCalc() {
                                                 variant="light" 
                                                 size="sm" 
                                                 className="min-w-0 px-2 h-7 text-[10px] font-black tracking-widest uppercase text-zinc-500 data-[hover=true]:bg-zinc-200 dark:data-[hover=true]:bg-zinc-700"
+                                                endContent={<ChevronDown size={12} />}
                                             >
                                                 {getUnitDisplay(currentUnit)}
                                             </Button>
                                         </DropdownTrigger>
                                         <DropdownMenu 
-                                            aria-label="Current Unit" 
-                                            onAction={(k) => handleCurrentUnitChange(k as 'percent' | 'gl' | 'gl-sugar' | 'oechsle')}
+                                            aria-label={t('unit-select')} 
+                                            onAction={(k) => handleCurrentUnitChange(k as EnologicalUnit)}
                                         >
-                                            <DropdownItem key="percent">% Vol</DropdownItem>
-                                            <DropdownItem key="gl">g/L Alc</DropdownItem>
-                                            <DropdownItem key="gl-sugar">g/L Sugar</DropdownItem>
-                                            <DropdownItem key="oechsle">°Oe</DropdownItem>
+                                            {units.map(u => (
+                                                <DropdownItem key={u}>{getUnitDisplay(u)}</DropdownItem>
+                                            ))}
                                         </DropdownMenu>
                                     </Dropdown>
                                 }
                                 classNames={{
-                                    input: "[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
                                     inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
                                     label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
                                 }}
                             />
 
                             <Input
-                                type="number"
-                                label={baseTargetLabel}
+                                type="text"
+                                inputMode="decimal"
+                                label={t('input-target')}
                                 placeholder="0"
-                                value={targetAbv}
-                                onValueChange={setTargetAbv}
+                                value={targetVal}
+                                onValueChange={setTargetVal}
                                 variant="flat"
                                 labelPlacement="outside"
                                 size="lg"
@@ -209,23 +195,22 @@ export default function ChaptalizationCalc() {
                                                 variant="light" 
                                                 size="sm" 
                                                 className="min-w-0 px-2 h-7 text-[10px] font-black tracking-widest uppercase text-zinc-500 data-[hover=true]:bg-zinc-200 dark:data-[hover=true]:bg-zinc-700"
+                                                endContent={<ChevronDown size={12} />}
                                             >
                                                 {getUnitDisplay(targetUnit)}
                                             </Button>
                                         </DropdownTrigger>
                                         <DropdownMenu 
-                                            aria-label="Target Unit" 
-                                            onAction={(k) => handleTargetUnitChange(k as 'percent' | 'gl' | 'gl-sugar' | 'oechsle')}
+                                            aria-label={t('unit-select')} 
+                                            onAction={(k) => handleTargetUnitChange(k as EnologicalUnit)}
                                         >
-                                            <DropdownItem key="percent">% Vol</DropdownItem>
-                                            <DropdownItem key="gl">g/L Alc</DropdownItem>
-                                            <DropdownItem key="gl-sugar">g/L Sugar</DropdownItem>
-                                            <DropdownItem key="oechsle">°Oe</DropdownItem>
+                                            {units.map(u => (
+                                                <DropdownItem key={u}>{getUnitDisplay(u)}</DropdownItem>
+                                            ))}
                                         </DropdownMenu>
                                     </Dropdown>
                                 }
                                 classNames={{
-                                    input: "[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
                                     inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
                                     label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
                                 }}
@@ -234,15 +219,15 @@ export default function ChaptalizationCalc() {
 
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                            <Card className="relative bg-zinc-950 text-white border-none overflow-hidden py-6 flex flex-col items-center justify-center rounded-[2.5rem]" shadow="none">
-                                <CardBody className="p-0 flex flex-col items-center justify-center relative z-10 w-full space-y-6">
+                            <Card className="relative bg-zinc-950 text-white border-none overflow-hidden py-8 flex flex-col items-center justify-center rounded-[2.5rem]" shadow="none">
+                                <CardBody className="p-0 flex flex-col items-center justify-center relative z-10 w-full space-y-8">
                                     
                                     <div className="flex flex-col items-center text-center">
                                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-2 ml-[0.3em]">
                                             {t('result-sugar')}
                                         </span>
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-5xl md:text-6xl font-black tracking-tighter text-white">
+                                            <span className="text-5xl md:text-7xl font-black tracking-tighter text-white">
                                                 {results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0'}
                                             </span>
                                             <span className="text-xl font-black text-brand-500 uppercase italic">
@@ -251,56 +236,56 @@ export default function ChaptalizationCalc() {
                                         </div>
                                         {showWarning && (
                                             <m.div 
-                                                initial={{ opacity: 0, y: -10 }} 
-                                                animate={{ opacity: 1, y: 0 }} 
-                                                className="mt-6 flex items-center gap-2 text-[10px] sm:text-[11px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                                initial={{ opacity: 0, scale: 0.9 }} 
+                                                animate={{ opacity: 1, scale: 1 }} 
+                                                className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20"
                                             >
-                                                <AlertTriangle size={16} className="shrink-0" />
+                                                <AlertTriangle size={14} className="shrink-0" />
                                                 <span>{t('warning-limit')}</span>
                                             </m.div>
                                         )}
                                     </div>
                                     
-                                    <div className="w-full flex justify-between divide-x divide-white/10 border-t border-white/10 pt-6 px-4">
-                                        <div className="flex-1 flex flex-col items-center">
-                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1 text-center px-1">
-                                                {t('result-alc-increase')}
+                                    <div className="w-full grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-8 px-4">
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
+                                                Zusatz (Alc)
                                             </span>
                                             <div className="flex items-baseline gap-1">
-                                                <span className={`text-xl sm:text-2xl font-black ${diffAlcGl > 0 ? 'text-zinc-200' : 'text-zinc-200'}`}>
-                                                    +{diffAlcGl > 0 ? diffAlcGl.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
+                                                <span className="text-xl font-black text-zinc-200">
+                                                    +{alcGlDifference > 0 ? alcGlDifference.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
                                                 </span>
-                                                <span className="text-xs sm:text-sm font-bold text-zinc-500 uppercase">g/L Alc</span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">g/L Alc</span>
                                             </div>
                                         </div>
 
-                                        <div className="flex-1 flex flex-col items-center">
-                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1 text-center px-1">
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
                                                 {t('result-volume-increase')}
                                             </span>
                                             <div className="flex items-baseline gap-1">
-                                                <span className="text-xl sm:text-2xl font-black text-zinc-200">
+                                                <span className="text-xl font-black text-zinc-200">
                                                     +{results.deltaVol > 0 ? results.deltaVol.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
                                                 </span>
-                                                <span className="text-xs sm:text-sm font-bold text-zinc-500 uppercase">L</span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">L</span>
                                             </div>
                                         </div>
                                         
-                                        <div className="flex-1 flex flex-col items-center">
-                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1 text-center px-1">
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
                                                 {t('result-total-volume')}
                                             </span>
                                             <div className="flex items-baseline gap-1">
-                                                <span className="text-xl sm:text-2xl font-black text-brand-400">
+                                                <span className="text-xl font-black text-brand-400">
                                                     {results.total > 0 ? results.total.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
                                                 </span>
-                                                <span className="text-xs sm:text-sm font-bold text-zinc-500 uppercase">L</span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">L</span>
                                             </div>
                                         </div>
                                     </div>
                                 </CardBody>
-                                <div className="absolute top-0 left-0 p-4 opacity-5">
-                                    <Beaker size={120} />
+                                <div className="absolute top-0 left-0 p-6 opacity-5">
+                                    <Beaker size={140} />
                                 </div>
                             </Card>
                         </div>

@@ -11,7 +11,7 @@
             "home": "Home",
             "more": "More",
             "sr-auf-in": "Sugar Calc (on/in)",
-            "alkohol": "Alcohol Converter",
+            "alkohol": "Must Analyzer",
             "sr-verschnitt": "Sugar Blending",
             "mehrfach": "Multiple Blending",
             "so2-rechner": "SO2 Calculator",
@@ -42,8 +42,8 @@
         "tools": {
             "sr-rechner": "Sugar Calculator",
             "sr-rechner-desc": "Quick calculation of residual sugar in wine.",
-            "alkohol": "Alcohol Converter",
-            "alkohol-desc": "Conversion between g/l and % vol. alcohol.",
+            "alkohol": "Must Analyzer Pro",
+            "alkohol-desc": "High-precision must and alcohol analysis based on Troost standards.",
             "sr-verschnitt": "Sugar Blending",
             "sr-verschnitt-desc": "Calculation of sugar blending using mixing rules.",
             "mehrfach": "Multiple Blending",
@@ -105,17 +105,18 @@
             "formula-in": "Percentage of the finished total volume."
         },
         "alkohol": {
-            "title": "Alcohol Converter",
-            "subtitle": "Conversion between g/l and % vol.",
-            "seo-title": "Wine Alcohol Converter (g/L to % Vol) | VinoFlow",
-            "seo-description": "Instant conversion between alcohol by volume (%) and grams per liter for enological analysis and cellar management.",
-            "input-gl": "Grams per Liter",
-            "input-vol": "Percent Volume",
-            "result-gl": "Result: Grams per Liter",
-            "result-vol": "Result: Alcohol Content",
-            "formula-gl-vol": "1. Grams/Liter to % Volume",
-            "formula-vol-gl": "2. % Volume to Grams/Liter",
-            "footer-tag": "Standard conversion factor for winemaking"
+            "title": "Must & Alcohol Analyzer",
+            "subtitle": "High-precision calculation by G. Troost",
+            "seo-title": "Must Analysis & Alcohol Calculator (Troost Table) | VinoFlow",
+            "seo-description": "Professional tool for analyzing must density, sugar content, and potential alcohol.",
+            "input-value": "Enter Value",
+            "unit-oe": "°Oe (Oechsle)",
+            "unit-vol": "% Vol (Alcohol)",
+            "unit-alc-gl": "g/L Alc",
+            "unit-sugar": "g/L Sugar",
+            "result-label": "Troost Analysis Results",
+            "formula-desc": "Linear interpolation of the Troost table (44-124°Oe)",
+            "footer-tag": "Winemaking Standard G. Troost, 1980"
         },
         "sr-verschnitt": {
             "title": "Sugar Blending",
@@ -205,20 +206,19 @@
         },
         "chaptalization": {
             "title": "Chaptalization",
-            "subtitle": "Sugar calculation to increase potential alcohol",
+            "subtitle": "Increase potential alcohol",
             "seo-title": "Wine Chaptalization Calculator | VinoFlow",
-            "seo-description": "Calculate the addition of sugar to increase potential alcohol in wine using standard Dujardin-Salleron formulas.",
+            "seo-description": "Calculate the addition of sugar to increase potential alcohol in wine using Troost standards.",
             "input-volume": "Current Volume (L)",
-            "input-current-abv": "Current Alcohol (%)",
-            "input-target-abv": "Target Alcohol (%)",
-            "input-current-oechsle": "Current Density (°Oe)",
-            "input-target-oechsle": "Target Density (°Oe)",
+            "input-current": "Current Value",
+            "input-target": "Target Value",
             "result-sugar": "Required Sugar (kg)",
             "result-volume-increase": "Volume Increase (L)",
             "result-total-volume": "Total Volume (L)",
             "result-alc-increase": "Addition (Alc)",
             "warning-limit": "Exceeds alcohol limit (24 g/L Alc)",
-            "error-target": "Target alcohol must be greater than current"
+            "error-target": "Target value must be greater than current",
+            "unit-select": "Select Unit"
         }
     },
     "Fermentation": {

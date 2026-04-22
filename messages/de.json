@@ -11,7 +11,7 @@
             "home": "Home",
             "more": "Mehr",
             "sr-auf-in": "Zuckerrechner (auf/in)",
-            "alkohol": "Alkohol-Umrechner",
+            "alkohol": "Most-Analyse",
             "sr-verschnitt": "SR-Verschnitt",
             "mehrfach": "Multi-Verschnitt",
             "so2-rechner": "SO2-Rechner",
@@ -42,8 +42,8 @@
         "tools": {
             "sr-rechner": "Zuckerrechner",
             "sr-rechner-desc": "Schnelle Berechnung des Restzuckers im Wein.",
-            "alkohol": "Alkohol-Umrechner",
-            "alkohol-desc": "Umrechnung zwischen g/l und % Vol.",
+            "alkohol": "Most-Analyse Pro",
+            "alkohol-desc": "Präzise Most- und Alkohol-Analyse nach Troost-Standard.",
             "sr-verschnitt": "SR-Verschnitt",
             "sr-verschnitt-desc": "Berechnung von Zucker-Verschnitt nach Mischungsregeln.",
             "mehrfach": "Multi-Verschnitt",
@@ -100,17 +100,18 @@
             "in-desc": "Prozentsatz im fertigen Gesamtvolumen."
         },
         "alkohol": {
-            "title": "Alkohol-Umrechner",
-            "subtitle": "Konvertierung zwischen g/l und % Vol.",
-            "seo-title": "Alkohol-Umrechner Wein (g/L in % Vol) | VinoFlow",
-            "seo-description": "Schnelle Umrechnung zwischen Volumenprozent und Gramm pro Liter für die önologische Analyse und Kellerwirtschaft.",
-            "input-gl": "Gramm pro Liter",
-            "input-vol": "Prozent Volumen",
-            "result-gl": "Ergebnis: Gramm pro Liter",
-            "result-vol": "Ergebnis: Alkoholgehalt",
-            "formula-gl-vol": "1. Gramm/Liter in % Volumen",
-            "formula-vol-gl": "2. % Volumen in Gramm/Liter",
-            "footer-tag": "Standard-Konvertierungsfaktor für Kellerwirtschaft"
+            "title": "Most- und Alkohol-Analyse",
+            "subtitle": "Hochpräzise Berechnung nach G. Troost",
+            "seo-title": "Most-Analyse & Alkohol-Rechner (Troost-Tabelle) | VinoFlow",
+            "seo-description": "Professionelles Werkzeug zur Analyse von Mostgewicht, Zuckergehalt und potenziellem Alkohol.",
+            "input-value": "Wert eingeben",
+            "unit-oe": "°Oe (Oechsle)",
+            "unit-vol": "% Vol (Alkohol)",
+            "unit-alc-gl": "g/L Alc",
+            "unit-sugar": "g/L Sugar (Zucker)",
+            "result-label": "Analyseergebnisse nach Troost",
+            "formula-desc": "Lineare Interpolation der Troost-Tabelle (44-124°Oe)",
+            "footer-tag": "Weinbau-Standard G. Troost, 1980"
         },
         "sr-verschnitt": {
             "title": "SR-Verschnitt",
@@ -200,20 +201,19 @@
         },
         "chaptalization": {
             "title": "Chaptalisierung",
-            "subtitle": "Zuckerberechnung zur Erhöhung des potenziellen Alkohols",
+            "subtitle": "Erhöhung des potenziellen Alkohols",
             "seo-title": "Wein-Chaptalisierungs-Rechner | VinoFlow",
-            "seo-description": "Berechnen Sie die Zugabe von Zucker zur Erhöhung des potenziellen Alkohols im Wein nach den Standardformeln von Dujardin-Salleron.",
+            "seo-description": "Berechnen Sie die Zugabe von Zucker zur Erhöhung des potenziellen Alkohols im Wein nach Troost-Standard.",
             "input-volume": "Aktuelles Volumen (L)",
-            "input-current-abv": "Aktueller Alkohol (%)",
-            "input-target-abv": "Ziel-Alkohol (%)",
-            "input-current-oechsle": "Aktuelles Mostgewicht (°Oe)",
-            "input-target-oechsle": "Ziel-Mostgewicht (°Oe)",
+            "input-current": "Aktueller Wert",
+            "input-target": "Ziel-Wert",
             "result-sugar": "Benötigter Zucker (kg)",
             "result-volume-increase": "Volumenzunahme (L)",
             "result-total-volume": "Gesamtvolumen (L)",
             "result-alc-increase": "Zusatz (Alc)",
             "warning-limit": "Alkohol-Limit überschritten (24 g/L Alc)",
-            "error-target": "Der Zielalkohol muss größer als der aktuelle sein"
+            "error-target": "Der Zielwert muss größer als der aktuelle sein",
+            "unit-select": "Einheit wählen"
         }
     },
     "Fermentation": {
