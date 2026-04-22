@@ -11,7 +11,7 @@
             "home": "Home",
             "more": "More",
             "sr-auf-in": "Sugar Calc (on/in)",
-            "alkohol": "Must Analyzer",
+            "alkohol": "Eno-Converter",
             "sr-verschnitt": "Sugar Blending",
             "mehrfach": "Multiple Blending",
             "so2-rechner": "SO2 Calculator",
@@ -49,8 +49,8 @@
         "tools": {
             "sr-rechner": "Sugar Calculator",
             "sr-rechner-desc": "Quick calculation of residual sugar in wine.",
-            "alkohol": "Must Analyzer Pro",
-            "alkohol-desc": "High-precision must and alcohol analysis based on Troost standards.",
+            "alkohol": "Enological Converter",
+            "alkohol-desc": "High-precision conversion of wine and must parameters using Troost table.",
             "sr-verschnitt": "Sugar Blending",
             "sr-verschnitt-desc": "Calculation of sugar blending using mixing rules.",
             "mehrfach": "Multiple Blending",
@@ -112,7 +112,7 @@
             "formula-in": "Percentage of the finished total volume."
         },
         "alkohol": {
-            "title": "Must & Alcohol Analyzer",
+            "title": "Enological Converter",
             "subtitle": "High-precision calculation by G. Troost",
             "seo-title": "Must Analysis & Alcohol Calculator (Troost Table) | VinoFlow",
             "seo-description": "Professional tool for analyzing must density, sugar content, and potential alcohol.",

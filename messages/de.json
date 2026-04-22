@@ -11,7 +11,7 @@
             "home": "Home",
             "more": "Mehr",
             "sr-auf-in": "Zuckerrechner (auf/in)",
-            "alkohol": "Most-Analyse",
+            "alkohol": "Eno-Konverter",
             "sr-verschnitt": "SR-Verschnitt",
             "mehrfach": "Multi-Verschnitt",
             "so2-rechner": "SO2-Rechner",
@@ -49,8 +49,8 @@
         "tools": {
             "sr-rechner": "Zuckerrechner",
             "sr-rechner-desc": "Schnelle Berechnung des Restzuckers im Wein.",
-            "alkohol": "Most-Analyse Pro",
-            "alkohol-desc": "Präzise Most- und Alkohol-Analyse nach Troost-Standard.",
+            "alkohol": "Önologischer Konverter",
+            "alkohol-desc": "Hochpräzise Umrechnung von Wein- und Mostparametern nach der Troost-Tabelle.",
             "sr-verschnitt": "SR-Verschnitt",
             "sr-verschnitt-desc": "Berechnung von Zucker-Verschnitt nach Mischungsregeln.",
             "mehrfach": "Multi-Verschnitt",
@@ -107,7 +107,7 @@
             "in-desc": "Prozentsatz im fertigen Gesamtvolumen."
         },
         "alkohol": {
-            "title": "Most- und Alkohol-Analyse",
+            "title": "Önologischer Konverter",
             "subtitle": "Hochpräzise Berechnung nach G. Troost",
             "seo-title": "Most-Analyse & Alkohol-Rechner (Troost-Tabelle) | VinoFlow",
             "seo-description": "Professionelles Werkzeug zur Analyse von Mostgewicht, Zuckergehalt und potenziellem Alkohol.",
