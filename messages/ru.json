@@ -226,7 +226,12 @@
             "result-alc-increase": "Добавка (Alc)",
             "warning-limit": "Превышение лимита (24 г/л Alc)",
             "error-target": "Целевое значение должно быть выше текущего",
-            "unit-select": "Выбор ед. изм."
+            "unit-select": "Выбор ед. изм.",
+            "unit-g-l-alc": "г/л Alc",
+            "unit-oe": "°Oe",
+            "unit-alc-vol": "% Vol",
+            "unit-sugar-gl": "г/л Сахар",
+            "history": "История"
         }
     },
     "Fermentation": {

@@ -1,7 +1,7 @@
 /**
  * НАЗНАЧЕНИЕ: Калькулятор шаптализации на основе таблицы Трооста
- * ЗАВИСИМОСТИ: useTranslations, useFermentationStore, calcChaptalization
- * ОСОБЕННОСТЬ: 4 единицы измерения, высокоточная интерполяция, Mobile-first
+ * ЗАВИСИМОСТИ: useTranslations, useHistoryAutoSave, calcChaptalization
+ * ОСОБЕННОСТЬ: 4 единицы измерения, энологическая точность, Mobile-first
  */
 
 'use client';
@@ -9,7 +9,7 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
-import { Beaker, AlertTriangle, ChevronDown } from "lucide-react";
+import { Beaker, AlertTriangle, History, ChevronsUpDown } from "lucide-react";
 import { m } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
@@ -25,7 +25,8 @@ export default function ChaptalizationCalc() {
     const [currentUnit, setCurrentUnit] = useState<EnologicalUnit>('alcVol');
     const [targetUnit, setTargetUnit] = useState<EnologicalUnit>('alcVol');
 
-    const handleUnitChange = (valStr: string, fromUnit: EnologicalUnit, toUnit: EnologicalUnit) => {
+    // Функция для пересчета значений между различными энологическими единицами
+    const handleUnitChange = React.useCallback((valStr: string, fromUnit: EnologicalUnit, toUnit: EnologicalUnit) => {
         const v = parseFloat(valStr.replace(',', '.'));
         if (isNaN(v)) return valStr;
 
@@ -35,7 +36,7 @@ export default function ChaptalizationCalc() {
         return typeof result === 'number' 
             ? result.toLocaleString(locale, { maximumFractionDigits: toUnit === 'oe' ? 0 : 2 }) 
             : valStr;
-    };
+    }, [locale]);
 
     const handleCurrentUnitChange = (k: EnologicalUnit) => {
         if (k === currentUnit) return;
@@ -49,7 +50,9 @@ export default function ChaptalizationCalc() {
         setTargetUnit(k);
     };
 
+    // Основной расчет параметров шаптализации
     const results = useMemo(() => {
+        // Парсинг входных данных с поддержкой запятой как десятичного разделителя
         const v = parseFloat(volume.replace(',', '.')) || 0;
         const c = parseFloat(currentVal.replace(',', '.')) || 0;
         const target = parseFloat(targetVal.replace(',', '.')) || 0;
@@ -57,13 +60,16 @@ export default function ChaptalizationCalc() {
         return calcChaptalization(v, c, target, currentUnit, targetUnit);
     }, [volume, currentVal, targetVal, currentUnit, targetUnit]);
 
+    // Валидация: проверка, что целевое значение больше текущего
     const error = useMemo(() => {
         if (!currentVal || !targetVal) return null;
-        if (results.sugar === 0 && parseFloat(targetVal) > 0) {
-            return t('error-target');
+        if (results.targetData && results.currentData) {
+            if (results.targetData.totalAlc < results.currentData.totalAlc) {
+                return t('error-target');
+            }
         }
         return null;
-    }, [currentVal, targetVal, results.sugar, t]);
+    }, [currentVal, targetVal, results.targetData, results.currentData, t]);
 
     const formattedResult = results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0';
 
@@ -86,12 +92,13 @@ export default function ChaptalizationCalc() {
         results.sugar > 0 ? results.sugar : null
     );
 
+    // Получение локализованного отображения единиц измерения
     const getUnitDisplay = (u: EnologicalUnit) => {
         switch(u) {
-            case 'oe': return '°Oe';
-            case 'alcVol': return '% Vol';
-            case 'alcGl': return 'g/L Alc';
-            case 'sugar': return 'g/L Sugar';
+            case 'oe': return t('unit-oe');
+            case 'alcVol': return t('unit-alc-vol');
+            case 'alcGl': return t('unit-g-l-alc');
+            case 'sugar': return t('unit-sugar-gl');
             default: return u;
         }
     };
@@ -110,9 +117,13 @@ export default function ChaptalizationCalc() {
                         <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
                             <Beaker size={32} />
                         </div>
-                        <div className="flex flex-col text-left">
+                        <div className="flex flex-col text-left flex-1">
                             <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">{t('title')}</h1>
                             <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">{t('subtitle')}</p>
+                        </div>
+                        <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-700/50">
+                            <History size={16} className="text-zinc-400" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{t('history')}</span>
                         </div>
                     </CardHeader>
 
@@ -136,85 +147,97 @@ export default function ChaptalizationCalc() {
                                 endContent={<span className="text-zinc-400 font-black text-[10px]">L</span>}
                             />
 
-                            <Input
-                                type="text"
-                                inputMode="decimal"
-                                label={t('input-current')}
-                                placeholder="0"
-                                value={currentVal}
-                                onValueChange={setCurrentVal}
-                                variant="flat"
-                                labelPlacement="outside"
-                                size="lg"
-                                radius="lg"
-                                endContent={
-                                    <Dropdown>
-                                        <DropdownTrigger>
-                                            <Button 
-                                                variant="light" 
-                                                size="sm" 
-                                                className="min-w-0 px-2 h-7 text-[10px] font-black tracking-widest uppercase text-zinc-500 data-[hover=true]:bg-zinc-200 dark:data-[hover=true]:bg-zinc-700"
-                                                endContent={<ChevronDown size={12} />}
+                            <div className="flex flex-col gap-2">
+                                <Input
+                                    type="text"
+                                    inputMode="decimal"
+                                    label={t('input-current')}
+                                    placeholder="0"
+                                    value={currentVal}
+                                    onValueChange={setCurrentVal}
+                                    variant="flat"
+                                    labelPlacement="outside"
+                                    size="lg"
+                                    radius="lg"
+                                    endContent={
+                                        <Dropdown>
+                                            <DropdownTrigger>
+                                                <Button 
+                                                    variant="flat" 
+                                                    size="sm" 
+                                                    className="h-9 px-3 min-w-[85px] text-[10px] font-black tracking-widest uppercase text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-900/50 hover:bg-brand-200 dark:hover:bg-brand-800 transition-all border border-brand-300/50 dark:border-brand-600/50 shadow-sm"
+                                                >
+                                                    <div className="flex items-center justify-between w-full gap-2">
+                                                        <span>{getUnitDisplay(currentUnit)}</span>
+                                                        <ChevronsUpDown size={16} className="text-brand-600 dark:text-brand-400 shrink-0" />
+                                                    </div>
+                                                </Button>
+                                            </DropdownTrigger>
+                                            <DropdownMenu 
+                                                aria-label={t('unit-select')} 
+                                                onAction={(k) => handleCurrentUnitChange(k as EnologicalUnit)}
                                             >
-                                                {getUnitDisplay(currentUnit)}
-                                            </Button>
-                                        </DropdownTrigger>
-                                        <DropdownMenu 
-                                            aria-label={t('unit-select')} 
-                                            onAction={(k) => handleCurrentUnitChange(k as EnologicalUnit)}
-                                        >
-                                            {units.map(u => (
-                                                <DropdownItem key={u}>{getUnitDisplay(u)}</DropdownItem>
-                                            ))}
-                                        </DropdownMenu>
-                                    </Dropdown>
-                                }
-                                classNames={{
-                                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
-                                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
-                                }}
-                            />
+                                                {units.map(u => (
+                                                    <DropdownItem key={u}>
+                                                        {getUnitDisplay(u)}
+                                                    </DropdownItem>
+                                                ))}
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                    }
+                                    classNames={{
+                                        inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                                        label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
+                                    }}
+                                />
+                            </div>
 
-                            <Input
-                                type="text"
-                                inputMode="decimal"
-                                label={t('input-target')}
-                                placeholder="0"
-                                value={targetVal}
-                                onValueChange={setTargetVal}
-                                variant="flat"
-                                labelPlacement="outside"
-                                size="lg"
-                                radius="lg"
-                                isInvalid={!!error}
-                                errorMessage={error}
-                                endContent={
-                                    <Dropdown>
-                                        <DropdownTrigger>
-                                            <Button 
-                                                variant="light" 
-                                                size="sm" 
-                                                className="min-w-0 px-2 h-7 text-[10px] font-black tracking-widest uppercase text-zinc-500 data-[hover=true]:bg-zinc-200 dark:data-[hover=true]:bg-zinc-700"
-                                                endContent={<ChevronDown size={12} />}
+                            <div className="flex flex-col gap-2">
+                                <Input
+                                    type="text"
+                                    inputMode="decimal"
+                                    label={t('input-target')}
+                                    placeholder="0"
+                                    value={targetVal}
+                                    onValueChange={setTargetVal}
+                                    variant="flat"
+                                    labelPlacement="outside"
+                                    size="lg"
+                                    radius="lg"
+                                    isInvalid={!!error}
+                                    errorMessage={error}
+                                    endContent={
+                                        <Dropdown>
+                                            <DropdownTrigger>
+                                                <Button 
+                                                    variant="flat" 
+                                                    size="sm" 
+                                                    className="h-9 px-3 min-w-[85px] text-[10px] font-black tracking-widest uppercase text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-900/50 hover:bg-brand-200 dark:hover:bg-brand-800 transition-all border border-brand-300/50 dark:border-brand-600/50 shadow-sm"
+                                                >
+                                                    <div className="flex items-center justify-between w-full gap-2">
+                                                        <span>{getUnitDisplay(targetUnit)}</span>
+                                                        <ChevronsUpDown size={16} className="text-brand-600 dark:text-brand-400 shrink-0" />
+                                                    </div>
+                                                </Button>
+                                            </DropdownTrigger>
+                                            <DropdownMenu 
+                                                aria-label={t('unit-select')} 
+                                                onAction={(k) => handleTargetUnitChange(k as EnologicalUnit)}
                                             >
-                                                {getUnitDisplay(targetUnit)}
-                                            </Button>
-                                        </DropdownTrigger>
-                                        <DropdownMenu 
-                                            aria-label={t('unit-select')} 
-                                            onAction={(k) => handleTargetUnitChange(k as EnologicalUnit)}
-                                        >
-                                            {units.map(u => (
-                                                <DropdownItem key={u}>{getUnitDisplay(u)}</DropdownItem>
-                                            ))}
-                                        </DropdownMenu>
-                                    </Dropdown>
-                                }
-                                classNames={{
-                                    inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
-                                    label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
-                                }}
-                            />
+                                                {units.map(u => (
+                                                    <DropdownItem key={u}>
+                                                        {getUnitDisplay(u)}
+                                                    </DropdownItem>
+                                                ))}
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                    }
+                                    classNames={{
+                                        inputWrapper: "bg-zinc-100 dark:bg-zinc-800/50 group-data-[focus=true]:bg-white dark:group-data-[focus=true]:bg-zinc-800 border-2 border-transparent group-data-[focus=true]:border-brand-500 transition-all",
+                                        label: "font-black uppercase text-[11px] tracking-widest text-zinc-400 mb-2 truncate w-full"
+                                    }}
+                                />
+                            </div>
                         </div>
 
                         <div className="relative group">
@@ -226,13 +249,15 @@ export default function ChaptalizationCalc() {
                                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-2 ml-[0.3em]">
                                             {t('result-sugar')}
                                         </span>
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-5xl md:text-7xl font-black tracking-tighter text-white">
-                                                {results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0'}
-                                            </span>
-                                            <span className="text-xl font-black text-brand-500 uppercase italic">
-                                                kg
-                                            </span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-5xl md:text-7xl font-black tracking-tighter text-white">
+                                                    {results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0'}
+                                                </span>
+                                                <span className="text-xl font-black text-brand-500 uppercase italic">
+                                                    kg
+                                                </span>
+                                            </div>
                                         </div>
                                         {showWarning && (
                                             <m.div 
@@ -249,13 +274,13 @@ export default function ChaptalizationCalc() {
                                     <div className="w-full grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-8 px-4">
                                         <div className="flex flex-col items-center px-2 text-center">
                                             <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
-                                                Zusatz (Alc)
+                                                {t('result-alc-increase')}
                                             </span>
                                             <div className="flex items-baseline gap-1">
                                                 <span className="text-xl font-black text-zinc-200">
                                                     +{alcGlDifference > 0 ? alcGlDifference.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
                                                 </span>
-                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">g/L Alc</span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">{t('unit-g-l-alc')}</span>
                                             </div>
                                         </div>
 
