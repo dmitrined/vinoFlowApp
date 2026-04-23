@@ -226,7 +226,12 @@
             "result-alc-increase": "Addition (Alc)",
             "warning-limit": "Exceeds alcohol limit (24 g/L Alc)",
             "error-target": "Target value must be higher than current",
-            "unit-select": "Unit Select"
+            "unit-select": "Unit Select",
+            "unit-g-l-alc": "g/L Alc",
+            "unit-oe": "°Oe",
+            "unit-alc-vol": "% Vol",
+            "unit-sugar-gl": "g/l Sugar",
+            "history": "History"
         }
     },
     "Fermentation": {
