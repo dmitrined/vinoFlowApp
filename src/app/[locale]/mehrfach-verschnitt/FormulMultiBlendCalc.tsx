@@ -129,7 +129,12 @@ const FormulMultiBlendCalc: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="border-none bg-zinc-950 text-white rounded-[2rem] shadow-none overflow-hidden relative h-32" shadow="none">
                     <CardBody className="p-6 flex flex-col justify-center relative z-10">
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">{t('total-vol')}</span>
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">{t('total-vol')}</span>
+                            {results.totalLiters > 0 && (
+                                <span className="text-[10px] font-black text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full">100%</span>
+                            )}
+                        </div>
                         <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-black tracking-tighter transition-all">
                                 {results.totalLiters.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -179,7 +184,11 @@ const FormulMultiBlendCalc: React.FC = () => {
             <div className="space-y-4">
               <LayoutGroup>
                 <AnimatePresence>
-                  {wines.map((wine, index) => (
+                  {wines.map((wine, index) => {
+                    const literVal = parseFloat(wine.liter.replace(',', '.')) || 0;
+                    const winePercent = results.totalLiters > 0 ? (literVal / results.totalLiters) * 100 : 0;
+                    
+                    return (
                     <m.div
                       layout
                       key={index}
@@ -188,10 +197,15 @@ const FormulMultiBlendCalc: React.FC = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="group relative grid grid-cols-1 md:grid-cols-12 gap-6 p-6 md:p-8 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-transparent hover:border-brand-500/20 transition-all shadow-sm"
                     >
-                      <div className="md:col-span-1 flex items-center justify-center">
+                      <div className="md:col-span-1 flex flex-col items-center justify-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs font-black text-zinc-400 group-hover:bg-brand-600 group-hover:text-white transition-all shadow-inner">
                           {index + 1}
                         </div>
+                        {winePercent > 0 && (
+                          <div className="text-[10px] font-black text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/30 px-2 py-0.5 rounded-lg shadow-sm">
+                            {winePercent.toLocaleString('de-DE', { maximumFractionDigits: 1 })}%
+                          </div>
+                        )}
                       </div>
 
                       <div className="md:col-span-3">
@@ -261,7 +275,8 @@ const FormulMultiBlendCalc: React.FC = () => {
                         </Button>
                       </div>
                     </m.div>
-                  ))}
+                    );
+                  })}
                 </AnimatePresence>
               </LayoutGroup>
             </div>
