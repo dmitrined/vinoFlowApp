@@ -86,25 +86,24 @@ describe('Enological Calculations', () => {
     });
 
     describe('Chaptalization', () => {
-        it('should calculate sugar and volume increase using user custom formula (Delta g/L Alc * 2.5)', () => {
+        it('should calculate sugar and volume increase using Troost table exact values', () => {
             // 1000L, 10.0% Vol -> 12.51% Vol
             // From Troost Table:
-            // 10.0% Vol = 78.9 g/L Alc
-            // 12.51% Vol = 98.8 g/L Alc
-            // Delta g/L Alc: 98.8 - 78.9 = 19.9
-            // Sugar: (19.9 * 2.5 * 1000) / 1000 = 49.75 kg
+            // 10.0% Vol = 164 g/L Sugar
+            // 12.51% Vol = 206 g/L Sugar
+            // Delta Sugar: 206 - 164 = 42 g/L
+            // Total Sugar: (42 * 1000) / 1000 = 42 kg
             const result = calcChaptalization(1000, 10.0, 12.51, 'alcVol');
             
-            expect(result.sugar).toBeCloseTo(49.75, 2);
-            expect(result.deltaVol).toBeCloseTo(49.75 * 0.63, 2);
+            expect(result.sugar).toBeCloseTo(42, 1);
+            expect(result.deltaVol).toBeCloseTo(42 * 0.63, 2);
         });
 
-        it('should handle alcGl input correctly with user custom formula', () => {
+        it('should handle alcGl input correctly with exact Troost values', () => {
             // 1000L, 78.9 g/L alc -> 98.8 g/L alc
-            // Delta g/L Alc: 19.9
-            // Sugar: (19.9 * 2.5 * 1000) / 1000 = 49.75 kg
+            // Matches 10.0% -> 12.51% in Troost table => 42 kg sugar
             const result = calcChaptalization(1000, 78.9, 98.8, 'alcGl', 'alcGl');
-            expect(result.sugar).toBeCloseTo(49.75, 2);
+            expect(result.sugar).toBeCloseTo(42, 1);
         });
 
         it('should return zeros for invalid input', () => {
