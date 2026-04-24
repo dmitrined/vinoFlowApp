@@ -241,7 +241,7 @@ export const calcChaptalization = (
     targetUnit: EnologicalUnit = 'alcVol'
 ) => {
     if (isNaN(volume) || isNaN(currentVal) || isNaN(targetVal) || volume <= 0 || currentVal < 0) {
-        return { sugar: 0, deltaVol: 0, total: volume };
+        return { sugar: 0, deltaVol: 0, total: volume, deltaOe: 0, deltaAlcVol: 0, deltaAlcGl: 0, deltaSugar: 0 };
     }
 
     const currentData = getTroostData(currentVal, currentUnit);
@@ -249,17 +249,19 @@ export const calcChaptalization = (
 
     // Если целевой алкоголь ниже текущего, расчет не требуется
     if (targetData.totalAlc <= currentData.totalAlc) {
-        return { sugar: 0, deltaVol: 0, total: volume };
+        return { sugar: 0, deltaVol: 0, total: volume, deltaOe: 0, deltaAlcVol: 0, deltaAlcGl: 0, deltaSugar: 0, currentData, targetData };
     }
 
-    // ЛОГИКА ПОЛЬЗОВАТЕЛЯ: (Разница g/l Alc * 2.5 * Объем) / 1000
-    // totalAlc в таблице Трооста соответствует g/l Alc
-    const deltaAlcGl = targetData.totalAlc - currentData.totalAlc;
-    const sugarPerLiter = deltaAlcGl * 2.5; 
-    const sugarNeededKg = (sugarPerLiter * volume) / 1000;
+    // ЛОГИКА ПОЛЬЗОВАТЕЛЯ: Используем разницу сахара напрямую из таблицы Трооста
+    const deltaSugar = targetData.sugar - currentData.sugar;
+    const sugarNeededKg = (deltaSugar * volume) / 1000;
 
     const volumeIncrease = sugarNeededKg * WINE_CONSTANTS.CHAPTALIZATION.VOL_INCREASE_PER_KG;
     const totalVolume = volume + volumeIncrease;
+
+    const deltaOe = targetData.oe - currentData.oe;
+    const deltaAlcVol = targetData.alcVol - currentData.alcVol;
+    const deltaAlcGl = targetData.totalAlc - currentData.totalAlc;
 
     return { 
         sugar: sugarNeededKg, 
@@ -267,7 +269,12 @@ export const calcChaptalization = (
         total: totalVolume,
         // Данные для отображения в UI (по Троосту)
         currentData,
-        targetData
+        targetData,
+        // Разница по всем 4 параметрам
+        deltaOe,
+        deltaAlcVol,
+        deltaAlcGl,
+        deltaSugar
     };
 };
 

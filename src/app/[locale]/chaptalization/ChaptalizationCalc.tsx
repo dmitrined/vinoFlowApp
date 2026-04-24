@@ -9,16 +9,19 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
-import { Beaker, AlertTriangle, History, ChevronsUpDown } from "lucide-react";
-import { m } from "framer-motion";
+import { Beaker, AlertTriangle, History, ChevronsUpDown, Eye, EyeOff } from "lucide-react";
+import { m, AnimatePresence } from "framer-motion";
 import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import SaveFeedback from '@/components/ui/SaveFeedback';
 import { calcChaptalization, EnologicalUnit, getTroostData } from '@/lib/calculations';
+import FormulChaptalizationMath from './FormulChaptalizationMath';
 
 export default function ChaptalizationCalc() {
     const t = useTranslations('Calculators.chaptalization');
+    const commonT = useTranslations('Calculators');
     const locale = useLocale();
 
+    const [showFormula, setShowFormula] = useState<boolean>(false);
     const [volume, setVolume] = useState<string>('');
     const [currentVal, setCurrentVal] = useState<string>('');
     const [targetVal, setTargetVal] = useState<string>('');
@@ -73,13 +76,10 @@ export default function ChaptalizationCalc() {
 
     const formattedResult = results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0';
 
-    const alcGlDifference = useMemo(() => {
-        if (results.targetData && results.currentData) {
-            const diff = results.targetData.totalAlc - results.currentData.totalAlc;
-            return diff > 0 ? diff : 0;
-        }
+    const getPositive = (val: number | undefined) => {
+        if (val && val > 0) return val;
         return 0;
-    }, [results.targetData, results.currentData]);
+    };
 
     const showWarning = (results.targetData?.alcVol || 0) - (results.currentData?.alcVol || 0) > 3.0; // Примерный порог 3% Vol
 
@@ -271,19 +271,57 @@ export default function ChaptalizationCalc() {
                                         )}
                                     </div>
                                     
-                                    <div className="w-full grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-8 px-4">
+                                    <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-y-6 divide-x-0 sm:divide-x divide-white/10 border-t border-white/10 pt-8 px-4">
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
+                                                {t('result-oe-increase')}
+                                            </span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-xl font-black text-zinc-200">
+                                                    +{getPositive(results.deltaOe).toLocaleString(locale, { maximumFractionDigits: 1 })}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">{t('unit-oe')}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
+                                                {t('result-alc-vol-increase')}
+                                            </span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-xl font-black text-zinc-200">
+                                                    +{getPositive(results.deltaAlcVol).toLocaleString(locale, { maximumFractionDigits: 2 })}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">{t('unit-alc-vol')}</span>
+                                            </div>
+                                        </div>
+                                        
                                         <div className="flex flex-col items-center px-2 text-center">
                                             <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
                                                 {t('result-alc-increase')}
                                             </span>
                                             <div className="flex items-baseline gap-1">
                                                 <span className="text-xl font-black text-zinc-200">
-                                                    +{alcGlDifference > 0 ? alcGlDifference.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0'}
+                                                    +{getPositive(results.deltaAlcGl).toLocaleString(locale, { maximumFractionDigits: 1 })}
                                                 </span>
                                                 <span className="text-[10px] font-bold text-zinc-600 uppercase">{t('unit-g-l-alc')}</span>
                                             </div>
                                         </div>
 
+                                        <div className="flex flex-col items-center px-2 text-center">
+                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
+                                                {t('result-sugar-increase')}
+                                            </span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-xl font-black text-zinc-200">
+                                                    +{getPositive(results.deltaSugar).toLocaleString(locale, { maximumFractionDigits: 1 })}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-zinc-600 uppercase">{t('unit-sugar-gl')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="w-full grid grid-cols-2 divide-x divide-white/10 border-t border-white/10 pt-6 px-4">
                                         <div className="flex flex-col items-center px-2 text-center">
                                             <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2 truncate w-full">
                                                 {t('result-volume-increase')}
@@ -315,8 +353,32 @@ export default function ChaptalizationCalc() {
                             </Card>
                         </div>
                     </CardBody>
+
+                    <CardBody className="px-8 pb-8 pt-0 flex flex-col items-center">
+                        <Button
+                            variant="light"
+                            onPress={() => setShowFormula(!showFormula)}
+                            startContent={showFormula ? <EyeOff size={18} /> : <Eye size={18} />}
+                            className="font-black uppercase tracking-widest text-[10px] text-zinc-400 hover:text-brand-600 w-full h-12 rounded-2xl"
+                        >
+                            {showFormula ? commonT('formula.hide') : commonT('formula.title')}
+                        </Button>
+                    </CardBody>
                 </Card>
             </m.div>
+
+            <AnimatePresence>
+                {showFormula && (
+                    <m.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="w-full"
+                    >
+                        <FormulChaptalizationMath />
+                    </m.div>
+                )}
+            </AnimatePresence>
             <SaveFeedback show={showFeedback} />
         </div>
     );
