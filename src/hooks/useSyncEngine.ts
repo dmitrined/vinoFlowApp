@@ -71,42 +71,29 @@ export function useSyncEngine() {
         .filter(r => r.synced === false)
         .map(mapHistoryToSync);
 
-      const syncPromises = [];
+      // ВАЖНО: Выполняем синхронизацию последовательно!
+      // SQLite (и Turso) может выдать SQLITE_BUSY при параллельных транзакциях.
+      // Кроме того, Readings и Additions зависят от Barrels (Foreign Key),
+      // поэтому Barrels ДОЛЖНЫ быть сохранены первыми.
 
       if (allBarrelsToSync.length > 0) {
-        syncPromises.push(
-          pushBarrels.mutateAsync(allBarrelsToSync).then((res) => {
-            markBarrelsSynced(res.syncedIds);
-          })
-        );
+        const res = await pushBarrels.mutateAsync(allBarrelsToSync);
+        markBarrelsSynced(res.syncedIds);
       }
 
       if (unsyncedReadings.length > 0) {
-        syncPromises.push(
-          pushReadings.mutateAsync(unsyncedReadings).then((res) => {
-            markReadingsSynced(res.syncedIds);
-          })
-        );
+        const res = await pushReadings.mutateAsync(unsyncedReadings);
+        markReadingsSynced(res.syncedIds);
       }
 
       if (unsyncedAdditions.length > 0) {
-        syncPromises.push(
-          pushAdditions.mutateAsync(unsyncedAdditions).then((res) => {
-            markAdditionsSynced(res.syncedIds);
-          })
-        );
+        const res = await pushAdditions.mutateAsync(unsyncedAdditions);
+        markAdditionsSynced(res.syncedIds);
       }
 
       if (unsyncedHistory.length > 0) {
-        syncPromises.push(
-          pushHistory.mutateAsync(unsyncedHistory).then((res) => {
-            markHistorySynced(res.syncedIds);
-          })
-        );
-      }
-
-      if (syncPromises.length > 0) {
-        await Promise.all(syncPromises);
+        const res = await pushHistory.mutateAsync(unsyncedHistory);
+        markHistorySynced(res.syncedIds);
       }
     } catch (e) {
       console.error("SyncEngine: Ошибка выгрузки:", e);
