@@ -314,7 +314,9 @@
         "confirm_reset_title": "Confirm Reset",
         "confirm_reset_msg": "Are you sure? This will only reset the local sync flag and reload the page. No data will be deleted.",
         "confirm_reset_btn": "Yes, reset",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "sync_now": "Sync Now",
+        "last_sync": "Last updated:"
     },
     "LoginView": {
         "title": "Access Restricted",
