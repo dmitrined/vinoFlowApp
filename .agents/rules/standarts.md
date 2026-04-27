@@ -39,4 +39,4 @@ When adding a new field (e.g., to Barrels, Readings, Additions), update ALL laye
 3. Extract all strings to `messages/*.json` before committing code.
 4. **Clean up**: Remove all unused imports, variables, and commented code.
 5. **Local Verification**: `npm run typecheck && npm run lint`.
-6. **Commit**: Use Conventional Commits (e.g., `feat(fermentation): add new barrel field`).
+6. **Commit**: Агент НЕ должен делать коммиты. Вместо этого выведи текст для коммита по стандарту Conventional Commits (например, `feat(fermentation): add new barrel field`), чтобы пользователь закоммитил сам.
