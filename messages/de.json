@@ -314,7 +314,9 @@
         "confirm_reset_title": "Zurücksetzen bestätigen",
         "confirm_reset_msg": "Sind Sie sicher? Dies setzt nur das lokale Sync-Flag zurück und lädt die Seite neu. Es werden keine Daten gelöscht.",
         "confirm_reset_btn": "Ja, zurücksetzen",
-        "cancel": "Abbrechen"
+        "cancel": "Abbrechen",
+        "sync_now": "Jetzt synchronisieren",
+        "last_sync": "Letztes Update:"
     },
     "LoginView": {
         "title": "Zugriff beschränkt",

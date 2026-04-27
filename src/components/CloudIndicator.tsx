@@ -1,38 +1,35 @@
 /**
  * НАЗНАЧЕНИЕ: Визуальный индикатор статуса облачной синхронизации
- * ЗАВИСИМОСТИ: lucide-react, @/lib/store/useFermentationStore, @/lib/store/useHistoryStore, @heroui/react
- * ОСОБЕННОСТИ: Динамическое отслеживание состояния сети и наличия несохраненных изменений в сторах
+ * ЗАВИСИМОСТИ: lucide-react, @/lib/store/useFermentationStore, @/lib/store/useHistoryStore, @/hooks/useSyncEngine, @heroui/react
+ * ОСОБЕННОСТИ: Динамическое отслеживание состояния сети, времени последней синхронизации и ручной запуск syncAll
  */
 
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Cloud, CloudOff, RefreshCw, CheckCircle2, ShieldAlert } from "lucide-react";
+import { Cloud, CloudOff, RefreshCw, CheckCircle2 } from "lucide-react";
 import { useFermentationStore } from "@/lib/store/useFermentationStore";
 import { useHistoryStore } from "@/lib/store/useHistoryStore";
 import { useSyncStore } from "@/lib/store/useSyncStore";
+import { useSyncEngine } from "@/hooks/useSyncEngine";
 import { 
     Popover, 
     PopoverTrigger, 
     PopoverContent, 
-    Button,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure
+    Button
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 export const CloudIndicator = () => {
     const t = useTranslations("SyncEngine");
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [isMounted, setIsMounted] = useState(false);
     const [isOnline, setIsOnline] = useState(true);
-    const resetSync = useSyncStore(s => s.resetSync);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const isGlobalSyncing = useSyncStore((s) => s.isSyncing);
+    const lastSyncTimestamp = useSyncStore((s) => s.lastSyncTimestamp);
+    const { syncAll } = useSyncEngine();
+    
     const barrels = useFermentationStore((state) => state.barrels);
     const records = useHistoryStore((state) => state.records);
 
@@ -71,9 +68,15 @@ export const CloudIndicator = () => {
 
     return (
         <>
-            <Popover placement="bottom-end" backdrop="blur" classNames={{
-                content: "bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-2xl min-w-[200px]"
-            }}>
+            <Popover 
+                isOpen={isPopoverOpen}
+                onOpenChange={setIsPopoverOpen}
+                placement="bottom-end" 
+                backdrop="blur" 
+                classNames={{
+                    content: "bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-2xl min-w-[200px]"
+                }}
+            >
                 <PopoverTrigger>
                     <div className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all active:scale-95 ${
                         !isOnline ? 'bg-zinc-100 dark:bg-zinc-800' : 
@@ -91,71 +94,32 @@ export const CloudIndicator = () => {
                             <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
                                 {!isOnline ? t("offline") : isSyncing ? t("syncing") : t("synced")}
                             </p>
+                            {!isSyncing && isOnline && lastSyncTimestamp && (
+                                <p className="text-[10px] font-medium text-zinc-500 mt-1">
+                                    {t("last_sync")} {new Date(lastSyncTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                            <p className="text-[9px] text-zinc-400 mb-2 leading-relaxed font-medium">
-                                {t("reset_warning")}
-                            </p>
+                        <div className="pt-2 flex gap-2">
                             <Button 
-                                color="danger" 
+                                color="primary" 
                                 variant="flat" 
                                 size="sm" 
-                                className="w-full font-black uppercase tracking-widest text-[10px] h-9"
-                                startContent={<ShieldAlert size={14} />}
-                                onPress={onOpen}
+                                className="flex-1 font-black uppercase tracking-widest text-[10px] h-9"
+                                startContent={<RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />}
+                                onPress={() => {
+                                    syncAll();
+                                    setIsPopoverOpen(false);
+                                }}
+                                isDisabled={!isOnline || isSyncing}
                             >
-                                {t("reset_btn")}
+                                {t("sync_now")}
                             </Button>
                         </div>
                     </div>
                 </PopoverContent>
             </Popover>
-
-            <Modal 
-                isOpen={isOpen} 
-                onOpenChange={onOpenChange}
-                backdrop="blur"
-                classNames={{
-                    base: "bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-zinc-200 dark:border-zinc-800 m-4",
-                }}
-            >
-                <ModalContent>
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">
-                                <h3 className="text-xl font-black text-danger uppercase italic tracking-tighter">
-                                    {t("confirm_reset_title")}
-                                </h3>
-                            </ModalHeader>
-                            <ModalBody>
-                                <p className="text-sm font-bold text-zinc-500 leading-relaxed">
-                                    {t("confirm_reset_msg")}
-                                </p>
-                            </ModalBody>
-                            <ModalFooter className="flex gap-3">
-                                <Button 
-                                    variant="light" 
-                                    onPress={onClose}
-                                    className="font-black uppercase tracking-widest text-[10px]"
-                                >
-                                    {t("cancel")}
-                                </Button>
-                                <Button 
-                                    color="danger" 
-                                    className="font-black uppercase tracking-widest text-[10px] shadow-lg shadow-danger-500/20"
-                                    onPress={() => {
-                                        resetSync();
-                                        window.location.reload();
-                                    }}
-                                >
-                                    {t("confirm_reset_btn")}
-                                </Button>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
         </>
     );
 };
