@@ -33,7 +33,11 @@ export function mergeEntities<T extends BaseSyncEntity>(
       const sTime = new Date(sItem.updatedAt).getTime();
       const lTime = new Date(lItem.updatedAt).getTime();
 
-      if (sTime > lTime) {
+      // Слияние: сервер выигрывает, если он новее или время совпадает.
+      // Если время совпадает, но сервер говорит "удалено", это имеет приоритет.
+      const shouldPreferServer = sTime > lTime || (sTime === lTime && sItem.isDeleted);
+
+      if (shouldPreferServer) {
         mergedMap.set(sItem.id, { ...lItem, ...sItem });
       } else {
         mergedMap.set(sItem.id, lItem);
