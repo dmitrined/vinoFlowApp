@@ -46,7 +46,14 @@ export const useHistoryStore = create<HistoryState>()(
                     r.id === id ? { ...r, isDeleted: true, updatedAt: new Date().toISOString(), synced: false } : r
                 )
             })),
-            clearHistory: () => set({ records: [] }),
+            clearHistory: () => set((state) => ({
+                records: state.records.map(r => ({ 
+                    ...r, 
+                    isDeleted: true, 
+                    updatedAt: new Date().toISOString(), 
+                    synced: false 
+                }))
+            })),
             markHistorySynced: (ids: string[]) => set((state) => ({
                 records: state.records.map(r => ids.includes(r.id) ? { ...r, synced: true } : r)
             })),

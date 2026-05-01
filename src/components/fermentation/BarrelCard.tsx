@@ -25,7 +25,9 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
     const router = useRouter();
 
     const lastReading = barrel.readings && barrel.readings.length > 0 
-        ? [...barrel.readings].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] 
+        ? [...barrel.readings]
+            .filter(r => !r.isDeleted)
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] 
         : null;
 
     return (

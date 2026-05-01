@@ -291,7 +291,7 @@ export const useFermentationStore = create<FermentationState>()(
                 const serverBarrels = serverData.barrels.map(sb => ({
                     id: sb.id,
                     number: sb.name || '',
-                    status: sb.status as 'active' | 'finished' | 'archived',
+                    status: sb.status as BarrelStatus,
                     volume: sb.volume || 0,
                     notes: sb.notes || '',
                     updatedAt: sb.updatedAt,

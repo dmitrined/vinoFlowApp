@@ -96,7 +96,7 @@ export default function FermentationDashboard() {
                 <Tabs 
                     aria-label="Barrel Status Filter"
                     selectedKey={statusFilter}
-                    onSelectionChange={(key) => setStatusFilter(key as 'active' | 'finished')}
+                    onSelectionChange={(key) => setStatusFilter(key as 'active' | 'finished' | 'archived')}
                     variant="underlined"
                     classNames={{
                         base: "w-full md:w-auto",
