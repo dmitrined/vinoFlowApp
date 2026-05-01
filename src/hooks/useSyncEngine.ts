@@ -87,6 +87,8 @@ export function useSyncEngine() {
       }
 
       if (unsyncedAdditions.length > 0) {
+        console.log(`SyncEngine: Pushing ${unsyncedAdditions.length} additions...`, 
+          unsyncedAdditions.filter(a => a.isDeleted).length, "deletions");
         const res = await pushAdditions.mutateAsync(unsyncedAdditions);
         markAdditionsSynced(res.syncedIds);
       }
@@ -119,6 +121,13 @@ export function useSyncEngine() {
     try {
       const { data } = await pullQuery.refetch();
       if (data) {
+        console.log("SyncEngine: Pull results:", {
+          barrels: data.barrels.length,
+          readings: data.readings.length,
+          additions: data.additions.length,
+          deletedAdditions: data.additions.filter(a => a.isDeleted).length
+        });
+
         hydrateFermentation({
           barrels: data.barrels,
           readings: data.readings,

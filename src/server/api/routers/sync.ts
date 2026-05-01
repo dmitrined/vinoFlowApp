@@ -100,8 +100,8 @@ export const syncRouter = createTRPCRouter({
         const incomingTime = new Date(barrel.updatedAt).getTime();
         const existingTime = existingMap.get(barrel.id) || 0;
 
-        // Обновляем только если входящие данные новее серверных
-        if (incomingTime > existingTime) {
+        // Обновляем, если входящие данные новее серверных или такие же (для LWW при одинаковом времени)
+        if (incomingTime >= existingTime) {
           const data = {
             name: barrel.name,
             volume: barrel.volume || null,
@@ -141,7 +141,7 @@ export const syncRouter = createTRPCRouter({
         const incomingTime = new Date(item.updatedAt).getTime();
         const existingTime = existingMap.get(item.id) || 0;
 
-        if (incomingTime > existingTime) {
+        if (incomingTime >= existingTime) {
           const data = {
             barrelId: item.barrelId,
             date: item.date,
@@ -181,7 +181,7 @@ export const syncRouter = createTRPCRouter({
         const incomingTime = new Date(item.updatedAt).getTime();
         const existingTime = existingMap.get(item.id) || 0;
 
-        if (incomingTime > existingTime) {
+        if (incomingTime >= existingTime) {
           const data = {
             barrelId: item.barrelId,
             date: item.date,
@@ -222,7 +222,7 @@ export const syncRouter = createTRPCRouter({
         const incomingTime = new Date(item.updatedAt).getTime();
         const existingTime = existingMap.get(item.id) || 0;
 
-        if (incomingTime > existingTime) {
+        if (incomingTime >= existingTime) {
           const data = {
             type: item.type,
             date: BigInt(item.date),

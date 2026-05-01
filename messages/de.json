@@ -323,5 +323,23 @@
         "description": "Admin-Passwort eingeben, um auf Gär-Synchronisation zuzugreifen.",
         "password_label": "Password",
         "submit_button": "Anmelden"
+    },
+    "Export": {
+        "title": "Daten exportieren",
+        "excel": "Als Excel exportieren",
+        "pdf": "Als PDF exportieren",
+        "general_info": "Allgemeine Informationen",
+        "readings": "Messungen",
+        "additions": "Zusätze",
+        "barrel": "Fass",
+        "volume": "Volumen",
+        "status": "Status",
+        "notes": "Notizen",
+        "date": "Datum",
+        "oechsle": "Oechsle",
+        "temperature": "Temperatur",
+        "name": "Name",
+        "dosage": "Dosierung",
+        "unit": "Einheit"
     }
 }

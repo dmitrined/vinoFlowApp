@@ -29,7 +29,11 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter
+    ModalFooter,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem
 } from "@heroui/react";
 import { 
     ArrowLeft, 
@@ -37,7 +41,8 @@ import {
     Edit2, 
     Activity, 
     Info, 
-    ChevronLeft
+    ChevronLeft,
+    Download
 } from "lucide-react";
 import { useFermentationStore } from '@/lib/store/useFermentationStore';
 const FermentationChart = dynamic(
@@ -61,11 +66,14 @@ import { Reading, Addition } from '@/types/fermentation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { formatDate } from '@/lib/dateUtils';
+import { exportBarrelToExcel } from '@/lib/export/exportExcel';
+import { exportBarrelToPdf } from '@/lib/export/exportPdf';
 
 export default function BarrelDetailPage() {
     const params = useParams();
     const id = params.id as string;
     const t = useTranslations('Fermentation');
+    const tExport = useTranslations('Export');
     const { 
         barrels, 
         addReading, 
@@ -182,6 +190,25 @@ export default function BarrelDetailPage() {
                 </div>
 
                 <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <Button 
+                                variant="flat" 
+                                className="font-black uppercase tracking-widest text-[10px] h-11"
+                                startContent={<Download size={14} />}
+                            >
+                                {tExport('title')}
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Export Actions">
+                            <DropdownItem key="excel" onPress={() => exportBarrelToExcel(barrel, tExport)}>
+                                {tExport('excel')}
+                            </DropdownItem>
+                            <DropdownItem key="pdf" onPress={() => exportBarrelToPdf(barrel, tExport)}>
+                                {tExport('pdf')}
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                     <Button
                         variant="flat"
                         color={barrel.status === 'active' ? 'primary' : barrel.status === 'finished' ? 'default' : 'success'}
