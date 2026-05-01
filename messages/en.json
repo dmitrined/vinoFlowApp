@@ -323,5 +323,23 @@
         "description": "Enter admin password to access fermentation sync.",
         "password_label": "Password",
         "submit_button": "Log In"
+    },
+    "Export": {
+        "title": "Export Data",
+        "excel": "Export as Excel",
+        "pdf": "Export as PDF",
+        "general_info": "General Information",
+        "readings": "Readings",
+        "additions": "Additions",
+        "barrel": "Barrel",
+        "volume": "Volume",
+        "status": "Status",
+        "notes": "Notes",
+        "date": "Date",
+        "oechsle": "Oechsle",
+        "temperature": "Temperature",
+        "name": "Name",
+        "dosage": "Dosage",
+        "unit": "Unit"
     }
 }

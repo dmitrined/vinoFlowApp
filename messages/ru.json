@@ -323,5 +323,23 @@
         "description": "Введите пароль администратора для доступа к синхронизации брожения.",
         "password_label": "Пароль",
         "submit_button": "Войти"
+    },
+    "Export": {
+        "title": "Экспорт данных",
+        "excel": "Экспорт в Excel",
+        "pdf": "Экспорт в PDF",
+        "general_info": "Общая информация",
+        "readings": "Замеры",
+        "additions": "Препараты",
+        "barrel": "Бочка",
+        "volume": "Объем",
+        "status": "Статус",
+        "notes": "Заметки",
+        "date": "Дата",
+        "oechsle": "Oechsle",
+        "temperature": "Температура",
+        "name": "Название",
+        "dosage": "Дозировка",
+        "unit": "Ед. изм."
     }
 }
