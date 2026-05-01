@@ -340,6 +340,11 @@
         "temperature": "Temperatur",
         "name": "Name",
         "dosage": "Dosierung",
-        "unit": "Einheit"
+        "unit": "Einheit",
+        "export_all": "Alle Fässer exportieren",
+        "start_date": "Startdatum",
+        "current_oechsle": "Aktueller Oechsle",
+        "current_temp": "Aktuelle T°",
+        "additions_summary": "Zusätze Zusammenfassung"
     }
 }

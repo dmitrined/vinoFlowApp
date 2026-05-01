@@ -7,8 +7,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Pagination } from "@heroui/react";
-import { Plus, Wine, Search } from "lucide-react";
+import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Pagination, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+import { Plus, Wine, Search, Download, FileSpreadsheet, FileText } from "lucide-react";
+import { exportAllBarrelsToExcel } from '@/lib/export/exportAllExcel';
+import { exportAllBarrelsToPdf } from '@/lib/export/exportAllPdf';
 import { useFermentationStore } from '@/lib/store/useFermentationStore';
 import { BarrelCard } from '@/components/fermentation/BarrelCard';
 import { ConfirmModal } from '@/components/fermentation/ConfirmModal';
@@ -17,6 +19,7 @@ import { m, AnimatePresence } from "framer-motion";
 
 export default function FermentationDashboard() {
     const t = useTranslations('Fermentation');
+    const tExport = useTranslations('Export');
     const { barrels, addBarrel, deleteBarrel, changeStatus } = useFermentationStore();
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newBarrelNumber, setNewBarrelNumber] = useState('');
@@ -79,16 +82,49 @@ export default function FermentationDashboard() {
                     </p>
                 </div>
 
-                <Button 
-                    onPress={onOpen}
-                    color="primary" 
-                    size="lg" 
-                    radius="full"
-                    startContent={<Plus size={20} />}
-                    className="w-full md:w-auto font-black uppercase tracking-widest text-xs px-8 shadow-2xl shadow-brand-500/30 active:scale-95 transition-all h-14 md:h-12"
-                >
-                    {t('add-barrel')}
-                </Button>
+                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                    <Dropdown placement="bottom-end">
+                        <DropdownTrigger>
+                            <Button 
+                                color="default"
+                                variant="flat"
+                                size="lg" 
+                                radius="full"
+                                startContent={<Download size={20} />}
+                                className="w-full md:w-auto font-black uppercase tracking-widest text-xs px-8 h-14 md:h-12 border border-zinc-200 dark:border-zinc-800"
+                            >
+                                {tExport('export_all')}
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Export Actions" variant="flat">
+                            <DropdownItem 
+                                key="excel" 
+                                startContent={<FileSpreadsheet size={18} className="text-success" />}
+                                onPress={() => exportAllBarrelsToExcel(filteredBarrels, tExport)}
+                            >
+                                {tExport('excel')}
+                            </DropdownItem>
+                            <DropdownItem 
+                                key="pdf" 
+                                startContent={<FileText size={18} className="text-danger" />}
+                                onPress={() => exportAllBarrelsToPdf(filteredBarrels, tExport)}
+                            >
+                                {tExport('pdf')}
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+
+                    <Button 
+                        onPress={onOpen}
+                        color="primary" 
+                        size="lg" 
+                        radius="full"
+                        startContent={<Plus size={20} />}
+                        className="w-full md:w-auto font-black uppercase tracking-widest text-xs px-8 shadow-2xl shadow-brand-500/30 active:scale-95 transition-all h-14 md:h-12"
+                    >
+                        {t('add-barrel')}
+                    </Button>
+                </div>
             </div>
 
             {/* Sub-Header: Search & Filter */}

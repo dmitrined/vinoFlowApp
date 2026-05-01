@@ -47,7 +47,7 @@ export const exportBarrelToPdf = async (barrel: Barrel, t: (key: string) => stri
                 r.temperature?.toString() ?? '-'
             ]),
             theme: 'striped',
-            headStyles: { fillColor: [100, 83, 233] }, // Цвет brand-600
+            headStyles: { fillColor: [100, 83, 233], fontStyle: 'normal' }, // Цвет brand-600
             styles: { font: 'Roboto' }
         });
         
@@ -78,7 +78,7 @@ export const exportBarrelToPdf = async (barrel: Barrel, t: (key: string) => stri
                 a.unit
             ]),
             theme: 'striped',
-            headStyles: { fillColor: [100, 83, 233] },
+            headStyles: { fillColor: [100, 83, 233], fontStyle: 'normal' },
             styles: { font: 'Roboto' }
         });
     }

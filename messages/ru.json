@@ -340,6 +340,11 @@
         "temperature": "Температура",
         "name": "Название",
         "dosage": "Дозировка",
-        "unit": "Ед. изм."
+        "unit": "Ед. изм.",
+        "export_all": "Экспорт всех бочек",
+        "start_date": "Дата старта",
+        "current_oechsle": "Текущий Oechsle",
+        "current_temp": "Текущая T°",
+        "additions_summary": "Препараты (Сводка)"
     }
 }
