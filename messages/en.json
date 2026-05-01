@@ -340,6 +340,11 @@
         "temperature": "Temperature",
         "name": "Name",
         "dosage": "Dosage",
-        "unit": "Unit"
+        "unit": "Unit",
+        "export_all": "Export All Barrels",
+        "start_date": "Start Date",
+        "current_oechsle": "Current Oechsle",
+        "current_temp": "Current Temp",
+        "additions_summary": "Additions Summary"
     }
 }
