@@ -83,6 +83,16 @@ npm test
 npm run build
 ```
 
+### Environment Variables
+
+To ensure proper functionality of technical SEO (Sitemap & Robots.txt generation) and absolute routing, set the following environment variable in your deployment platform (e.g., Vercel):
+
+```env
+NEXT_PUBLIC_BASE_URL=https://vino-flow-app.vercel.app
+# OR your custom domain:
+# NEXT_PUBLIC_BASE_URL=https://vinoflow.app
+```
+
 ---
 
 ## Русский
