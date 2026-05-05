@@ -344,5 +344,14 @@
         "current_oechsle": "Текущий Oechsle",
         "current_temp": "Текущая T°",
         "additions_summary": "Препараты (Сводка)"
+    },
+    "Docs": {
+        "title": "База знаний",
+        "description": "Энологические статьи и руководства.",
+        "readTime": "мин. чтение",
+        "author": "Автор",
+        "back": "Назад к списку",
+        "relatedTools": "Связанные инструменты",
+        "noArticles": "Статьи пока не добавлены."
     }
 }

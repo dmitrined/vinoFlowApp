@@ -344,5 +344,14 @@
         "current_oechsle": "Current Oechsle",
         "current_temp": "Current Temp",
         "additions_summary": "Additions Summary"
+    },
+    "Docs": {
+        "title": "Knowledge Hub",
+        "description": "Oenological articles and guides.",
+        "readTime": "min read",
+        "author": "Author",
+        "back": "Back to Hub",
+        "relatedTools": "Related Tools",
+        "noArticles": "No articles available yet."
     }
 }

@@ -1,0 +1,54 @@
+---
+title: "Die Troost-Tabelle: Grundlagen der önologischen Berechnungen"
+excerpt: "Wie man die Troost-Tabelle zur genauen Umrechnung von Oechsle in potenziellen Alkohol und Zucker verwendet."
+author: "Dmitri Nedioglo Engineer (Oenology)"
+date: "2024-05-05"
+readTime: 5
+category: "Theorie"
+relatedTools: ["alkohol", "chaptalization"]
+---
+
+Bei der Weinherstellung spielt die Genauigkeit von Messungen eine entscheidende Rolle. Eines der wichtigsten Werkzeuge der deutschen önologischen Schule ist die **Troost-Tabelle** (erstellt von Gerhard Troost).
+
+Sie ermöglicht eine genaue Korrelation der Mostdichte (ausgedrückt in Oechsle-Grad) mit dem Zuckergehalt und dem potenziellen Alkohol.
+
+## Was ist Oechsle (°Oe)?
+
+Das Oechsle-Grad ist eine Maßeinheit für die Dichte von Traubenmost, die angibt, um wie viel Gramm ein Liter Most bei 20°C schwerer ist als ein Liter Wasser.
+
+Zum Beispiel hat Most mit einer Dichte von 1080 g/L $1080 - 1000 = 80$ °Oe.
+
+<Note type="info">
+Der °Oe-Wert ist nicht direkt gleich Gramm Zucker. Der Most enthält andere lösliche Substanzen (Säuren, Pektine, Mineralien), die ebenfalls die Dichte beeinflussen.
+</Note>
+
+## Fragment der Troost-Tabelle
+
+Um Markdown-Tabellen-Parsingfehler zu vermeiden, verwenden wir reines HTML:
+
+<table>
+  <thead>
+    <tr>
+      <th>Oechsle (°Oe)</th>
+      <th>Zucker (g/l)</th>
+      <th>Gesamtalkohol (g/l)</th>
+      <th>Alkohol (% vol)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>50</td><td>103</td><td>48.0</td><td>6.08</td></tr>
+    <tr><td>60</td><td>130</td><td>60.4</td><td>7.65</td></tr>
+    <tr><td>70</td><td>156</td><td>72.8</td><td>9.22</td></tr>
+    <tr><td>80</td><td>183</td><td>85.1</td><td>10.79</td></tr>
+    <tr><td>90</td><td>209</td><td>97.5</td><td>12.35</td></tr>
+    <tr><td>100</td><td>236</td><td>110.0</td><td>13.92</td></tr>
+    <tr><td>110</td><td>263</td><td>122.3</td><td>15.49</td></tr>
+    <tr><td>120</td><td>289</td><td>134.7</td><td>17.06</td></tr>
+  </tbody>
+</table>
+
+## Verwendung in VinoFlow
+
+In unserer Anwendung ist die Troost-Tabelle in die Algorithmen des **Eno-Konverters** und des **Chaptalisierungs**-Rechners integriert, was höchste Berechnungsgenauigkeit entsprechend den deutschen Weinbaustandards (Handbuch der Kellerwirtschaft) garantiert.
+
+Probieren Sie den Konverter in Aktion aus, indem Sie ihn im unteren Bereich auswählen!

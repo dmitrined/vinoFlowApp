@@ -28,6 +28,7 @@
 | **Cellar Notes** | Batch-specific editable notes for each barrel, persisted in the cloud and available offline. |
 | **Smart Sync Engine** | Cloud sync via tRPC/Turso with **Battery Optimization** (30s adaptive polling). Features a mobile-friendly **Rescue Console** for full data resets. |
 | **Enological Tools** | Professional calculators: SO₂, SR, Blending, Acid Management, and Chaptalization. |
+| **Knowledge Hub & SEO** | Fully localized MDX-based documentation with automatic `sitemap.xml` and `robots.txt` generation for perfect technical SEO. |
 | **Protected Access** | Secure administrative area gated by JWT-based authentication. |
 
 ### Tech Stack
@@ -98,6 +99,7 @@ npm run build
 | **Заметки винодела** | Встроенное ведение записей для каждой партии вина с синхронизацией в реальном времени. |
 | **Smart Sync Engine** | Синхронизация с **режимом экономии энергии** (интервал 30 сек) и мобильной консолью управления сбросом данных. |
 | **Энологические инструменты** | Профессиональные расчеты: SO₂, сахара, купажа, кислотности и шаптализации. |
+| **Knowledge Hub & SEO** | Мультиязычная база знаний на MDX с автоматической генерацией `sitemap.xml` и `robots.txt` для технического SEO. |
 | **Защищенный доступ** | Административный раздел, защищенный авторизацией на базе JWT. |
 
 ---
@@ -115,6 +117,7 @@ npm run build
 | **Gärungs-Tracker** | Dynamische Überwachung von Oechsle und Temperatur. Optimiert mit **React.memo** für maximale Performance bei 200+ Fässern. |
 | **Cloud-Sync (LWW)** | Backend-Synchronisierung via tRPC und Turso. Nutzt **Incremental (Delta) Sync** für maximale Effizienz. "Last Write Wins" Strategie für absolute Datensicherheit. |
 | **Önologische Tools** | Profi-Rechner: SO₂, SR, Verschnitt, Säuremanagement und Chaptalisierung. |
+| **Knowledge Hub & SEO** | Mehrsprachige MDX-Wissensdatenbank mit automatischer `sitemap.xml` und `robots.txt` für perfektes SEO. |
 | **Geschützter Bereich** | Sicherer Administrationsbereich, geschützt durch JWT-basierte Authentifizierung. |
 
 ---

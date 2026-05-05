@@ -1,0 +1,54 @@
+---
+title: "The Troost Table: Foundations of Oenological Calculations"
+excerpt: "How to use the Troost table for accurate conversion of Oechsle to potential alcohol and sugar."
+author: "Dmitri Nedioglo Engineer (Oenology)"
+date: "2024-05-05"
+readTime: 5
+category: "Theory"
+relatedTools: ["alkohol", "chaptalization"]
+---
+
+In winemaking, precision in measurements plays a crucial role. One of the most important tools of the German oenological school is the **Troost Table** (compiled by Gerhard Troost).
+
+It allows for an accurate correlation of must density (expressed in Oechsle degrees) with sugar content and potential alcohol.
+
+## What is Oechsle (°Oe)?
+
+The Oechsle degree is a unit of measurement for grape must density, indicating how many grams one liter of must is heavier than one liter of water at 20°C.
+
+For example, must with a density of 1080 g/L has $1080 - 1000 = 80$ °Oe.
+
+<Note type="info">
+The °Oe value is not directly equal to grams of sugar. The must contains other soluble substances (acids, pectins, minerals) that also affect density.
+</Note>
+
+## Troost Table Fragment
+
+To avoid Markdown table parsing errors, we use pure HTML:
+
+<table>
+  <thead>
+    <tr>
+      <th>Oechsle (°Oe)</th>
+      <th>Sugar (g/l)</th>
+      <th>Total Alcohol (g/l)</th>
+      <th>Alcohol (% vol)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>50</td><td>103</td><td>48.0</td><td>6.08</td></tr>
+    <tr><td>60</td><td>130</td><td>60.4</td><td>7.65</td></tr>
+    <tr><td>70</td><td>156</td><td>72.8</td><td>9.22</td></tr>
+    <tr><td>80</td><td>183</td><td>85.1</td><td>10.79</td></tr>
+    <tr><td>90</td><td>209</td><td>97.5</td><td>12.35</td></tr>
+    <tr><td>100</td><td>236</td><td>110.0</td><td>13.92</td></tr>
+    <tr><td>110</td><td>263</td><td>122.3</td><td>15.49</td></tr>
+    <tr><td>120</td><td>289</td><td>134.7</td><td>17.06</td></tr>
+  </tbody>
+</table>
+
+## Usage in VinoFlow
+
+In our application, the Troost table is integrated into the algorithms of the **Eno-Converter** and the **Chaptalization** calculator, ensuring the highest accuracy of calculations, corresponding to German winemaking standards (Handbuch der Kellerwirtschaft).
+
+Try the converter in action by selecting it in the section below!

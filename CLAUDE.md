@@ -239,4 +239,17 @@ src/app/[locale]/layout.tsx  ← ЛОКАЛЬНЫЙ: только провайд
 ### 🛠 Примечание по ESLint:
 Конфигурация `eslint.config.mjs` игнорирует `public/` для предотвращения ошибок в сгенерированных воркерах.
 
-**VinoFlow App v1.3** | *Architecture Standards Updated*
+---
+
+## 📚 13. Knowledge Hub & Technical SEO (MDX)
+
+1.  **MDX Стандарты**: Статьи пишутся в формате `.mdx` и хранятся в `src/content/docs/[locale]/`. Используется `next-mdx-remote` для рендеринга на сервере.
+2.  **Структура Frontmatter**: Каждая статья обязана иметь `title`, `excerpt`, `author`, `date`, `readTime`, `category` и массив `relatedTools`.
+3.  **Безопасный рендеринг**: Запрещено использовать интерактивные клиентские компоненты внутри MDX. Все таблицы должны писаться на чистом HTML для избежания багов парсинга (обход проблем `remark-gfm`).
+4.  **Связь с калькуляторами**: Поле `relatedTools` во frontmatter содержит ID калькуляторов (например, `sr-rechner`). Этот ID маппится на реальный URL через константу `TOOL_HREFS` в `page.tsx` хаба знаний.
+5.  **Technical SEO**: 
+    *   `src/app/sitemap.ts` автоматически генерирует `sitemap.xml`, включая все калькуляторы и читает MDX файлы.
+    *   Всегда используются языковые альтернативы (`hreflang` для ru, en, de) для предотвращения склейки страниц Google-ом.
+    *   `src/app/robots.ts` управляет `robots.txt`.
+
+**VinoFlow App v1.3.1** | *Architecture Standards Updated*

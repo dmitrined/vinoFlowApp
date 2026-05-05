@@ -134,6 +134,8 @@ export default function Home() {
                         {t('cta-start')}
                     </Button>
                     <Button 
+                        as={Link}
+                        href="/docs"
                         variant="light"
                         className="font-bold text-zinc-500"
                         radius="full"

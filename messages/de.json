@@ -344,5 +344,14 @@
         "current_oechsle": "Aktueller Oechsle",
         "current_temp": "Aktuelle T°",
         "additions_summary": "Zusätze Zusammenfassung"
+    },
+    "Docs": {
+        "title": "Wissensdatenbank",
+        "description": "Önologische Artikel und Leitfäden.",
+        "readTime": "Min. Lesezeit",
+        "author": "Autor",
+        "back": "Zurück zur Übersicht",
+        "relatedTools": "Verwandte Tools",
+        "noArticles": "Noch keine Artikel verfügbar."
     }
 }
