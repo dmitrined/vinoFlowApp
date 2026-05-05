@@ -39,8 +39,6 @@
         "cta-start": "Start",
         "cta-docs": "Documentation",
         "tools-heading": "Enological Tools",
-        "promo-title": "Maintain Precision",
-        "promo-subtitle": "Cellar Management Pro",
         "tool-label": "Tool",
         "recent-calculations": "Recent Calculations",
         "empty-history": "Calculation history is empty",
@@ -346,5 +344,14 @@
         "current_oechsle": "Current Oechsle",
         "current_temp": "Current Temp",
         "additions_summary": "Additions Summary"
+    },
+    "Docs": {
+        "title": "Knowledge Hub",
+        "description": "Oenological articles and guides.",
+        "readTime": "min read",
+        "author": "Author",
+        "back": "Back to Hub",
+        "relatedTools": "Related Tools",
+        "noArticles": "No articles available yet."
     }
 }

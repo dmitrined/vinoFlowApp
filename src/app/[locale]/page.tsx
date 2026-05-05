@@ -127,13 +127,15 @@ export default function Home() {
                 <div className="flex gap-4">
                     <Button 
                         as={Link}
-                        href="/so2-rechner"
+                        href="#tools-section"
                         className="bg-tech-primary font-bold px-8 h-12"
                         radius="full"
                     >
                         {t('cta-start')}
                     </Button>
                     <Button 
+                        as={Link}
+                        href="/docs"
                         variant="light"
                         className="font-bold text-zinc-500"
                         radius="full"
@@ -147,7 +149,7 @@ export default function Home() {
             <RecentCalculations />
 
             {/* Bento Grid Tools */}
-            <div className="mb-8 flex items-center gap-2 px-2">
+            <div id="tools-section" className="mb-8 flex items-center gap-2 px-2">
                 <TrendingUp size={20} className="text-brand-500" />
                 <h2 className="text-2xl font-black tracking-tight uppercase italic opacity-80">{t('tools-heading')}</h2>
             </div>
@@ -188,16 +190,6 @@ export default function Home() {
                     </m.div>
                 ))}
 
-                {/* Placeholder Bento Card for Pro features or info */}
-                <Card className="bento-card border-none bg-brand-600 text-white md:col-span-1 md:row-span-1 pointer-events-none group">
-                    <CardBody className="p-8 flex flex-col items-center justify-center text-center">
-                        <div className="mb-4 p-4 bg-white/20 rounded-full animate-pulse">
-                            <Zap size={32} />
-                        </div>
-                        <h3 className="text-xl font-black italic mb-2 tracking-tight">{t('promo-title')}</h3>
-                        <p className="text-xs text-white/70 font-bold uppercase tracking-widest">{t('promo-subtitle')}</p>
-                    </CardBody>
-                </Card>
             </m.div>
         </div>
     );

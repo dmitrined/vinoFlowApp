@@ -39,8 +39,6 @@
         "cta-start": "Начать",
         "cta-docs": "Документация",
         "tools-heading": "Энологические инструменты",
-        "promo-title": "Соблюдайте точность",
-        "promo-subtitle": "Cellar Management Pro",
         "tool-label": "Инструмент",
         "recent-calculations": "Последние расчеты",
         "empty-history": "История расчетов пуста",
@@ -346,5 +344,14 @@
         "current_oechsle": "Текущий Oechsle",
         "current_temp": "Текущая T°",
         "additions_summary": "Препараты (Сводка)"
+    },
+    "Docs": {
+        "title": "База знаний",
+        "description": "Энологические статьи и руководства.",
+        "readTime": "мин. чтение",
+        "author": "Автор",
+        "back": "Назад к списку",
+        "relatedTools": "Связанные инструменты",
+        "noArticles": "Статьи пока не добавлены."
     }
 }
