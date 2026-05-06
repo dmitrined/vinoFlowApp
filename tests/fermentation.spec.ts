@@ -25,8 +25,8 @@ test.describe('Fermentation Dashboard', () => {
     await page.getByRole('button', { name: /Add Barrel/i }).click();
     
     // Fill barrel number in modal
-    // Note: Modal uses Input without specific test id, we'll use placeholder
-    const input = page.getByPlaceholder(/Barrel #/i);
+    // Actual placeholder is "e.g. T-42 or Barrel 1" or localized
+    const input = page.locator('input[type="text"]').last(); // Getting the input in modal
     await input.fill(barrelNumber);
     
     // Save
@@ -41,11 +41,12 @@ test.describe('Fermentation Dashboard', () => {
     
     // Create it first
     await page.getByRole('button', { name: /Add Barrel/i }).click();
-    await page.getByPlaceholder(/Barrel #/i).fill(barrelNumber);
+    await page.locator('input[type="text"]').last().fill(barrelNumber);
     await page.getByRole('button', { name: /Save/i }).click();
     
     // Search
-    const searchInput = page.getByPlaceholder(/Search barrels/i);
+    // Placeholder for search is "Search barrels..." or similar
+    const searchInput = page.locator('input[placeholder*="..."]');
     await searchInput.fill(barrelNumber);
     
     // Verify only this barrel is visible (or at least it is visible)
