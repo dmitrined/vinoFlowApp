@@ -41,7 +41,7 @@ export default async function ImpressumPage({
     ];
 
     return (
-        <div className="min-h-screen bg-[#FDFDFF] text-slate-900 py-20 px-6">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 py-20 px-6">
             <div className="max-w-2xl mx-auto">
                 <Link 
                     href="/" 
@@ -52,7 +52,7 @@ export default async function ImpressumPage({
                 </Link>
 
                 <header className="mb-16">
-                    <h1 className="text-5xl font-black text-slate-900 mb-4 tracking-tight">
+                    <h1 className="text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight">
                         {t('title')}
                     </h1>
                     <p className="text-slate-500 text-lg">
@@ -60,7 +60,7 @@ export default async function ImpressumPage({
                     </p>
                 </header>
 
-                <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-xl shadow-slate-200/50">
+                <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 rounded-3xl p-8 shadow-xl shadow-slate-200/50 dark:shadow-none">
                     <div className="space-y-8">
                         {details.map((detail, idx) => (
                             <div key={idx} className="flex items-start gap-4">
@@ -71,7 +71,7 @@ export default async function ImpressumPage({
                                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
                                         {detail.label}
                                     </p>
-                                    <p className="text-slate-900 text-lg font-medium">
+                                    <p className="text-zinc-900 dark:text-zinc-100 text-lg font-medium">
                                         {detail.value}
                                     </p>
                                 </div>

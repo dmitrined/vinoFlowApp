@@ -37,7 +37,7 @@ export default async function LegalPage({
     ];
 
     return (
-        <div className="min-h-screen bg-[#FDFDFF] text-slate-900 py-20 px-6">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 py-20 px-6">
             <div className="max-w-4xl mx-auto">
                 <Link 
                     href="/" 
@@ -48,7 +48,7 @@ export default async function LegalPage({
                 </Link>
 
                 <header className="mb-16">
-                    <h1 className="text-5xl font-black text-slate-900 mb-4 tracking-tight">
+                    <h1 className="text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight">
                         {t('title')}
                     </h1>
                     <p className="text-slate-500 text-lg max-w-2xl">
@@ -67,7 +67,7 @@ export default async function LegalPage({
                                     {section.icon}
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 mb-4">
+                                    <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
                                         {section.title}
                                     </h2>
                                     <p className="text-slate-600 leading-relaxed text-lg">
