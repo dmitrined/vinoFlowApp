@@ -19,7 +19,7 @@ export const Footer = () => {
           {/* Левая часть: Брендинг и Копирайт */}
           <div className="flex flex-col items-center md:items-start gap-2">
             <span className="text-2xl font-black bg-tech-gradient bg-clip-text text-transparent tracking-tighter">
-              VinoFlow
+              {t('app-name')}
             </span>
             <span className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
               {t('rights')}
@@ -39,10 +39,10 @@ export const Footer = () => {
           {/* Правая часть: Версия и Слоган */}
           <div className="flex flex-col items-center md:items-end gap-2">
             <div className="px-4 py-1 bg-slate-900 rounded-full border border-white/5 text-[9px] font-black text-brand-500/80 tracking-widest uppercase">
-              v1.2.0-stable
+              {t('version')}
             </div>
             <div className="text-slate-700 text-[10px] font-black uppercase tracking-[0.3em] hidden lg:block">
-              Precision Oenology Hub
+              {t('slogan')}
             </div>
           </div>
 

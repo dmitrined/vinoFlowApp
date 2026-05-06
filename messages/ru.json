@@ -21,7 +21,9 @@
             "app-name": "VinoFlow",
             "rights": "© 2026 VinoFlow Oenology Hub. Все права защищены.",
             "impressum": "Юридические данные",
-            "legal": "Правовая информация"
+            "legal": "Правовая информация",
+            "slogan": "Центр точной энологии",
+            "version": "v1.2.0-stable"
         },
         "fermentation": "Брожение"
     },

@@ -21,7 +21,9 @@
             "app-name": "VinoFlow",
             "rights": "© 2026 VinoFlow Oenology Hub. All rights reserved.",
             "impressum": "Legal Disclosure",
-            "legal": "Legal Notice"
+            "legal": "Legal Notice",
+            "slogan": "Precision Oenology Hub",
+            "version": "v1.2.0-stable"
         },
         "fermentation": "Fermentation"
     },
@@ -148,7 +150,7 @@
         },
         "mehrfach": {
             "title": "Multiple Blending",
-           "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
+            "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
             "seo-title": "Wine Blending & Assemblage Calculator | VinoFlow",
             "seo-description": "Optimize your wine blends with weighted average calculations for sugar and alcohol across multiple batches.",
             "add-wine": "Add Batch",

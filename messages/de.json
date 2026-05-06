@@ -21,7 +21,9 @@
             "app-name": "VinoFlow",
             "rights": "© 2026 VinoFlow Oenology Hub. Alle Rechte vorbehalten.",
             "impressum": "Impressum",
-            "legal": "Rechtliche Hinweise"
+            "legal": "Rechtliche Hinweise",
+            "slogan": "Präzisions-Önologie-Hub",
+            "version": "v1.2.0-stable"
         },
         "fermentation": "Gärung"
     },

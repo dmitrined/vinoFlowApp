@@ -25,7 +25,7 @@ import {
   Zap,
   Cpu
 } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
@@ -42,6 +42,7 @@ interface ResultCardProps {
 const FormulSR_AufInCalc = () => {
   const t = useTranslations('Calculators.sr-rechner');
   const commonT = useTranslations('Calculators');
+  const locale = useLocale();
 
   const [percentSR, setPercentSR] = useState("");
   const [literWein, setLiterWein] = useState("");
@@ -60,7 +61,7 @@ const FormulSR_AufInCalc = () => {
   const { showFeedback } = useHistoryAutoSave(
     {
       type: 'sr-rechner',
-      result: resultAuf.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(resultAuf),
       unit: 'L'
     },
     resultAuf > 0 ? resultAuf : null
@@ -83,7 +84,7 @@ const FormulSR_AufInCalc = () => {
             </div>
             <div className="flex items-baseline gap-2">
               <span className={`text-3xl font-black tracking-tighter ${color === 'primary' ? 'text-brand-600 dark:text-brand-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                {value > 0 ? value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
+                {value > 0 ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value) : new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(0)}
               </span>
               <span className="text-sm font-black text-zinc-500 uppercase italic">L</span>
             </div>
