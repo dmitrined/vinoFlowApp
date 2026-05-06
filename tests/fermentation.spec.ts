@@ -9,7 +9,6 @@ test.describe('Fermentation Dashboard', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test in this describe block
     await page.goto('/en/fermentation');
-    const passwordInput = page.locator('input[type="password"]');
     if (await page.locator('input[type="password"]').isVisible()) {
       await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
       await page.locator('button[type="submit"]').click();

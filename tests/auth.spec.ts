@@ -18,7 +18,6 @@ test.describe('Authentication Flow', () => {
 
     // Fill the password from env or a default dev one
     // Note: In CI we must set ADMIN_PASSWORD
-    const password = process.env.ADMIN_PASSWORD || 'test-password';
     await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
     await page.click('button[type="submit"]');
 
