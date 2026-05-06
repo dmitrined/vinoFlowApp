@@ -1,0 +1,52 @@
+---
+# НАЗНАЧЕНИЕ: Научно-популярная статья о диоксиде серы (SO2) и методике его расчета (DE).
+# ЗАВИСИМОСТИ: MDX, компоненты Note, семантический HTML.
+# ОСОБЕННОСТИ: Стилистика профессионального издания, интеграция с калькулятором SO2.
+title: "Schwefeldioxid (SO2): Die Technologie der Präzisionsschwefelung"
+excerpt: "Eine wissenschaftliche Perspektive auf das Schwefeldioxid-Management in der Kellerwirtschaft: von antiseptischem Schutz bis hin zu mathematischen Dosierungsmodellen."
+author: "Dmitri Nedioglo Engineer (Oenology)"
+date: "2026-05-06"
+readTime: 4
+category: "Önologie"
+relatedTools: ["so2-rechner"]
+---
+
+Schwefeldioxid (SO₂) ist das wohl am meisten diskutierte und zugleich unverzichtbarste Additiv in der klassischen Kellerwirtschaft. Seine Rolle ist vielfältig: von der Blockierung unerwünschter Mikroflora bis hin zur Verhinderung der Oxidation von Aromastoffen. In diesem Artikel werden wir die physikalisch-chemischen Grundlagen der Schwefelung und die Mathematik hinter den Berechnungen in VinoFlow untersuchen.
+
+## Die vielen Gesichter von SO₂: Chemisches Gleichgewicht
+
+Bei der Zugabe zum Wein bleibt Schwefeldioxid nicht in einer einzigen Form. Es tritt in ein komplexes dynamisches Gleichgewicht ein und teilt sich in drei Hauptfraktionen auf:
+
+1.  **Gebundenes SO₂**: Verbindet sich mit Zuckern, Aldehyden (insbesondere Acetaldehyd) und Ketonen. Dieser Teil ist praktisch inert.
+2.  **Freies SO₂**: Die Fraktion, die nicht an andere Komponenten gebunden ist. Dieser Teil bietet den Schutz für den Wein.
+3.  **Molekulares SO₂**: Ein kleiner Teil des freien Schwefeldioxidgases, das die maximale antiseptische Kraft besitzt.
+
+Ein professioneller Önologe weiß, dass die Wirksamkeit der Schwefelung direkt vom **pH-Wert des Weins** abhängt. Je niedriger der pH-Wert, desto höher ist der Anteil an aktivem molekularem SO₂ und desto geringer ist die für die Stabilisierung erforderliche Dosis.
+
+## Formen der Zugabe und Dosierungsmathematik
+
+Je nach technologischer Aufgabe verwenden Winzer unterschiedliche Präparate. Jedes erfordert einen spezifischen Ansatz für die Berechnung.
+
+### 1. Kaliumpyrosulfit (Metabisulfit)
+Eine pulverförmige Form, am beliebtesten in kleinen und mittleren Betrieben. Bei der Zugabe werden etwa **50%** reines Schwefeldioxid freigesetzt.
+
+> **M (g) = (Volumen (l) × ΔSO₂ (mg/l)) / (10 × Konzentration (%))**
+
+### 2. Flüssige Lösungen (Schweflige Säure)
+Stellen in der Regel eine 5–15%ige wässrige Lösung des Gases dar. Praktisch für die automatisierte Zugabe.
+
+> **V (ml) = (Volumen (l) × ΔSO₂ (mg/l)) / Konzentration (g/l)**
+
+<Note type="info">
+Bei der Berechnung mit flüssigen Formen wird die Konzentration häufig in Gramm pro Liter angegeben. Eine 5%ige Lösung entspricht beispielsweise 50 g/l reinem SO₂.
+</Note>
+
+## Berechnungspräzision in VinoFlow
+
+Fehler bei der Schwefelung können entweder zu mikrobiologischem Verderb des Weins (Mangel) oder zum Auftreten eines stechenden „Schwefel“-Geruchs und zum Verlust des Sortenaromas (Überschuss) führen.
+
+In VinoFlow integriert der **SO2-Rechner** diese mathematischen Modelle und ermöglicht ein sofortiges Umschalten zwischen Gas, Pulver und Lösungen verschiedener Konzentrationen. Dies eliminiert das Risiko des „menschlichen Fehlers“ bei der Umrechnung von Prozentsätzen in Gramm oder Milliliter.
+
+Für beste Ergebnisse empfehlen wir, vor der Durchführung von Korrekturen immer eine vorläufige Analyse des aktuellen Gehalts an freiem SO₂ durchzuführen.
+
+Probieren Sie die Berechnung in unserem Rechner über den untenstehenden Link aus!
