@@ -25,15 +25,15 @@ test.describe('Fermentation Dashboard', () => {
     await page.getByRole('button', { name: /Add Barrel/i }).click();
     
     // Fill barrel number in modal
-    // Actual placeholder is "e.g. T-42 or Barrel 1" or localized
-    const input = page.locator('input[type="text"]').last(); // Getting the input in modal
-    await input.fill(barrelNumber);
+    const modal = page.getByRole('dialog');
+    await modal.locator('input[type="text"]').fill(barrelNumber);
     
-    // Save
+    // Save and wait for modal to close
     await page.getByRole('button', { name: /Save/i }).click();
+    await expect(modal).not.toBeVisible();
     
     // Verify barrel card exists
-    await expect(page.locator('div')).toContainText(barrelNumber);
+    await expect(page.getByText(barrelNumber)).toBeVisible();
   });
 
   test('should search for a barrel', async ({ page }) => {
@@ -41,19 +41,21 @@ test.describe('Fermentation Dashboard', () => {
     
     // Create it first
     await page.getByRole('button', { name: /Add Barrel/i }).click();
-    await page.locator('input[type="text"]').last().fill(barrelNumber);
+    const modal = page.getByRole('dialog');
+    await modal.locator('input[type="text"]').fill(barrelNumber);
     await page.getByRole('button', { name: /Save/i }).click();
+    await expect(modal).not.toBeVisible();
     
     // Search
-    // Placeholder for search is "Search barrels..." or similar
-    const searchInput = page.locator('input[placeholder*="..."]');
+    // Use the first search input on the page
+    const searchInput = page.locator('input[type="text"]').first();
     await searchInput.fill(barrelNumber);
     
-    // Verify only this barrel is visible (or at least it is visible)
-    await expect(page.locator('div')).toContainText(barrelNumber);
+    // Verify only this barrel is visible
+    await expect(page.getByText(barrelNumber)).toBeVisible();
     
     // Search for something else
     await searchInput.fill('NON-EXISTENT-BARREL-XYZ');
-    await expect(page.locator('div')).toContainText(/No barrels found/i);
+    await expect(page.getByText(/No barrels found/i)).toBeVisible();
   });
 });
