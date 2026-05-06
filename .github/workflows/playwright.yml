@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: "file:./dev.db"
+      DATABASE_URL: "file:${{ github.workspace }}/prisma/dev.db"
       JWT_SECRET: "mock_secret_for_playwright"
       ADMIN_PASSWORD: "test-password"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
