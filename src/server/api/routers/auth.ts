@@ -8,10 +8,15 @@ export const authRouter = createTRPCRouter({
   login: publicProcedure
     .input(z.object({ password: z.string() }))
     .mutation(async ({ input }) => {
-      const correctPassword = process.env.ADMIN_PASSWORD;
+      let correctPassword = process.env.ADMIN_PASSWORD;
+
+      // В среде CI разрешаем тестовый пароль как запасной вариант
+      if (process.env.CI && !correctPassword) {
+        correctPassword = "test-password";
+      }
 
       if (process.env.CI) {
-        console.log("CI Debug: Checking password. ADMIN_PASSWORD set:", !!correctPassword);
+        console.log("CI Debug: Auth attempt. Expected pwd set:", !!correctPassword);
       }
 
       if (!correctPassword || input.password !== correctPassword) {
