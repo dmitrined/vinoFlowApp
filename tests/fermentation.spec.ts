@@ -10,9 +10,11 @@ test.describe('Fermentation Dashboard', () => {
     // Login before each test in this describe block
     await page.goto('/en/fermentation');
     const passwordInput = page.locator('input[type="password"]');
-    if (await passwordInput.isVisible()) {
-      await passwordInput.fill(process.env.ADMIN_PASSWORD || 'test-password');
+    if (await page.locator('input[type="password"]').isVisible()) {
+      await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
       await page.locator('button[type="submit"]').click();
+      // Wait for login to complete
+      await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 10000 });
     }
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });

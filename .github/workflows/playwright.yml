@@ -21,8 +21,10 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
-    - name: Generate Prisma Client
-      run: npx prisma generate
+    - name: Generate Prisma Client and Init DB
+      run: |
+        npx prisma generate
+        npx prisma db push --accept-data-loss
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests

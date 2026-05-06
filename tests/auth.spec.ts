@@ -19,13 +19,13 @@ test.describe('Authentication Flow', () => {
     // Fill the password from env or a default dev one
     // Note: In CI we must set ADMIN_PASSWORD
     const password = process.env.ADMIN_PASSWORD || 'test-password';
-    await passwordInput.fill(password);
-    
-    // Submit
-    await page.locator('button[type="submit"]').click();
+    await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
+    await page.click('button[type="submit"]');
 
-    // Should redirect/show the dashboard
-    // We look for the "Fermentation" title (Layout.footer.app-name or Fermentation.title)
+    // Wait for navigation or change in H1 to ensure login processed
+    await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 10000 });
+    
+    // Should show the dashboard
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });
 
