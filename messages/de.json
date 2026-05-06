@@ -18,8 +18,10 @@
             "close": "Schließen"
         },
         "footer": {
-            "app-name": "Wine Calculator App",
-            "rights": "Alle Rechte vorbehalten."
+            "app-name": "VinoFlow",
+            "rights": "© 2026 VinoFlow Oenology Hub. Alle Rechte vorbehalten.",
+            "impressum": "Impressum",
+            "legal": "Rechtliche Hinweise"
         },
         "fermentation": "Gärung"
     },
@@ -353,5 +355,29 @@
         "back": "Zurück zur Übersicht",
         "relatedTools": "Verwandte Tools",
         "noArticles": "Noch keine Artikel verfügbar."
+    },
+    "Legal": {
+        "title": "Rechtliche Hinweise",
+        "subtitle": "Rechtliche Hinweise und Haftungsbeschränkungen",
+        "disclaimer": {
+            "title": "Haftungsausschluss",
+            "content": "Alle von der VinoFlow-Anwendung bereitgestellten Berechnungen basieren auf allgemein anerkannten önologischen Formeln und Standards (einschließlich G. Troost-Tabellen). Diese Ergebnisse sind jedoch theoretischer Natur. Die Weinherstellung ist ein komplexer biologischer Prozess, der von hunderten Faktoren beeinflusst wird. Der Entwickler haftet nicht für direkte oder indirekte Schäden, einschließlich des Verderbs von Weinmaterial, finanzieller Verluste oder der Nichteinhaltung gesetzlicher Normen durch das Produkt, die aus der Nutzung dieser Anwendung resultieren. Endgültige technologische Entscheidungen müssen von einer qualifizierten Fachkraft auf der Grundlage von Laboranalysen getroffen werden."
+        },
+        "external": {
+            "title": "Externe Links",
+            "content": "Die Anwendung kann Links zu Ressourcen Dritter enthalten. Wir kontrollieren und übernehmen keine Verantwortung für den Inhalt oder die Datenschutzrichtlinien dieser Websites."
+        }
+    },
+    "Impressum": {
+        "title": "Impressum",
+        "subtitle": "Offizielle Informationen über den Website-Betreiber",
+        "owner": "Betreiber",
+        "address": "Adresse",
+        "contact": "Kontaktinformationen",
+        "responsible": "Verantwortlich für den Inhalt",
+        "placeholder-name": "Dmitri Nedioglo",
+        "placeholder-address": "Deutschland, Esslingen",
+        "placeholder-email": "support@vinoflow.app",
+        "disclaimer-note": "Diese Informationen werden gemäß § 5 TMG (Telemediengesetz) für den deutschen Markt bereitgestellt. VinoFlow ist eine professionelle önologische Plattform, die sich der Präzisions-Weinbereitung widmet."
     }
 }
