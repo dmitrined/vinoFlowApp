@@ -1,54 +1,66 @@
 ---
-title: "The Troost Table: Foundations of Oenological Calculations"
-excerpt: "How to use the Troost table for accurate conversion of Oechsle to potential alcohol and sugar."
+# НАЗНАЧЕНИЕ: Научно-популярная статья о таблице Трооста и методике энологических расчетов (EN).
+# ЗАВИСИМОСТИ: MDX, компоненты Note, семантический HTML.
+# ОСОБЕННОСТИ: Стилистика профессионального издания, интеграция с инструментами VinoFlow.
+title: "The Troost Table: The Mathematical Foundation of Modern Oenology"
+excerpt: "A deep dive into Gerhard Troost's classic methodology: from must density to precision potential alcohol forecasting."
 author: "Dmitri Nedioglo Engineer (Oenology)"
-date: "2024-05-05"
-readTime: 5
-category: "Theory"
+date: "2026-05-06"
+readTime: 4
+category: "Oenology"
 relatedTools: ["alkohol", "chaptalization"]
 ---
 
-In winemaking, precision in measurements plays a crucial role. One of the most important tools of the German oenological school is the **Troost Table** (compiled by Gerhard Troost).
+In modern oenology, where the digitalization of winemaking processes is becoming the standard, it is essential not to forget the fundamental tools that laid the groundwork for precision. One such pillar is the **Troost Table**, developed by the eminent German scientist Gerhard Troost. In this article, we will examine why his methodology remains relevant and how it is integrated into the VinoFlow algorithms.
 
-It allows for an accurate correlation of must density (expressed in Oechsle degrees) with sugar content and potential alcohol.
+## The Legacy of Gerhard Troost
 
-## What is Oechsle (°Oe)?
+Gerhard Troost, author of the monumental work *«Handbuch der Kellerwirtschaft»*, systematized empirical data on must density, creating a reliable mathematical model. His table is not just a set of numbers but the result of years of research into the correlation between the specific gravity of the must and the actual ethanol yield after fermentation is complete.
 
-The Oechsle degree is a unit of measurement for grape must density, indicating how many grams one liter of must is heavier than one liter of water at 20°C.
+## The Physics of Density: Oechsle Degrees (°Oe)
 
-For example, must with a density of 1080 g/L has $1080 - 1000 = 80$ °Oe.
+To understand the calculations, we must turn to the concept of Oechsle degrees. This unit of measurement reflects the excess density of the must compared to pure water.
 
-<Note type="info">
-The °Oe value is not directly equal to grams of sugar. The must contains other soluble substances (acids, pectins, minerals) that also affect density.
+> **°Oe = (Density₂₀/₂₀ - 1.000) × 1000**
+
+However, a professional winemaker knows: density is not just about sugar. The must contains what is known as **non-sugar extract**, consisting of acids, glycerin, phenolic compounds, and minerals. The Troost Table accounts for this "noise," allowing for the isolation of the pure sugar equivalent with a margin of error approaching zero.
+
+<Note type="warning">
+Ignoring the non-sugar extract factor in "back-of-the-envelope" calculations often leads to an error of 0.3–0.5% vol in the final alcohol, which is critical for the production of high-quality wines.
 </Note>
 
-## Troost Table Fragment
+## Fragment of the Reference Table
 
-To avoid Markdown table parsing errors, we use pure HTML:
+Below is the key range of values used in the production of dry and semi-dry wines.
 
 <table>
   <thead>
     <tr>
-      <th>Oechsle (°Oe)</th>
+      <th>Density (°Oe)</th>
       <th>Sugar (g/l)</th>
-      <th>Total Alcohol (g/l)</th>
-      <th>Alcohol (% vol)</th>
+      <th>Extract (g/l)</th>
+      <th>Pot. Alcohol (% vol)</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>50</td><td>103</td><td>48.0</td><td>6.08</td></tr>
-    <tr><td>60</td><td>130</td><td>60.4</td><td>7.65</td></tr>
-    <tr><td>70</td><td>156</td><td>72.8</td><td>9.22</td></tr>
-    <tr><td>80</td><td>183</td><td>85.1</td><td>10.79</td></tr>
-    <tr><td>90</td><td>209</td><td>97.5</td><td>12.35</td></tr>
-    <tr><td>100</td><td>236</td><td>110.0</td><td>13.92</td></tr>
-    <tr><td>110</td><td>263</td><td>122.3</td><td>15.49</td></tr>
-    <tr><td>120</td><td>289</td><td>134.7</td><td>17.06</td></tr>
+    <tr><td>50</td><td>103</td><td>117.8</td><td>6.08</td></tr>
+    <tr><td>60</td><td>130</td><td>145.2</td><td>7.65</td></tr>
+    <tr><td>70</td><td>156</td><td>172.5</td><td>9.22</td></tr>
+    <tr><td>80</td><td>183</td><td>199.9</td><td>10.79</td></tr>
+    <tr><td>85</td><td>196</td><td>213.6</td><td>11.57</td></tr>
+    <tr><td>90</td><td>209</td><td>227.3</td><td>12.35</td></tr>
+    <tr><td>95</td><td>222</td><td>241.0</td><td>13.14</td></tr>
+    <tr><td>100</td><td>236</td><td>254.7</td><td>13.92</td></tr>
   </tbody>
 </table>
 
-## Usage in VinoFlow
+## Practical Application in VinoFlow
 
-In our application, the Troost table is integrated into the algorithms of the **Eno-Converter** and the **Chaptalization** calculator, ensuring the highest accuracy of calculations, corresponding to German winemaking standards (Handbuch der Kellerwirtschaft).
+We didn't just copy the table. VinoFlow implements an **approximation of Troost's data** using polynomial regression. This allows the calculator to compute values for fractional Oechsle points (e.g., 82.5 °Oe) with analytical precision unattainable when simply reading a paper table.
 
-Try the converter in action by selecting it in the section below!
+Our tools **Eno-Converter** and **Chaptalization Module** use these algorithms to:
+1. Accurately predict the moment of fermentation termination.
+2. Calculate the required sugar addition to achieve the target balance.
+3. Estimate the total extract of the must.
+
+The use of Troost's time-tested formulas combined with the power of modern computing makes VinoFlow an indispensable tool for the professional winemaker.
