@@ -76,10 +76,15 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: process.env.CI ? 'npm run build && npm run start' : 'npm run dev',
-    port: 3000,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180 * 1000, // Increase to 3 minutes for CI build
-  },
+    webServer: {
+        command: process.env.CI ? 'npm run build && npm run start' : 'npm run dev',
+        port: 3000,
+        reuseExistingServer: !process.env.CI,
+        timeout: 180 * 1000,
+        env: {
+            ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'test-password',
+            JWT_SECRET: process.env.JWT_SECRET || 'mock_secret_for_playwright',
+            DATABASE_URL: process.env.DATABASE_URL || '',
+        }
+    },
 });

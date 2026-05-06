@@ -10,6 +10,10 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const correctPassword = process.env.ADMIN_PASSWORD;
 
+      if (process.env.CI) {
+        console.log("CI Debug: Checking password. ADMIN_PASSWORD set:", !!correctPassword);
+      }
+
       if (!correctPassword || input.password !== correctPassword) {
         throw new TRPCError({
           code: "UNAUTHORIZED",

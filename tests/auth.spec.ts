@@ -22,6 +22,10 @@ test.describe('Authentication Flow', () => {
     await page.click('button[type="submit"]');
 
     // Wait for navigation or change in H1 to ensure login processed
+    const h1Text = await page.locator('h1').innerText();
+    if (h1Text.includes('Access Restricted')) {
+      console.error('Login failed: Still on Access Restricted page even after submitting password');
+    }
     await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 10000 });
     
     // Should show the dashboard
