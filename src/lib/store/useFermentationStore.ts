@@ -9,6 +9,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { Barrel, Reading, Addition, BarrelStatus } from '@/types/fermentation';
 import { mergeEntities } from '@/lib/sync/mergeUtils';
 import { idbStorage } from './idb-storage';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FermentationState {
     barrels: Barrel[];
@@ -76,7 +77,7 @@ export const useFermentationStore = create<FermentationState>()(
                 barrels: [
                     ...state.barrels,
                     {
-                        id: crypto.randomUUID(),
+                        id: uuidv4(),
                         number,
                         status: 'active',
                         notes: '',
@@ -126,7 +127,7 @@ export const useFermentationStore = create<FermentationState>()(
                             readings: [
                                 ...(b.readings || []),
                                 {
-                                    id: crypto.randomUUID(),
+                                    id: uuidv4(),
                                     date: date || new Date().toISOString().split('T')[0],
                                     oechsle,
                                     temperature,
@@ -187,7 +188,7 @@ export const useFermentationStore = create<FermentationState>()(
                             additions: [
                                 ...(b.additions || []),
                                 {
-                                    id: crypto.randomUUID(),
+                                    id: uuidv4(),
                                     date,
                                     name,
                                     dosage,

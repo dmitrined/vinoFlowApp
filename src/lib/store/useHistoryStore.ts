@@ -10,6 +10,7 @@ import { persist } from 'zustand/middleware';
 import { CalculationRecord } from '@/types/calculations';
 
 import { mergeEntities } from '@/lib/sync/mergeUtils';
+import { v4 as uuidv4 } from 'uuid';
 
 interface HistoryState {
     records: CalculationRecord[];
@@ -32,7 +33,7 @@ export const useHistoryStore = create<HistoryState>()(
                 records: [
                     {
                         ...record,
-                        id: crypto.randomUUID(),
+                        id: uuidv4(),
                         date: Date.now(),
                         updatedAt: new Date().toISOString(),
                         isDeleted: false,

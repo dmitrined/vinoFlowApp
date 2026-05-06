@@ -5,7 +5,7 @@
  */
 
 import { getTranslations } from 'next-intl/server';
-import { ShieldAlert, Copyright, ExternalLink, ArrowLeft } from 'lucide-react';
+import { ShieldAlert, ExternalLink, ArrowLeft } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 
 export default async function LegalPage({

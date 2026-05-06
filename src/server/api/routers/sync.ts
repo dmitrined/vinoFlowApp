@@ -82,6 +82,158 @@ export const syncRouter = createTRPCRouter({
     }),
 
   /**
+   * Синхронизация пачкой (Batch Sync) для предотвращения SQLITE_BUSY
+   */
+  pushBatch: protectedProcedure
+    .input(z.object({
+      barrels: z.array(barrelSchema).optional(),
+      readings: z.array(readingSchema).optional(),
+      additions: z.array(additionSchema).optional(),
+      history: z.array(calculationSchema).optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const syncedIds = {
+        barrels: [] as string[],
+        readings: [] as string[],
+        additions: [] as string[],
+        history: [] as string[],
+      };
+
+      await ctx.db.$transaction(async (tx) => {
+        // Синхронизация бочек
+        if (input.barrels && input.barrels.length > 0) {
+          const dbIds = input.barrels.map(i => i.id);
+          const existing = await tx.barrel.findMany({
+            where: { id: { in: dbIds } },
+            select: { id: true, updatedAt: true }
+          });
+          const existingMap = new Map(existing.map(e => [e.id, e.updatedAt.getTime()]));
+
+          for (const barrel of input.barrels) {
+            const incomingTime = new Date(barrel.updatedAt).getTime();
+            const existingTime = existingMap.get(barrel.id) || 0;
+
+            if (incomingTime >= existingTime) {
+              const data = {
+                name: barrel.name,
+                volume: barrel.volume || null,
+                status: barrel.status,
+                notes: barrel.notes || null,
+                updatedAt: new Date(barrel.updatedAt),
+                isDeleted: barrel.isDeleted,
+              };
+              await tx.barrel.upsert({
+                where: { id: barrel.id },
+                update: data,
+                create: { id: barrel.id, ...data }
+              });
+            }
+            syncedIds.barrels.push(barrel.id);
+          }
+        }
+
+        // Синхронизация замеров
+        if (input.readings && input.readings.length > 0) {
+          const dbIds = input.readings.map(i => i.id);
+          const existing = await tx.reading.findMany({
+            where: { id: { in: dbIds } },
+            select: { id: true, updatedAt: true }
+          });
+          const existingMap = new Map(existing.map(e => [e.id, e.updatedAt.getTime()]));
+
+          for (const item of input.readings) {
+            const incomingTime = new Date(item.updatedAt).getTime();
+            const existingTime = existingMap.get(item.id) || 0;
+
+            if (incomingTime >= existingTime) {
+              const data = {
+                barrelId: item.barrelId,
+                date: item.date,
+                oechsle: item.oechsle || null,
+                temperature: item.temperature || null,
+                updatedAt: new Date(item.updatedAt),
+                isDeleted: item.isDeleted,
+              };
+              await tx.reading.upsert({
+                where: { id: item.id },
+                update: data,
+                create: { id: item.id, ...data }
+              });
+            }
+            syncedIds.readings.push(item.id);
+          }
+        }
+
+        // Синхронизация добавок
+        if (input.additions && input.additions.length > 0) {
+          const dbIds = input.additions.map(i => i.id);
+          const existing = await tx.addition.findMany({
+            where: { id: { in: dbIds } },
+            select: { id: true, updatedAt: true }
+          });
+          const existingMap = new Map(existing.map(e => [e.id, e.updatedAt.getTime()]));
+
+          for (const item of input.additions) {
+            const incomingTime = new Date(item.updatedAt).getTime();
+            const existingTime = existingMap.get(item.id) || 0;
+
+            if (incomingTime >= existingTime) {
+              const data = {
+                barrelId: item.barrelId,
+                date: item.date,
+                name: item.name,
+                dosage: item.dosage,
+                unit: item.unit,
+                updatedAt: new Date(item.updatedAt),
+                isDeleted: item.isDeleted,
+              };
+              await tx.addition.upsert({
+                where: { id: item.id },
+                update: data,
+                create: { id: item.id, ...data }
+              });
+            }
+            syncedIds.additions.push(item.id);
+          }
+        }
+
+        // Синхронизация истории калькуляторов
+        if (input.history && input.history.length > 0) {
+          const dbIds = input.history.map(i => i.id);
+          const existing = await tx.calculationRecord.findMany({
+            where: { id: { in: dbIds } },
+            select: { id: true, updatedAt: true }
+          });
+          const existingMap = new Map(existing.map(e => [e.id, e.updatedAt.getTime()]));
+
+          for (const item of input.history) {
+            const incomingTime = new Date(item.updatedAt).getTime();
+            const existingTime = existingMap.get(item.id) || 0;
+
+            if (incomingTime >= existingTime) {
+              const data = {
+                type: item.type,
+                date: BigInt(item.date),
+                result: item.result,
+                unit: item.unit || null,
+                updatedAt: new Date(item.updatedAt),
+                isDeleted: item.isDeleted,
+              };
+              await tx.calculationRecord.upsert({
+                where: { id: item.id },
+                update: data,
+                create: { id: item.id, ...data }
+              });
+            }
+            syncedIds.history.push(item.id);
+          }
+        }
+      });
+
+      return syncedIds;
+    }),
+
+  /**
    * Синхронизация бочек (Upsert)
    */
   pushBarrels: protectedProcedure

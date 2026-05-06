@@ -35,10 +35,7 @@ export function useSyncEngine() {
   const markHistorySynced = useHistoryStore(s => s.markHistorySynced);
   const hydrateHistory = useHistoryStore(s => s.hydrateFromServer);
 
-  const pushBarrels = api.sync.pushBarrels.useMutation();
-  const pushReadings = api.sync.pushReadings.useMutation();
-  const pushAdditions = api.sync.pushAdditions.useMutation();
-  const pushHistory = api.sync.pushHistory.useMutation();
+  const pushBatch = api.sync.pushBatch.useMutation();
 
   const pushLocalData = useCallback(async () => {
     try {
@@ -71,40 +68,27 @@ export function useSyncEngine() {
         .filter(r => r.synced === false)
         .map(mapHistoryToSync);
 
-      // ВАЖНО: Выполняем синхронизацию последовательно!
-      // SQLite (и Turso) может выдать SQLITE_BUSY при параллельных транзакциях.
-      // Кроме того, Readings и Additions зависят от Barrels (Foreign Key),
-      // поэтому Barrels ДОЛЖНЫ быть сохранены первыми.
+      // Выполняем синхронизацию батчем
+      if (allBarrelsToSync.length > 0 || unsyncedReadings.length > 0 || unsyncedAdditions.length > 0 || unsyncedHistory.length > 0) {
+        console.log(`SyncEngine: Pushing batch... Barrels: ${allBarrelsToSync.length}, Readings: ${unsyncedReadings.length}, Additions: ${unsyncedAdditions.length}, History: ${unsyncedHistory.length}`);
+        
+        const res = await pushBatch.mutateAsync({
+          barrels: allBarrelsToSync.length > 0 ? allBarrelsToSync : undefined,
+          readings: unsyncedReadings.length > 0 ? unsyncedReadings : undefined,
+          additions: unsyncedAdditions.length > 0 ? unsyncedAdditions : undefined,
+          history: unsyncedHistory.length > 0 ? unsyncedHistory : undefined,
+        });
 
-      if (allBarrelsToSync.length > 0) {
-        const res = await pushBarrels.mutateAsync(allBarrelsToSync);
-        markBarrelsSynced(res.syncedIds);
-      }
-
-      if (unsyncedReadings.length > 0) {
-        const res = await pushReadings.mutateAsync(unsyncedReadings);
-        markReadingsSynced(res.syncedIds);
-      }
-
-      if (unsyncedAdditions.length > 0) {
-        console.log(`SyncEngine: Pushing ${unsyncedAdditions.length} additions...`, 
-          unsyncedAdditions.filter(a => a.isDeleted).length, "deletions");
-        const res = await pushAdditions.mutateAsync(unsyncedAdditions);
-        markAdditionsSynced(res.syncedIds);
-      }
-
-      if (unsyncedHistory.length > 0) {
-        const res = await pushHistory.mutateAsync(unsyncedHistory);
-        markHistorySynced(res.syncedIds);
+        if (res.barrels.length > 0) markBarrelsSynced(res.barrels);
+        if (res.readings.length > 0) markReadingsSynced(res.readings);
+        if (res.additions.length > 0) markAdditionsSynced(res.additions);
+        if (res.history.length > 0) markHistorySynced(res.history);
       }
     } catch (e) {
       console.error("SyncEngine: Ошибка выгрузки:", e);
     }
   }, [
-    pushBarrels, 
-    pushReadings, 
-    pushAdditions, 
-    pushHistory,
+    pushBatch,
     markBarrelsSynced,
     markReadingsSynced,
     markAdditionsSynced,
@@ -165,6 +149,6 @@ export function useSyncEngine() {
     pushLocalData, 
     pullData,
     syncAll,
-    isSyncing: isSyncing || pushBarrels.isPending || pullQuery.isFetching
+    isSyncing: isSyncing || pushBatch.isPending || pullQuery.isFetching
   };
 }
