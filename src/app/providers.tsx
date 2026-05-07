@@ -1,3 +1,8 @@
+/**
+ * НАЗНАЧЕНИЕ: Глобальная обертка провайдеров (HeroUI, tRPC, Framer Motion)
+ * ЗАВИСИМОСТИ: @heroui/react, framer-motion, @/trpc/react
+ * ОСОБЕННОСТИ: Client Component, LazyMotion для анимаций
+ */
 'use client';
 
 import { HeroUIProvider } from "@heroui/react";

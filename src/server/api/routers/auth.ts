@@ -1,3 +1,8 @@
+/**
+ * НАЗНАЧЕНИЕ: Роутер авторизации и управления сессиями
+ * ЗАВИСИМОСТИ: zod, next/headers, @/lib/auth
+ * ОСОБЕННОСТИ: HTTP-only cookies, JWT auth, CI-fallback
+ */
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { cookies } from "next/headers";
@@ -30,10 +35,13 @@ export const authRouter = createTRPCRouter({
       const token = await signAuthToken();
       
       // Set HTTP-only cookie using Next.js cookies API
+      const isProd = process.env.NODE_ENV === "production";
+      const isTest = process.env.CI || process.env.NODE_ENV === 'test';
+      
       const cookieStore = await cookies();
       cookieStore.set("vinoflow_auth_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isProd && !isTest, // Don't use secure cookies in CI/Test over HTTP
         sameSite: "lax",
         path: "/",
         maxAge: 30 * 24 * 60 * 60, // 30 days

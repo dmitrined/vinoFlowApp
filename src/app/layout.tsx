@@ -1,3 +1,8 @@
+/**
+ * НАЗНАЧЕНИЕ: Корневой HTML-скелет приложения
+ * ЗАВИСИМОСТИ: next/font/google, globals.css
+ * ОСОБЕННОСТИ: Базовая структура, Geist font configuration
+ */
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
