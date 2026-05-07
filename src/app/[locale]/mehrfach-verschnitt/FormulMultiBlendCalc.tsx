@@ -25,7 +25,7 @@ import {
   Zap,
   Droplets,
 } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence, LayoutGroup } from "framer-motion";
 import { calcMultiBlended } from '@/lib/calculations';
 import FormulMultiCalc from './FormulMultiCalc';
@@ -41,6 +41,7 @@ interface WineEntry {
 const FormulMultiBlendCalc: React.FC = () => {
   const t = useTranslations('Calculators.mehrfach');
   const commonT = useTranslations('Calculators');
+  const locale = useLocale();
 
   const [showFormula, setShowFormula] = useState(false);
   const [wines, setWines] = useState<WineEntry[]>(
@@ -89,12 +90,12 @@ const FormulMultiBlendCalc: React.FC = () => {
     [
         results.avgSugar > 0 ? {
             type: 'mehrfach',
-            result: results.avgSugar.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgSugar),
             unit: 'g/l SR'
         } : null,
         results.avgAlcohol > 0 ? {
             type: 'mehrfach',
-            result: results.avgAlcohol.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgAlcohol),
             unit: 'g/l Alc'
         } : null
     ],
@@ -137,7 +138,7 @@ const FormulMultiBlendCalc: React.FC = () => {
                         </div>
                         <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-black tracking-tighter transition-all">
-                                {results.totalLiters.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.totalLiters)}
                             </span>
                             <span className="text-sm font-black text-brand-500 uppercase italic">L</span>
                         </div>
@@ -152,7 +153,7 @@ const FormulMultiBlendCalc: React.FC = () => {
                         <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2 uppercase italic">{t('avg-sugar')}</span>
                         <div className="flex items-baseline gap-2 text-zinc-800 dark:text-white">
                             <span className="text-4xl font-black tracking-tighter">
-                                {results.avgSugar.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgSugar)}
                             </span>
                             <span className="text-sm font-black text-brand-600 uppercase italic">g/l</span>
                         </div>
@@ -167,7 +168,7 @@ const FormulMultiBlendCalc: React.FC = () => {
                         <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2 uppercase italic">{t('avg-alcohol')}</span>
                         <div className="flex items-baseline gap-2 text-zinc-800 dark:text-white">
                             <span className="text-4xl font-black tracking-tighter">
-                                {results.avgAlcohol.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgAlcohol)}
                             </span>
                             <span className="text-sm font-black text-brand-600 uppercase italic">g/l</span>
                         </div>
@@ -203,7 +204,7 @@ const FormulMultiBlendCalc: React.FC = () => {
                         </div>
                         {winePercent > 0 && (
                           <div className="text-[10px] font-black text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/30 px-2 py-0.5 rounded-lg shadow-sm">
-                            {winePercent.toLocaleString('de-DE', { maximumFractionDigits: 1 })}%
+                            {new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(winePercent)}%
                           </div>
                         )}
                       </div>

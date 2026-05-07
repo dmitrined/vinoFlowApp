@@ -42,6 +42,8 @@
 | **State** | Zustand + IndexedDB (via idb-keyval) |
 | **UI** | HeroUI (NextUI) + Tailwind CSS + Framer Motion |
 | **PWA** | @ducanh2912/next-pwa (Offline Ready) |
+| **Testing** | Vitest (Unit) + Playwright (E2E) |
+| **Quality** | ESLint (Strict TypeScript, no explicit any) |
 
 ### Project Structure
 
@@ -76,8 +78,11 @@ npm install
 # Run development server
 npm run dev
 
-# Run tests
-npm test
+# Run unit tests
+npm run test
+
+# Run E2E tests
+npx playwright test
 
 # Build for production
 npm run build

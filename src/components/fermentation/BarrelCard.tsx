@@ -32,6 +32,7 @@ export const BarrelCard = React.memo<Props>(({ barrel, onDelete, onToggleStatus 
 
     return (
         <m.div
+            layoutId={barrel.id}
             whileHover={{ y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             onClick={() => router.push(`/fermentation/${barrel.id}`)}

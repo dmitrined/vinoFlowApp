@@ -18,8 +18,12 @@
             "close": "Close"
         },
         "footer": {
-            "app-name": "Wine Calculator App",
-            "rights": "All rights reserved."
+            "app-name": "VinoFlow",
+            "rights": "© 2026 VinoFlow Oenology Hub. All rights reserved.",
+            "impressum": "Legal Disclosure",
+            "legal": "Legal Notice",
+            "slogan": "Precision Oenology Hub",
+            "version": "v1.2.0-stable"
         },
         "fermentation": "Fermentation"
     },
@@ -146,7 +150,7 @@
         },
         "mehrfach": {
             "title": "Multiple Blending",
-           "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
+            "subtitle": "Calculation of sugar and alcohol for any number of wine batches",
             "seo-title": "Wine Blending & Assemblage Calculator | VinoFlow",
             "seo-description": "Optimize your wine blends with weighted average calculations for sugar and alcohol across multiple batches.",
             "add-wine": "Add Batch",
@@ -353,5 +357,29 @@
         "back": "Back to Hub",
         "relatedTools": "Related Tools",
         "noArticles": "No articles available yet."
+    },
+    "Legal": {
+        "title": "Legal Notice",
+        "subtitle": "Legal notices and limitations of liability",
+        "disclaimer": {
+            "title": "Limitation of Liability",
+            "content": "All calculations provided by the VinoFlow application are based on generally accepted oenological formulas and standards (including G. Troost tables). However, these results are theoretical. Winemaking is a complex biological process influenced by hundreds of factors. The developer is not liable for any direct or indirect damages, including spoilage of wine material, financial losses, or product non-compliance with legal standards, resulting from the use of this application. Final technological decisions must be made by a qualified specialist based on laboratory analysis."
+        },
+        "external": {
+            "title": "External Links",
+            "content": "The application may contain links to third-party resources. We do not control and are not responsible for the content or privacy policies of these sites."
+        }
+    },
+    "Impressum": {
+        "title": "Legal Disclosure",
+        "subtitle": "Official information about the resource owner",
+        "owner": "Owner",
+        "address": "Address",
+        "contact": "Contact Information",
+        "responsible": "Responsible for Content",
+        "placeholder-name": "Dmitri Nedioglo",
+        "placeholder-address": "Germany, Esslingen",
+        "placeholder-email": "support@vinoflow.app",
+        "disclaimer-note": "This information is provided in accordance with § 5 TMG (Telemediengesetz) for the German market. VinoFlow is a professional oenological platform dedicated to precision winemaking."
     }
 }

@@ -24,7 +24,7 @@ import {
   Zap,
   Info
 } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 import { calcSRVerschnitt } from '@/lib/calculations';
 import FormulSRCalc from './FormulSRCalc';
@@ -34,6 +34,7 @@ import SaveFeedback from '@/components/ui/SaveFeedback';
 const FormulSR_VerschnittCalc: React.FC = () => {
   const t = useTranslations('Calculators.sr-verschnitt');
   const commonT = useTranslations('Calculators');
+  const locale = useLocale();
 
   const [showFormula, setShowFormula] = useState(false);
   const [values, setValues] = useState({
@@ -90,7 +91,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
   const { showFeedback } = useHistoryAutoSave(
     results ? {
         type: 'sr-verschnitt',
-        result: results.liter_SR.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.liter_SR),
         unit: 'L'
     } : null,
     results?.liter_SR || 0
@@ -210,7 +211,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
                             </span>
                             <div className="flex items-baseline gap-3">
                                 <span className={`text-6xl font-black tracking-tighter transition-all ${results ? 'text-white' : 'text-zinc-800 animate-pulse'}`}>
-                                    {results ? results.liter_SR.toFixed(2) : "0.00"}
+                                    {results ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.liter_SR) : new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(0)}
                                 </span>
                                 <span className="text-xl font-black text-brand-500 uppercase italic">L</span>
                             </div>
@@ -223,7 +224,7 @@ const FormulSR_VerschnittCalc: React.FC = () => {
                                 >
                                     <Info size={12} className="text-brand-500" />
                                     <span className="text-[9px] font-black text-brand-400 uppercase tracking-widest">
-                                        Total: {results.gesamt_Liter.toFixed(2)} L
+                                        Total: {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.gesamt_Liter)} L
                                     </span>
                                 </m.div>
                             )}

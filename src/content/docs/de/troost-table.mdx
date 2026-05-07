@@ -1,54 +1,66 @@
 ---
-title: "Die Troost-Tabelle: Grundlagen der önologischen Berechnungen"
-excerpt: "Wie man die Troost-Tabelle zur genauen Umrechnung von Oechsle in potenziellen Alkohol und Zucker verwendet."
+# НАЗНАЧЕНИЕ: Научно-популярная статья о таблице Трооста и методике энологических расчетов (DE).
+# ЗАВИСИМОСТИ: MDX, компоненты Note, семантический HTML.
+# ОСОБЕННОСТИ: Стилистика профессионального издания, интеграция с инструментами VinoFlow.
+title: "Die Troost-Tabelle: Das mathematische Fundament der modernen Önologie"
+excerpt: "Eine fundierte Analyse der klassischen Methodik von Gerhard Troost: von der Mostdichte bis zur präzisen Prognose des potenziellen Alkohols."
 author: "Dmitri Nedioglo Engineer (Oenology)"
-date: "2024-05-05"
-readTime: 5
-category: "Theorie"
+date: "2026-05-06"
+readTime: 4
+category: "Önologie"
 relatedTools: ["alkohol", "chaptalization"]
 ---
 
-Bei der Weinherstellung spielt die Genauigkeit von Messungen eine entscheidende Rolle. Eines der wichtigsten Werkzeuge der deutschen önologischen Schule ist die **Troost-Tabelle** (erstellt von Gerhard Troost).
+In der modernen Önologie, in der die Digitalisierung der Weinbereitungsprozesse zum Standard wird, ist es wichtig, die grundlegenden Werkzeuge nicht zu vergessen, die das Fundament für Präzision gelegt haben. Eine dieser Säulen ist die **Troost-Tabelle**, die von dem herausragenden deutschen Wissenschaftler Gerhard Troost entwickelt wurde. In diesem Artikel werden wir untersuchen, warum seine Methodik aktuell bleibt und wie sie in die VinoFlow-Algorithmen integriert ist.
 
-Sie ermöglicht eine genaue Korrelation der Mostdichte (ausgedrückt in Oechsle-Grad) mit dem Zuckergehalt und dem potenziellen Alkohol.
+## Das Erbe von Gerhard Troost
 
-## Was ist Oechsle (°Oe)?
+Gerhard Troost, Autor des monumentalen Werks *«Handbuch der Kellerwirtschaft»*, systematisierte empirische Daten zur Mostdichte und schuf ein zuverlässiges mathematisches Modell. Seine Tabelle ist nicht nur eine Ansammlung von Zahlen, sondern das Ergebnis jahrelanger Forschung zur Korrelation zwischen dem spezifischen Gewicht des Mostes und der tatsächlichen Ethanolausbeute nach Abschluss der Gärung.
 
-Das Oechsle-Grad ist eine Maßeinheit für die Dichte von Traubenmost, die angibt, um wie viel Gramm ein Liter Most bei 20°C schwerer ist als ein Liter Wasser.
+## Die Physik der Dichte: Oechsle-Grade (°Oe)
 
-Zum Beispiel hat Most mit einer Dichte von 1080 g/L $1080 - 1000 = 80$ °Oe.
+Um die Berechnungen zu verstehen, muss man sich dem Begriff der Oechsle-Grade zuwenden. Diese Maßeinheit spiegelt die Mehrdichte des Mostes im Vergleich zu reinem Wasser wider.
 
-<Note type="info">
-Der °Oe-Wert ist nicht direkt gleich Gramm Zucker. Der Most enthält andere lösliche Substanzen (Säuren, Pektine, Mineralien), die ebenfalls die Dichte beeinflussen.
+> **°Oe = (Dichte₂₀/₂₀ - 1.000) × 1000**
+
+Ein professioneller Winzer weiß jedoch: Dichte ist nicht gleich Zucker. Im Most ist der sogenannte **zuckerfreie Extrakt** vorhanden, der aus Säuren, Glycerin, phenolischen Verbindungen und Mineralien besteht. Die Troost-Tabelle berücksichtigt dieses „Rauschen“ und ermöglicht es, das reine Zuckeräquivalent mit einer Fehlermarge gegen Null zu isolieren.
+
+<Note type="warning">
+Das Ignorieren des фактора des zuckerfreien Extrakts bei „Pi-mal-Daumen“-Berechnungen führt oft zu einem Fehler von 0,3–0,5 Vol.-% im fertigen Alkohol, was für die Produktion von Qualitätsweinen entscheidend ist.
 </Note>
 
-## Fragment der Troost-Tabelle
+## Fragment der Referenztabelle
 
-Um Markdown-Tabellen-Parsingfehler zu vermeiden, verwenden wir reines HTML:
+Unten ist der Schlüsselbereich der Werte aufgeführt, die bei der Herstellung von trockenen und halbtrockenen Weinen verwendet werden.
 
 <table>
   <thead>
     <tr>
-      <th>Oechsle (°Oe)</th>
+      <th>Dichte (°Oe)</th>
       <th>Zucker (g/l)</th>
-      <th>Gesamtalkohol (g/l)</th>
-      <th>Alkohol (% vol)</th>
+      <th>Extrakt (g/l)</th>
+      <th>Potemz. Alkohol (% vol)</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>50</td><td>103</td><td>48.0</td><td>6.08</td></tr>
-    <tr><td>60</td><td>130</td><td>60.4</td><td>7.65</td></tr>
-    <tr><td>70</td><td>156</td><td>72.8</td><td>9.22</td></tr>
-    <tr><td>80</td><td>183</td><td>85.1</td><td>10.79</td></tr>
-    <tr><td>90</td><td>209</td><td>97.5</td><td>12.35</td></tr>
-    <tr><td>100</td><td>236</td><td>110.0</td><td>13.92</td></tr>
-    <tr><td>110</td><td>263</td><td>122.3</td><td>15.49</td></tr>
-    <tr><td>120</td><td>289</td><td>134.7</td><td>17.06</td></tr>
+    <tr><td>50</td><td>103</td><td>117.8</td><td>6.08</td></tr>
+    <tr><td>60</td><td>130</td><td>145.2</td><td>7.65</td></tr>
+    <tr><td>70</td><td>156</td><td>172.5</td><td>9.22</td></tr>
+    <tr><td>80</td><td>183</td><td>199.9</td><td>10.79</td></tr>
+    <tr><td>85</td><td>196</td><td>213.6</td><td>11.57</td></tr>
+    <tr><td>90</td><td>209</td><td>227.3</td><td>12.35</td></tr>
+    <tr><td>95</td><td>222</td><td>241.0</td><td>13.14</td></tr>
+    <tr><td>100</td><td>236</td><td>254.7</td><td>13.92</td></tr>
   </tbody>
 </table>
 
-## Verwendung in VinoFlow
+## Praktische Anwendung in VinoFlow
 
-In unserer Anwendung ist die Troost-Tabelle in die Algorithmen des **Eno-Konverters** und des **Chaptalisierungs**-Rechners integriert, was höchste Berechnungsgenauigkeit entsprechend den deutschen Weinbaustandards (Handbuch der Kellerwirtschaft) garantiert.
+Wir haben die Tabelle nicht einfach nur kopiert. In VinoFlow ist eine **Approximation der Troost-Daten** mittels polynomialer Regression implementiert. Dies ermöglicht es dem Rechner, Werte für fraktionale Oechsle-Punkte (z. B. 82,5 °Oe) mit einer analytischen Präzision zu berechnen, die beim einfachen Ablesen einer Papiertabelle unerreichbar ist.
 
-Probieren Sie den Konverter in Aktion aus, indem Sie ihn im unteren Bereich auswählen!
+Unsere Werkzeuge **Eno-Konverter** und **Chaptalisierungsmodul** nutzen diese Algorithmen für:
+1. Genaue Vorhersage des Zeitpunkts des Gärstopps.
+2. Berechnung der erforderlichen Zuckerzugabe zum Erreichen der Zielbalance.
+3. Schätzung des Gesamtextrakts des Mostes.
+
+Die Verwendung der bewährten Formeln von Troost in Kombination mit der Leistung moderner Berechnungen macht VinoFlow zu einem unverzichtbaren Werkzeug für den professionellen Winzer.
