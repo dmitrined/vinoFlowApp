@@ -28,8 +28,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 import { calcSRVerschnitt } from '@/lib/calculations';
 import FormulSRCalc from './FormulSRCalc';
-import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
-import SaveFeedback from '@/components/ui/SaveFeedback';
 
 const FormulSR_VerschnittCalc: React.FC = () => {
   const t = useTranslations('Calculators.sr-verschnitt');
@@ -87,15 +85,6 @@ const FormulSR_VerschnittCalc: React.FC = () => {
     };
   }, [values]);
 
-  // Авто-сохранение в историю через хук
-  const { showFeedback } = useHistoryAutoSave(
-    results ? {
-        type: 'sr-verschnitt',
-        result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.liter_SR),
-        unit: 'L'
-    } : null,
-    results?.liter_SR || 0
-  );
 
   return (
     <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
@@ -263,7 +252,6 @@ const FormulSR_VerschnittCalc: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <SaveFeedback show={showFeedback} />
     </div>
   );
 };

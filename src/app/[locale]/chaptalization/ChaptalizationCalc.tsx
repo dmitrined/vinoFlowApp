@@ -11,8 +11,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
 import { Beaker, AlertTriangle, History, ChevronsUpDown, Eye, EyeOff } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
-import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
-import SaveFeedback from '@/components/ui/SaveFeedback';
 import { calcChaptalization, EnologicalUnit, getTroostData } from '@/lib/calculations';
 import FormulChaptalizationMath from './FormulChaptalizationMath';
 
@@ -83,15 +81,7 @@ export default function ChaptalizationCalc() {
 
     const showWarning = (results.targetData?.alcVol || 0) - (results.currentData?.alcVol || 0) > 3.0; // Примерный порог 3% Vol
 
-    const { showFeedback } = useHistoryAutoSave(
-        {
-            type: 'chaptalization',
-            result: formattedResult,
-            unit: 'kg'
-        },
-        results.sugar > 0 ? results.sugar : null
-    );
-
+    
     // Получение локализованного отображения единиц измерения
     const getUnitDisplay = (u: EnologicalUnit) => {
         switch(u) {
@@ -379,7 +369,6 @@ export default function ChaptalizationCalc() {
                     </m.div>
                 )}
             </AnimatePresence>
-            <SaveFeedback show={showFeedback} />
         </div>
     );
 }

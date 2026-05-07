@@ -10,10 +10,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    # Задаем "заглушки" (mock secrets), чтобы проект собирался локально без доступа к реальной базе данных Turso
+    # Задаем "заглушки" (mock secrets), чтобы проект собирался локально
     env:
-      DATABASE_URL: "file:./dev.db"             # Фиктивная база для Prisma/LibSQL
-      JWT_SECRET: "mock_secret_for_ci_pipeline"   # Заглушка для аутентификации
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
 
     steps:
@@ -29,7 +27,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    # Prisma Client генерируется автоматически через postinstall скрипт в package.json
 
     - name: Run Linter (ESLint)
       run: npm run lint

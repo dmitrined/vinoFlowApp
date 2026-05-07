@@ -1,7 +1,7 @@
 {
   "name": "VinoFlow App",
   "short_name": "VinoFlow",
-  "description": "Your wine tracking application",
+  "description": "Professional oenology toolkit",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

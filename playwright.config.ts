@@ -82,9 +82,6 @@ export default defineConfig({
         reuseExistingServer: !process.env.CI,
         timeout: 180 * 1000,
         env: {
-            ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'test-password',
-            JWT_SECRET: process.env.JWT_SECRET || 'mock_secret_for_playwright',
-            DATABASE_URL: process.env.DATABASE_URL || '',
             CI: 'true',
         }
     },
