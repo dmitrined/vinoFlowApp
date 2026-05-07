@@ -51,7 +51,6 @@ export default function AcidManagementCalc() {
         return calcAcidManagement(v, c, target, agent);
     }, [volume, currentTa, targetTa, agent]);
 
-    const formattedResult = result > 0 ? result.toLocaleString(locale, { maximumFractionDigits: 1 }) : '0';
 
     
     return (

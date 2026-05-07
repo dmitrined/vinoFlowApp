@@ -72,7 +72,6 @@ export default function ChaptalizationCalc() {
         return null;
     }, [currentVal, targetVal, results.targetData, results.currentData, t]);
 
-    const formattedResult = results.sugar > 0 ? results.sugar.toLocaleString(locale, { maximumFractionDigits: 2 }) : '0';
 
     const getPositive = (val: number | undefined) => {
         if (val && val > 0) return val;

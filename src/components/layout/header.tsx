@@ -22,7 +22,6 @@ import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 
 export const Header = () => {
-  const t = useTranslations('Layout');
   const tTools = useTranslations('HomePage.tools');
   const pathname = usePathname();
   const router = useRouter();

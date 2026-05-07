@@ -8,8 +8,8 @@ test.describe('VinoFlow Calculator E2E', () => {
     await expect(page.locator('h1')).toContainText(/Vino/i);
     
     // Check if calculator cards are visible
-    await expect(page.getByText(/SO2 Rechner/i)).toBeVisible();
-    await expect(page.getByText(/Alcohol Converter/i)).toBeVisible();
+    await expect(page.getByText(/SO2 Calculator/i)).toBeVisible();
+    await expect(page.getByText(/Enological Converter/i)).toBeVisible();
   });
 
   test('should navigate to SO2 Rechner and perform a calculation', async ({ page }) => {

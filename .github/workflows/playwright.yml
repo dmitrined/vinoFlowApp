@@ -9,8 +9,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      JWT_SECRET: "mock_secret_for_playwright"
-      ADMIN_PASSWORD: "test-password"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
     steps:
     - uses: actions/checkout@v4

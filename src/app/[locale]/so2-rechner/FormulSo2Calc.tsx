@@ -41,7 +41,6 @@ const FormulSo2Calc: React.FC = () => {
     }, [volume, deltaSO2, productType, concentration]);
 
     const unit = productType === 'liquid' ? t('unit-ml') : t('unit-g');
-    const formattedResult = result > 0 ? result.toLocaleString(undefined, { maximumFractionDigits: 1 }) : '0';
 
     // Авто-сохранение в историю через хук (задержка 3с)
     
