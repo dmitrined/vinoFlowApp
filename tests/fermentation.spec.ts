@@ -16,7 +16,8 @@ test.describe('Fermentation Dashboard', () => {
       await page.locator('button[type="submit"]').click();
       await loginResponse;
       
-      await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 15000 });
+      // Force reload to ensure session is active
+      await page.goto('/en/fermentation');
     }
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });

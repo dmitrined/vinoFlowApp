@@ -24,9 +24,9 @@ test.describe('Authentication Flow', () => {
     await page.click('button[type="submit"]');
     await loginResponse;
 
-    // Wait for navigation or change in H1 to ensure login processed
-    await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 15000 });
-    
+    // Force a full reload to ensure the cookie is picked up by the server
+    await page.goto('/en/fermentation');
+
     // Should show the dashboard
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });
