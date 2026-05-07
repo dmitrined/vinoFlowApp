@@ -20,10 +20,8 @@ import NextImage from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
-import { CloudIndicator } from '@/components/CloudIndicator';
 
 export const Header = () => {
-  const t = useTranslations('Layout');
   const tTools = useTranslations('HomePage.tools');
   const pathname = usePathname();
   const router = useRouter();
@@ -64,11 +62,6 @@ export const Header = () => {
           <Link href="/" className={`text-sm font-bold ${pathname === '/' ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
             Dashboard
           </Link>
-          <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
-          <Link href="/fermentation" className={`text-sm font-bold ${pathname.includes('fermentation') ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
-            {t('fermentation')}
-          </Link>
-          <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
           <Dropdown placement="bottom-start" classNames={{ content: "min-w-[220px]" }}>
             <DropdownTrigger>
               <button className={`flex items-center gap-1 text-sm font-bold ${['rechner', 'umrechner', 'verschnitt', 'acid-management', 'chaptalization'].some(p => pathname.includes(p)) ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors outline-none cursor-pointer`}>
@@ -104,11 +97,6 @@ export const Header = () => {
               </button>
             ))}
           </div>
-          {pathname.includes('fermentation') && (
-            <div className="flex ml-1 relative">
-              <CloudIndicator />
-            </div>
-          )}
         </NavbarContent>
       </Navbar>
     </div>

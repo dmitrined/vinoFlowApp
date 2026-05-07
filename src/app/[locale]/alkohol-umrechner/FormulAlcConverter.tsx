@@ -12,7 +12,6 @@ import { RefreshCcw, Droplets, Wine, Beaker, FlaskConical, Info, type LucideIcon
 import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 import { getTroostData, EnologicalUnit } from '@/lib/calculations';
-import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 
 const MustAnalyzer = () => {
     const t = useTranslations('Calculators.alkohol');
@@ -34,15 +33,6 @@ const MustAnalyzer = () => {
         return getTroostData(val, activeUnit);
     }, [activeValue, activeUnit]);
 
-    // Автоматическое сохранение в историю при наличии значения
-    useHistoryAutoSave(
-        {
-            type: 'alkohol',
-            result: activeValue,
-            unit: activeUnit === 'alcVol' ? '% Vol' : activeUnit === 'alcGl' ? 'g/L Alc' : activeUnit === 'sugar' ? 'g/L Sugar' : '°Oe'
-        },
-        activeValue && parseFloat(activeValue) > 0 ? activeValue : null
-    );
 
     const format = (val: number, unit: EnologicalUnit) => {
         return val.toLocaleString(locale, { 

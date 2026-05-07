@@ -10,11 +10,9 @@ import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardBody, Input, Button } from "@heroui/react";
 import { Info, Eye, EyeOff, Zap, Wine } from "lucide-react";
 import ProductTypeSelector from '@/components/ui/ProductTypeSelector';
-import SaveFeedback from '@/components/ui/SaveFeedback';
 import { calcSO2Addition, WINE_CONSTANTS } from '@/lib/calculations';
 import { m, AnimatePresence } from "framer-motion";
 import FormulSo2Math from './FormulSo2Math';
-import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
 import { ProductType } from '@/types/calculations';
 
 const FormulSo2Calc: React.FC = () => {
@@ -43,18 +41,9 @@ const FormulSo2Calc: React.FC = () => {
     }, [volume, deltaSO2, productType, concentration]);
 
     const unit = productType === 'liquid' ? t('unit-ml') : t('unit-g');
-    const formattedResult = result > 0 ? result.toLocaleString(undefined, { maximumFractionDigits: 1 }) : '0';
 
     // Авто-сохранение в историю через хук (задержка 3с)
-    const { showFeedback } = useHistoryAutoSave(
-        {
-            type: 'so2-calc',
-            result: formattedResult,
-            unit: unit
-        },
-        result > 0 ? result : null
-    );
-
+    
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6 px-4 py-12 flex flex-col items-center">
             <m.div
@@ -193,8 +182,6 @@ const FormulSo2Calc: React.FC = () => {
                     </m.div>
                 )}
             </AnimatePresence>
-
-            <SaveFeedback show={showFeedback} />
         </div>
     );
 };

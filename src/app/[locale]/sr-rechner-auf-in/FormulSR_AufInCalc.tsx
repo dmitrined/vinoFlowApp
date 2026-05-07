@@ -29,8 +29,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 import { calcSR_Auf, calcSR_In } from "@/lib/calculations";
 import FormulPercentSRCalc from "./FormulPercentSRCalc";
-import { useHistoryAutoSave } from "@/hooks/useHistoryAutoSave";
-import SaveFeedback from "@/components/ui/SaveFeedback";
 
 interface ResultCardProps {
   label: string;
@@ -57,15 +55,6 @@ const FormulSR_AufInCalc = () => {
   const resultAuf = useMemo(() => (areInputsValid ? calcSR_Auf(P, L) : 0), [P, L, areInputsValid]);
   const resultIn = useMemo(() => (areInputsValid ? calcSR_In(P, L) : 0), [P, L, areInputsValid]);
 
-  // Авто-сохранение в историю через хук
-  const { showFeedback } = useHistoryAutoSave(
-    {
-      type: 'sr-rechner',
-      result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(resultAuf),
-      unit: 'L'
-    },
-    resultAuf > 0 ? resultAuf : null
-  );
 
   const ResultCard = ({ label, value, description, color }: ResultCardProps) => {
     return (
@@ -212,7 +201,6 @@ const FormulSR_AufInCalc = () => {
         )}
       </AnimatePresence>
 
-      <SaveFeedback show={showFeedback} />
     </div>
   );
 };

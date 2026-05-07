@@ -39,7 +39,6 @@ export const BottomHeader = () => {
     { label: tTools('so2-rechner'), path: '/so2-rechner', icon: <FlaskConical size={20} /> },
     { label: tTools('acid-management'), path: '/acid-management', icon: <Droplet size={20} /> },
     { label: tTools('chaptalization'), path: '/chaptalization', icon: <Activity size={20} /> },
-    { label: t('fermentation'), path: '/fermentation', icon: <Activity size={20} /> },
   ];
 
   return (
@@ -109,21 +108,6 @@ export const BottomHeader = () => {
             >
               <Home size={22} />
               <span className="text-[8px] font-black uppercase tracking-widest">{t('menu.home')}</span>
-            </Button>
-
-            {/* Брожение */}
-            <Button
-              isIconOnly
-              variant="light"
-              radius="full"
-              className={`flex flex-col gap-0.5 h-14 w-full min-w-0 transition-all ${pathname.includes('fermentation') && !isOpen ? 'text-brand-600 scale-110' : 'text-zinc-400'}`}
-              onPress={() => {
-                router.push('/fermentation');
-                setIsOpen(false);
-              }}
-            >
-              <Activity size={22} />
-              <span className="text-[8px] font-black uppercase tracking-widest">{t('fermentation')}</span>
             </Button>
 
             {/* Центральный разделитель или экшн */}

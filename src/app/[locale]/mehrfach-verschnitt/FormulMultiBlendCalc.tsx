@@ -29,8 +29,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence, LayoutGroup } from "framer-motion";
 import { calcMultiBlended } from '@/lib/calculations';
 import FormulMultiCalc from './FormulMultiCalc';
-import { useHistoryAutoSave } from '@/hooks/useHistoryAutoSave';
-import SaveFeedback from '@/components/ui/SaveFeedback';
 
 interface WineEntry {
   liter: string;
@@ -85,22 +83,6 @@ const FormulMultiBlendCalc: React.FC = () => {
     };
   }, [wines]);
 
-  // Авто-сохранение в историю через хук
-  const { showFeedback } = useHistoryAutoSave(
-    [
-        results.avgSugar > 0 ? {
-            type: 'mehrfach',
-            result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgSugar),
-            unit: 'g/l SR'
-        } : null,
-        results.avgAlcohol > 0 ? {
-            type: 'mehrfach',
-            result: new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(results.avgAlcohol),
-            unit: 'g/l Alc'
-        } : null
-    ],
-    results.totalLiters > 0
-  );
 
   return (
     <div className="min-h-screen p-4 sm:p-8 flex flex-col items-center py-12">
@@ -319,7 +301,6 @@ const FormulMultiBlendCalc: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <SaveFeedback show={showFeedback} />
     </div>
   );
 };

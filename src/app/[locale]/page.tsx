@@ -22,7 +22,6 @@ import {
     FlaskConical,
     Activity
 } from "lucide-react";
-import { RecentCalculations } from "@/components/layout/RecentCalculations";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -145,8 +144,6 @@ export default function Home() {
                 </div>
             </m.section>
 
-            {/* Dashboard / History */}
-            <RecentCalculations />
 
             {/* Bento Grid Tools */}
             <div id="tools-section" className="mb-8 flex items-center gap-2 px-2">
