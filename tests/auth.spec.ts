@@ -24,8 +24,8 @@ test.describe('Authentication Flow', () => {
     await page.click('button[type="submit"]');
     await loginResponse;
 
-    // Force a full reload to ensure the cookie is picked up by the server
-    await page.goto('/en/fermentation');
+    // Wait for navigation to complete (Next.js router.refresh or redirect)
+    await page.waitForURL('**/fermentation', { timeout: 15000 });
 
     // Should show the dashboard
     await expect(page.locator('h1')).toContainText(/Fermentation/i);

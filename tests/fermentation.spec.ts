@@ -16,8 +16,8 @@ test.describe('Fermentation Dashboard', () => {
       await page.locator('button[type="submit"]').click();
       await loginResponse;
       
-      // Force reload to ensure session is active
-      await page.goto('/en/fermentation');
+      // Wait for session to be recognized and page to update
+      await page.waitForURL('**/fermentation', { timeout: 15000 });
     }
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });
