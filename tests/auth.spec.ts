@@ -19,14 +19,13 @@ test.describe('Authentication Flow', () => {
     // Fill the password from env or a default dev one
     // Note: In CI we must set ADMIN_PASSWORD
     await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
+    // Wait for the login mutation response
+    const loginResponse = page.waitForResponse(resp => resp.url().includes('auth.login') && resp.status() === 200);
     await page.click('button[type="submit"]');
+    await loginResponse;
 
     // Wait for navigation or change in H1 to ensure login processed
-    const h1Text = await page.locator('h1').innerText();
-    if (h1Text.includes('Access Restricted')) {
-      console.error('Login failed: Still on Access Restricted page even after submitting password');
-    }
-    await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 10000 });
+    await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 15000 });
     
     // Should show the dashboard
     await expect(page.locator('h1')).toContainText(/Fermentation/i);

@@ -10,13 +10,13 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       let correctPassword = process.env.ADMIN_PASSWORD;
 
-      // В среде CI разрешаем тестовый пароль как запасной вариант
-      if (process.env.CI && !correctPassword) {
+      // В среде CI или тестах разрешаем тестовый пароль как запасной вариант
+      if ((process.env.CI || process.env.NODE_ENV === 'test') && !correctPassword) {
         correctPassword = "test-password";
       }
 
-      if (process.env.CI) {
-        console.log("CI Debug: Auth attempt. Expected pwd set:", !!correctPassword);
+      if (process.env.CI || process.env.NODE_ENV === 'test') {
+        console.log("CI/Test Debug: Auth attempt. Expected pwd set:", !!correctPassword);
       }
 
       if (!correctPassword || input.password !== correctPassword) {

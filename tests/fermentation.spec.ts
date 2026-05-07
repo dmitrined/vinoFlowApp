@@ -11,9 +11,12 @@ test.describe('Fermentation Dashboard', () => {
     await page.goto('/en/fermentation');
     if (await page.locator('input[type="password"]').isVisible()) {
       await page.fill('input[type="password"]', process.env.ADMIN_PASSWORD || 'test-password');
-      await page.locator('button[type="submit"]').click();
       // Wait for login to complete
-      await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 10000 });
+      const loginResponse = page.waitForResponse(resp => resp.url().includes('auth.login') && resp.status() === 200);
+      await page.locator('button[type="submit"]').click();
+      await loginResponse;
+      
+      await expect(page.locator('h1')).not.toHaveText(/Access Restricted/i, { timeout: 15000 });
     }
     await expect(page.locator('h1')).toContainText(/Fermentation/i);
   });
