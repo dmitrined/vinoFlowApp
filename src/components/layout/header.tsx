@@ -22,6 +22,7 @@ import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 
 export const Header = () => {
+  const tMenu = useTranslations('Layout.menu');
   const tTools = useTranslations('HomePage.tools');
   const pathname = usePathname();
   const router = useRouter();
@@ -60,12 +61,12 @@ export const Header = () => {
         <NavbarContent className="hidden lg:flex gap-8" justify="center">
           {/* Навигация в SaaS стиле */}
           <Link href="/" className={`text-sm font-bold ${pathname === '/' ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors`}>
-            Dashboard
+            {tMenu('dashboard')}
           </Link>
           <Dropdown placement="bottom-start" classNames={{ content: "min-w-[220px]" }}>
             <DropdownTrigger>
               <button className={`flex items-center gap-1 text-sm font-bold ${['rechner', 'umrechner', 'verschnitt', 'acid-management', 'chaptalization'].some(p => pathname.includes(p)) ? "text-brand-600" : "text-zinc-500 hover:text-brand-600"} transition-colors outline-none cursor-pointer`}>
-                Tools
+                {tMenu('tools')}
                 <ChevronDown size={14} className="opacity-70" />
               </button>
             </DropdownTrigger>

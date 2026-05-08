@@ -10,6 +10,7 @@ import { Providers } from "../providers";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { BottomHeader } from "@/components/layout/BottomHeader";
+import { CookieConsent } from "@/components/ui/CookieConsent";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         openGraph: {
             title: t('title'),
             description: t('description'),
-            url: "https://vinoflow.app",
+            url: process.env.NEXT_PUBLIC_APP_URL || "https://vinoflow.app",
             siteName: t('title'),
             locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_US' : 'de_DE',
             type: "website",
@@ -76,6 +77,7 @@ export default async function LocaleLayout({
                 </main>
                 <BottomHeader />
                 <Footer />
+                <CookieConsent />
             </Providers>
         </NextIntlClientProvider>
     );

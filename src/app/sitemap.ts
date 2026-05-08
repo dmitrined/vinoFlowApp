@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
 import { getDocs } from '@/lib/mdx';
 
-// Fallback to localhost if NEXT_PUBLIC_BASE_URL is not set
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://vinoflow.app';
+// Fallback to localhost if NEXT_PUBLIC_APP_URL is not set
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vinoflow.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes = [
