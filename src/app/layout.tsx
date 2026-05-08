@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export default function RootLayout({
     children,
 }: {
@@ -25,6 +28,8 @@ export default function RootLayout({
         <html lang="ru" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 {children}
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );

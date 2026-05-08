@@ -9,6 +9,8 @@
         },
         "menu": {
             "home": "Home",
+            "dashboard": "Dashboard",
+            "tools": "Tools",
             "more": "More",
             "sr-rechner": "Sweetening",
             "alkohol": "Eno-Converter",
@@ -254,6 +256,13 @@
         "external": {
             "title": "External Links",
             "content": "The application may contain links to third-party resources. We do not control and are not responsible for the content or privacy policies of these sites."
+        },
+        "cookies": {
+            "title": "Cookie Policy",
+            "description": "We use cookies to analyze traffic and improve your experience. We do not collect personal data.",
+            "accept": "Accept",
+            "decline": "Decline",
+            "more": "Learn more"
         }
     },
     "Impressum": {

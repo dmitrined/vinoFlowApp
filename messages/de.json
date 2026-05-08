@@ -9,6 +9,8 @@
         },
         "menu": {
             "home": "Home",
+            "dashboard": "Dashboard",
+            "tools": "Tools",
             "more": "Mehr",
             "sr-rechner": "Süßreserve",
             "alkohol": "Eno-Konverter",
@@ -254,6 +256,13 @@
         "external": {
             "title": "Externe Links",
             "content": "Die Anwendung kann Links zu Ressourcen Dritter enthalten. Wir kontrollieren und übernehmen keine Verantwortung für den Inhalt oder die Datenschutzrichtlinien dieser Websites."
+        },
+        "cookies": {
+            "title": "Cookie-Richtlinie",
+            "description": "Wir verwenden Cookies, um den Datenverkehr zu analysieren und Ihr Erlebnis zu verbessern. Wir sammeln keine persönlichen Daten.",
+            "accept": "Akzeptieren",
+            "decline": "Ablehnen",
+            "more": "Mehr erfahren"
         }
     },
     "Impressum": {
