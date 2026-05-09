@@ -12,7 +12,7 @@
             "dashboard": "Dashboard",
             "tools": "Tools",
             "more": "More",
-            "sr-rechner": "Sweetening",
+            "sr-rechner": "Dosage Master %",
             "alkohol": "Eno-Converter",
             "sr-verschnitt": "Sweetening Blend",
             "mehrfach": "Multi Blending",
@@ -24,6 +24,7 @@
             "rights": "© 2026 VinoFlow Oenology Hub. All rights reserved.",
             "impressum": "Legal Disclosure",
             "legal": "Legal Notice",
+            "how-to-install": "How to Install",
             "slogan": "Precision Oenology Hub",
             "version": "v1.2.0-stable"
         }
@@ -46,7 +47,7 @@
         "tools-heading": "Enological Tools",
         "tool-label": "Tool",
         "tools": {
-            "sr-rechner": "Sweetening Calc",
+            "sr-rechner": "Dosage Master %",
             "sr-rechner-desc": "Calculate additions of Süßreserve, concentrate or sulphured must.",
             "alkohol": "Enological Converter",
             "alkohol-desc": "High-precision conversion of wine and must parameters using Troost table.",
@@ -89,12 +90,15 @@
             "range": "Target must be between wine and sugar"
         },
         "sr-rechner": {
-            "title": "Sweetening Calc",
-            "subtitle": "Precise calculation of Süßreserve additions",
-            "seo-title": "Sweetener Calculator (SR) | VinoFlow",
-            "seo-description": "Determine required volume of sweet reserve to achieve desired wine sweetness.",
-            "input-sr": "% Sugar (Sweetener)",
-            "input-liter": "Wine Volume (Base)",
+            "title": "Dosage Master %",
+            "subtitle": "High-precision calculation of component additions",
+            "seo-title": "Dosage Master % (On/In Volume) | VinoFlow",
+            "seo-description": "Professional calculation of sugar, concentrate or must dosage to achieve the target.",
+            "input-sr": "% Addition",
+            "input-liter": "Volume (Base)",
+            "mode-select": "Calculation Mode:",
+            "result-add": "Required Addition",
+            "result-total": "Total Volume",
             "auf": "% on volume",
             "auf-desc": "Addition calculated from base wine volume.",
             "in": "% in volume",
@@ -180,7 +184,11 @@
             "input-liquid-conc": "Concentration (g/l)",
             "gas": "Gas",
             "powder": "Potassium Metabisulfite (50%)",
+            "powder-line1": "Potassium",
+            "powder-line2": "MB (50%)",
             "liquid": "Liquid SO2",
+            "liquid-line1": "Liquid",
+            "liquid-line2": "SO2",
             "result": "Required Amount",
             "unit-g": "grams",
             "unit-ml": "ml",
@@ -259,10 +267,14 @@
         },
         "cookies": {
             "title": "Cookie Policy",
-            "description": "We use cookies to analyze traffic and improve your experience. We do not collect personal data.",
+            "description": "We use minimal cookies for application stability. We do not collect personal data or use ad targeting.",
             "accept": "Accept",
             "decline": "Decline",
             "more": "Learn more"
+        },
+        "privacy": {
+            "title": "Privacy",
+            "content": "Your privacy is our priority. VinoFlow does not collect personal data. There are no user accounts and no cloud storage for your calculations. All data is stored locally on your device (LocalStorage). We have no access to your winemaking data."
         }
     },
     "Impressum": {
@@ -276,5 +288,23 @@
         "placeholder-address": "Germany, Esslingen",
         "placeholder-email": "support@vinoflow.app",
         "disclaimer-note": "This information is provided in accordance with § 5 TMG (Telemediengesetz) for the German market. VinoFlow is a professional oenological platform dedicated to precision winemaking."
+    },
+    "Pwa": {
+        "title": "How to Install",
+        "subtitle": "Installation instructions for the app",
+        "platform-select": "Select your device:",
+        "instructions-title": "Installation for {platform}",
+        "platforms": {
+            "ios": "iPhone / iPad",
+            "android": "Android",
+            "windows": "Windows PC",
+            "mac": "Apple Mac"
+        },
+        "instructions": {
+            "ios": "1. Open the site in Safari\n2. Tap the 'Share' icon (square with arrow)\n3. Select 'Add to Home Screen'",
+            "android": "1. Tap the three dots in the browser corner\n2. Select 'Install app'",
+            "windows": "1. Click the 'Install' icon on the right side of the address bar\n2. Confirm the installation",
+            "mac": "1. In Chrome or Edge, click the installation icon in the address bar\n2. The app will appear in your Dock"
+        }
     }
 }

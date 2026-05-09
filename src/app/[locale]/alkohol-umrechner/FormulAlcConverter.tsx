@@ -66,7 +66,7 @@ const MustAnalyzer = () => {
                     >
                         <RefreshCcw size={40} />
                     </m.div>
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tight text-tech-gradient uppercase italic">
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-tech-gradient uppercase italic leading-tight">
                         {t('title')}
                     </h1>
                     <p className="max-w-md text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
@@ -88,23 +88,25 @@ const MustAnalyzer = () => {
                                 classNames={{
                                     tabList: "gap-1 sm:gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-3xl border-none",
                                     cursor: "bg-white dark:bg-zinc-700 shadow-xl rounded-[1.25rem]",
-                                    tab: "px-3 sm:px-5 h-11 sm:h-12",
-                                    tabContent: "font-black uppercase tracking-wider text-[11px] sm:text-xs"
+                                    tab: "px-2 sm:px-5 h-11 sm:h-12",
+                                    tabContent: "font-black uppercase tracking-wider text-[10px] sm:text-xs"
                                 }}
                             >
-                                {units.map((u) => (
-                                    <Tab 
-                                        key={u.key} 
-                                        title={
-                                            <div className="flex items-center gap-2">
-                                                <u.icon size={18} className={activeUnit === u.key ? u.color : 'text-zinc-400 group-hover:text-zinc-500'} />
-                                                <span className={activeUnit === u.key ? 'text-zinc-900 dark:text-white' : 'text-zinc-400'}>
-                                                    {u.key === 'alcVol' ? '% Vol' : u.key === 'alcGl' ? 'g/L Alc' : u.key === 'sugar' ? 'g/L Sugar' : '°Oe'}
-                                                </span>
-                                            </div>
-                                        }
-                                    />
-                                ))}
+                            {units.map((u) => (
+                                <Tab 
+                                    key={u.key} 
+                                    title={
+                                        <div className="flex items-center justify-center">
+                                            <span className={`hidden sm:inline ${activeUnit === u.key ? 'text-zinc-900 dark:text-white' : 'text-zinc-400'}`}>
+                                                {u.key === 'alcVol' ? '% Vol' : u.key === 'alcGl' ? 'g/L Alc' : u.key === 'sugar' ? 'g/L Sugar' : '°Oe'}
+                                            </span>
+                                            <span className={`sm:hidden ${activeUnit === u.key ? 'text-zinc-900 dark:text-white' : 'text-zinc-400'}`}>
+                                                {u.key === 'alcVol' ? '% Vol' : u.key === 'alcGl' ? 'g/L Alc' : u.key === 'sugar' ? 'Sugar' : '°Oe'}
+                                            </span>
+                                        </div>
+                                    }
+                                />
+                            ))}
                             </Tabs>
 
                             {/* Large Input Area */}

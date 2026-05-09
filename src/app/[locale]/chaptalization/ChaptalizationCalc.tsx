@@ -102,15 +102,15 @@ export default function ChaptalizationCalc() {
                 className="w-full"
             >
                 <Card className="bento-card border-none shadow-none">
-                    <CardHeader className="flex gap-5 p-8 pb-4">
-                        <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
-                            <Beaker size={32} />
+                    <CardHeader className="flex gap-3 sm:gap-5 p-4 sm:p-8">
+                        <div className="p-3 sm:p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20 shrink-0">
+                            <Beaker size={24} className="sm:w-8 sm:h-8" />
                         </div>
-                        <div className="flex flex-col text-left flex-1">
-                            <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">{t('title')}</h1>
-                            <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">{t('subtitle')}</p>
+                        <div className="flex flex-col text-left flex-1 min-w-0">
+                            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-tech-gradient uppercase italic leading-tight">{t('title')}</h1>
+                            <p className="text-[10px] sm:text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">{t('subtitle')}</p>
                         </div>
-                        <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-700/50">
+                        <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-700/50">
                             <History size={16} className="text-zinc-400" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{t('history')}</span>
                         </div>

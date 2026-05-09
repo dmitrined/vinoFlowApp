@@ -92,15 +92,15 @@ const FormulMultiBlendCalc: React.FC = () => {
         className="w-full max-w-5xl"
       >
         <Card className="bento-card border-none shadow-none mb-8">
-          <CardHeader className="flex gap-5 p-8 sm:p-10">
-            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
-              <Layers size={32} />
+          <CardHeader className="flex gap-3 sm:gap-5 p-4 sm:p-10">
+            <div className="p-2 sm:p-4 bg-brand-600 text-white rounded-xl sm:rounded-2xl shadow-xl shadow-brand-500/20 shrink-0">
+              <Layers size={24} className="sm:w-8 sm:h-8" />
             </div>
-            <div className="flex flex-col text-left">
-              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+            <div className="flex flex-col text-left min-w-0 justify-center">
+              <h1 className="text-xl sm:text-3xl font-black tracking-tight text-tech-gradient uppercase italic leading-tight">
                 {t('title')}
               </h1>
-              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+              <p className="text-[9px] sm:text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60 leading-tight mt-0.5">
                 {t('subtitle')}
               </p>
             </div>

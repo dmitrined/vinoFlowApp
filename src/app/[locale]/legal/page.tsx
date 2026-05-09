@@ -5,7 +5,7 @@
  */
 
 import { getTranslations } from 'next-intl/server';
-import { ShieldAlert, ExternalLink, ArrowLeft } from 'lucide-react';
+import { ShieldAlert, ExternalLink, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 
 export default async function LegalPage({
@@ -18,6 +18,14 @@ export default async function LegalPage({
     const tCommon = await getTranslations('Layout');
 
     const sections = [
+        {
+            id: 'privacy',
+            icon: <ShieldCheck className="w-6 h-6 text-emerald-500" />,
+            title: t('privacy.title'),
+            content: t('privacy.content'),
+            bg: 'bg-emerald-50',
+            border: 'border-emerald-100'
+        },
         {
             id: 'disclaimer',
             icon: <ShieldAlert className="w-6 h-6 text-orange-500" />,

@@ -94,16 +94,16 @@ const FormulSR_VerschnittCalc: React.FC = () => {
         className="w-full max-w-2xl"
       >
         <Card className="bento-card border-none shadow-none mb-8">
-          <CardHeader className="flex gap-5 p-8 sm:p-10">
-            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
-              <Cpu size={32} />
+          <CardHeader className="flex gap-3 sm:gap-5 p-4 sm:p-8">
+            <div className="p-3 sm:p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20 shrink-0">
+              <Cpu size={24} className="sm:w-8 sm:h-8" />
             </div>
-            <div className="flex flex-col text-left">
-              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+            <div className="flex flex-col text-left min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-tech-gradient uppercase italic leading-tight">
                 {t('title')}
               </h1>
-              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
-                Professional Blend Optimization
+              <p className="text-[10px] sm:text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+                {t('subtitle')}
               </p>
             </div>
           </CardHeader>

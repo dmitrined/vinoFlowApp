@@ -12,7 +12,7 @@
             "dashboard": "Dashboard",
             "tools": "Tools",
             "more": "Mehr",
-            "sr-rechner": "Süßreserve",
+            "sr-rechner": "Dosierung Master %",
             "alkohol": "Eno-Konverter",
             "sr-verschnitt": "Süßreserve-Verschnitt",
             "mehrfach": "Multi-Verschnitt",
@@ -24,6 +24,7 @@
             "rights": "© 2026 VinoFlow Oenology Hub. Alle Rechte vorbehalten.",
             "impressum": "Impressum",
             "legal": "Rechtliche Hinweise",
+            "how-to-install": "App installieren",
             "slogan": "Präzisions-Önologie-Hub",
             "version": "v1.2.0-stable"
         }
@@ -46,7 +47,7 @@
         "tools-heading": "Önologische Werkzeuge",
         "tool-label": "Werkzeug",
         "tools": {
-            "sr-rechner": "Süßreserve-Rechner",
+            "sr-rechner": "Dosierung Master %",
             "sr-rechner-desc": "Berechnung der Zugabe von Süßreserve, RTK oder stummem Most.",
             "alkohol": "Önologischer Konverter",
             "alkohol-desc": "Hochpräzise Umrechnung von Wein- und Mostparametern nach der Troost-Tabelle.",
@@ -89,12 +90,15 @@
             "range": "Zielwert muss zwischen Wein und Zucker liegen"
         },
         "sr-rechner": {
-            "title": "Süßreserve-Rechner",
-            "subtitle": "Präzise Berechnung der Süßreserve-Zugabe",
-            "seo-title": "Süßreserve-Kalkulator (SR) | VinoFlow",
-            "seo-description": "Ermitteln Sie das benötigte Volumen der Süßreserve für die gewünschte Restsüße.",
-            "input-sr": "% Zucker (Süßreserve)",
-            "input-liter": "Wein-Volumen (Basis)",
+            "title": "Dosierung Master %",
+            "subtitle": "Hochpräzise Berechnung der Komponentenzugabe",
+            "seo-title": "Dosierung Master % (Auf/In Volumen) | VinoFlow",
+            "seo-description": "Professionelle Berechnung der Dosierung von Zucker, RTK oder Most zum Erreichen des Ziels.",
+            "input-sr": "% Zugabe",
+            "input-liter": "Volumen (Basis)",
+            "mode-select": "Berechnungsmodus:",
+            "result-add": "Benötigte Zugabe",
+            "result-total": "Gesamtvolumen",
             "auf": "% auf Volumen",
             "auf-desc": "Zugabe berechnet vom Basis-Weinvolumen.",
             "in": "% im Volumen",
@@ -180,7 +184,11 @@
             "input-liquid-conc": "Konzentration (g/l)",
             "gas": "Gas",
             "powder": "Kaliumdisulfit (50%)",
+            "powder-line1": "Kalium-",
+            "powder-line2": "disulfit",
             "liquid": "Flüssiges SO2",
+            "liquid-line1": "Flüssig",
+            "liquid-line2": "SO2",
             "result": "Benötigte Menge",
             "unit-g": "Gramm",
             "unit-ml": "ml",
@@ -259,10 +267,14 @@
         },
         "cookies": {
             "title": "Cookie-Richtlinie",
-            "description": "Wir verwenden Cookies, um den Datenverkehr zu analysieren und Ihr Erlebnis zu verbessern. Wir sammeln keine persönlichen Daten.",
+            "description": "Wir verwenden minimale Cookies für die Stabilität der Anwendung. Wir sammeln keine personenbezogenen Daten und nutzen kein Werbe-Targeting.",
             "accept": "Akzeptieren",
             "decline": "Ablehnen",
             "more": "Mehr erfahren"
+        },
+        "privacy": {
+            "title": "Datenschutz",
+            "content": "Ihre Privatsphäre ist uns wichtig. VinoFlow sammelt keine personenbezogenen Daten. Es gibt keine Benutzerkonten und keine Cloud-Speicherung Ihrer Berechnungen. Alle Daten werden lokal auf Ihrem Gerät (LocalStorage) gespeichert. Wir haben keinen Zugriff auf Ihre önologischen Daten."
         }
     },
     "Impressum": {
@@ -276,5 +288,23 @@
         "placeholder-address": "Deutschland, Esslingen",
         "placeholder-email": "support@vinoflow.app",
         "disclaimer-note": "Diese Informationen werden gemäß § 5 TMG (Telemediengesetz) für den deutschen Markt bereitgestellt. VinoFlow ist eine professionelle önologische Plattform, die sich der Präzisions-Weinbereitung widmet."
+    },
+    "Pwa": {
+        "title": "App installieren",
+        "subtitle": "Installationsanleitung für die App",
+        "platform-select": "Wählen Sie Ihr Gerät:",
+        "instructions-title": "Installation für {platform}",
+        "platforms": {
+            "ios": "iPhone / iPad",
+            "android": "Android",
+            "windows": "Windows PC",
+            "mac": "Apple Mac"
+        },
+        "instructions": {
+            "ios": "1. Website in Safari öffnen\n2. Auf das „Teilen“-Icon (Quadrat mit Pfeil) tippen\n3. „Zum Home-Bildschirm“ wählen",
+            "android": "1. Auf die drei Punkte im Browser tippen\n2. „App installieren“ wählen",
+            "windows": "1. Auf das Installations-Icon rechts in der Adressleiste klicken\n2. Installation bestätigen",
+            "mac": "1. Im Chrome- oder Edge-Browser auf das Installations-Icon in der Adressleiste klicken\n2. Die App erscheint im Dock"
+        }
     }
 }

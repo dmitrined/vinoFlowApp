@@ -24,12 +24,17 @@ import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
 
-export const BottomHeader = () => {
+export const BottomHeader = React.memo(() => {
   const t = useTranslations('Layout');
   const tTools = useTranslations('HomePage.tools');
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     { label: tTools('sr-rechner'), path: '/sr-rechner-auf-in', icon: <Calculator size={20} /> },
@@ -40,6 +45,8 @@ export const BottomHeader = () => {
     { label: tTools('acid-management'), path: '/acid-management', icon: <Droplet size={20} /> },
     { label: tTools('chaptalization'), path: '/chaptalization', icon: <Activity size={20} /> },
   ];
+
+  if (!mounted) return null;
 
   return (
     <>
@@ -59,12 +66,14 @@ export const BottomHeader = () => {
         <div className="w-full relative pointer-events-auto">
           
           {/* Меню инструментов - SaaS Floating Panel */}
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {isOpen && (
               <m.div
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                key="bottom-menu"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 className="absolute bottom-16 left-0 right-0 glass-modern p-3 shadow-2xl z-[1000] border-brand-500/10 mb-0 neon-glow bg-white dark:bg-zinc-900"
               >
                 <div className="flex flex-col gap-1">
@@ -72,8 +81,8 @@ export const BottomHeader = () => {
                     <button
                       key={item.path}
                       onClick={() => {
-                        router.push(item.path);
                         setIsOpen(false);
+                        router.push(item.path);
                       }}
                       className={`flex items-center gap-4 p-3.5 rounded-[1.5rem] transition-all active:scale-[0.97] ${
                         pathname === item.path 
@@ -93,7 +102,10 @@ export const BottomHeader = () => {
           </AnimatePresence>
 
           {/* Основная панель навигации - Clean Tech Glass */}
-          <div className="glass-modern rounded-none flex justify-around items-center p-2 shadow-2xl relative z-[1001] border-none border-t border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95">
+          <m.div 
+            layout
+            className="glass-modern rounded-none flex justify-around items-center p-2 shadow-2xl relative z-[1001] border-none border-t border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95"
+          >
             
             {/* Главная */}
             <Button
@@ -102,8 +114,8 @@ export const BottomHeader = () => {
               radius="full"
               className={`flex flex-col gap-0.5 h-14 w-full min-w-0 transition-all ${pathname === '/' && !isOpen ? 'text-brand-600 scale-110' : 'text-zinc-400'}`}
               onPress={() => {
-                router.push('/');
                 setIsOpen(false);
+                router.push('/');
               }}
             >
               <Home size={22} />
@@ -137,9 +149,11 @@ export const BottomHeader = () => {
               </div>
             </Button>
 
-          </div>
+          </m.div>
         </div>
       </div>
     </>
   );
-};
+});
+
+BottomHeader.displayName = 'BottomHeader';

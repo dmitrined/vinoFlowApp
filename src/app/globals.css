@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Глобальные стили приложения и конфигурация дизайн-системы
+ * ЗАВИСИМОСТИ: tailwindcss v4, tailwind.config.ts
+ * ОСОБЕННОСТИ: Использование слоев Tailwind 4, кастомные Saas-утилиты, поддержка темной темы
+ */
+
 @import "tailwindcss";
 @config "../../tailwind.config.ts";
 
@@ -22,8 +28,7 @@ html {
 }
 
 /* 
- * Custom Utility Classes for Tech UI
- * Using standard CSS to avoid Tailwind 4 @apply lookup errors
+ * КАСТОМНЫЕ УТИЛИТЫ (Дизайн-система VinoFlow)
  */
 
 .glass-modern {
@@ -52,6 +57,7 @@ html {
   transform: scale(0.97);
 }
 
+/* Градиент для текста (логотип и акценты) */
 .text-tech-gradient {
   background: linear-gradient(135deg, #6453e9 0%, #312e81 100%);
   -webkit-background-clip: text;
@@ -66,6 +72,7 @@ html {
   background-clip: text;
 }
 
+/* Карточки в стиле Bento */
 .bento-card {
   border-radius: 2rem;
   padding: 1.5rem;
@@ -93,4 +100,13 @@ html {
 
 .dark .neon-glow {
   box-shadow: 0 0 30px rgba(100, 83, 233, 0.15);
+}
+
+/* Скрытие скроллбара */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
