@@ -1,7 +1,7 @@
 /**
- * НАЗНАЧЕНИЕ: Редактор Süßreserve (SR) - расчеты "на" и "в" в стиле Tech SaaS
+ * НАЗНАЧЕНИЕ: Мастер дозировки % (Dosage Master %) — расчет внесения компонентов
  * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl, framer-motion, @/lib/calculations
- * ОСОБЕННОСТИ: i18n, Mobile-first, Tech UI дизайн.
+ * ОСОБЕННОСТИ: Выбор режима (На/В объеме), расчет общего объема, Mobile-first дизайн
  */
 
 'use client';
@@ -13,7 +13,9 @@ import {
   CardHeader,
   Input,
   Button,
-  Tooltip
+  Tooltip,
+  Tabs,
+  Tab
 } from "@heroui/react";
 import {
   Percent,
@@ -23,7 +25,8 @@ import {
   Info,
   ArrowRightLeft,
   Zap,
-  Cpu
+  Cpu,
+  Plus
 } from "lucide-react";
 import { useTranslations, useLocale } from 'next-intl';
 import { m, AnimatePresence } from "framer-motion";
@@ -35,6 +38,7 @@ interface ResultCardProps {
   value: number;
   description: string;
   color: 'primary' | 'secondary';
+  icon?: React.ReactNode;
 }
 
 const FormulSR_AufInCalc = () => {
@@ -42,21 +46,28 @@ const FormulSR_AufInCalc = () => {
   const commonT = useTranslations('Calculators');
   const locale = useLocale();
 
-  const [percentSR, setPercentSR] = useState("");
-  const [literWein, setLiterWein] = useState("");
+  const [mode, setMode] = useState<string>("auf");
+  const [percentValue, setPercentValue] = useState("");
+  const [baseVolume, setBaseVolume] = useState("");
   const [showFormula, setShowFormula] = useState(false);
 
   // Парсинг (заменяем запятую на точку для расчетов)
-  const P = parseFloat(percentSR.replace(",", "."));
-  const L = parseFloat(literWein.replace(",", "."));
+  const P = parseFloat(percentValue.replace(",", "."));
+  const L = parseFloat(baseVolume.replace(",", "."));
 
   const areInputsValid = !isNaN(P) && !isNaN(L) && P >= 0 && L >= 0 && P < 100;
 
-  const resultAuf = useMemo(() => (areInputsValid ? calcSR_Auf(P, L) : 0), [P, L, areInputsValid]);
-  const resultIn = useMemo(() => (areInputsValid ? calcSR_In(P, L) : 0), [P, L, areInputsValid]);
+  const resultAdd = useMemo(() => {
+    if (!areInputsValid) return 0;
+    return mode === "auf" ? calcSR_Auf(P, L) : calcSR_In(P, L);
+  }, [P, L, mode, areInputsValid]);
 
+  const resultTotal = useMemo(() => {
+    if (!areInputsValid) return 0;
+    return L + resultAdd;
+  }, [L, resultAdd, areInputsValid]);
 
-  const ResultCard = ({ label, value, description, color }: ResultCardProps) => {
+  const ResultCard = ({ label, value, description, color, icon }: ResultCardProps) => {
     return (
       <Card
         className="border-none glass-modern shadow-none group overflow-hidden"
@@ -73,13 +84,13 @@ const FormulSR_AufInCalc = () => {
             </div>
             <div className="flex items-baseline gap-2">
               <span className={`text-3xl font-black tracking-tighter ${color === 'primary' ? 'text-brand-600 dark:text-brand-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                {value > 0 ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value) : new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(0)}
+                {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)}
               </span>
               <span className="text-sm font-black text-zinc-500 uppercase italic">L</span>
             </div>
           </div>
           <div className={`p-3 rounded-2xl transition-all group-hover:scale-110 ${color === 'primary' ? 'bg-brand-500/10 text-brand-600' : 'bg-indigo-500/10 text-indigo-600'}`}>
-            <ArrowRightLeft size={20} />
+            {icon || <ArrowRightLeft size={20} />}
           </div>
         </CardBody>
       </Card>
@@ -95,28 +106,53 @@ const FormulSR_AufInCalc = () => {
         className="w-full max-w-2xl"
       >
         <Card className="bento-card border-none shadow-none mb-8">
-          <CardHeader className="flex gap-5 p-8 sm:p-10">
-            <div className="p-4 bg-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/20">
-              <Cpu size={32} />
+          <CardHeader className="flex gap-3 sm:gap-5 p-4 sm:p-10">
+            <div className="p-2 sm:p-4 bg-brand-600 text-white rounded-xl sm:rounded-2xl shadow-xl shadow-brand-500/20 shrink-0">
+              <Cpu size={24} className="sm:w-8 sm:h-8" />
             </div>
-            <div className="flex flex-col text-left">
-              <h1 className="text-3xl font-black tracking-tight text-tech-gradient uppercase italic">
+            <div className="flex flex-col text-left min-w-0 justify-center">
+              <h1 className="text-xl sm:text-3xl font-black tracking-tight text-tech-gradient uppercase italic leading-tight">
                 {t('title')}
               </h1>
-              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60">
+              <p className="text-[9px] sm:text-sm text-zinc-500 font-bold uppercase tracking-widest opacity-60 leading-tight mt-0.5">
                 {t('subtitle')}
               </p>
             </div>
           </CardHeader>
 
           <CardBody className="p-8 sm:p-10 space-y-10 pt-0">
+            {/* Выбор режима */}
+            <div className="flex flex-col gap-4">
+              <span className="font-black uppercase text-[11px] tracking-widest text-zinc-400 px-1">
+                {t('mode-select')}
+              </span>
+              <Tabs 
+                aria-label="Mode selection" 
+                selectedKey={mode}
+                onSelectionChange={(key) => setMode(key as string)}
+                variant="light"
+                color="primary"
+                size="lg"
+                fullWidth
+                classNames={{
+                  tabList: "bg-zinc-100 dark:bg-zinc-800/50 p-1.5 rounded-[1.5rem]",
+                  cursor: "rounded-[1.2rem] shadow-xl",
+                  tab: "h-12",
+                  tabContent: "font-black uppercase tracking-widest text-[11px]"
+                }}
+              >
+                <Tab key="auf" title={t('auf')} />
+                <Tab key="in" title={t('in')} />
+              </Tabs>
+            </div>
+
             {/* Поля ввода */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Input
                 label={t('input-sr')}
                 placeholder="0,0"
-                value={percentSR}
-                onValueChange={setPercentSR}
+                value={percentValue}
+                onValueChange={setPercentValue}
                 labelPlacement="outside"
                 size="lg"
                 radius="lg"
@@ -134,8 +170,8 @@ const FormulSR_AufInCalc = () => {
               <Input
                 label={t('input-liter')}
                 placeholder="0"
-                value={literWein}
-                onValueChange={setLiterWein}
+                value={baseVolume}
+                onValueChange={setBaseVolume}
                 labelPlacement="outside"
                 size="lg"
                 radius="lg"
@@ -160,16 +196,18 @@ const FormulSR_AufInCalc = () => {
               </div>
               <div className="grid grid-cols-1 gap-5">
                 <ResultCard
-                  label={t('auf')}
-                  value={resultAuf}
-                  description={t('auf-desc')}
+                  label={t('result-add')}
+                  value={resultAdd}
+                  description={mode === 'auf' ? t('auf-desc') : t('in-desc')}
                   color="primary"
+                  icon={<Plus size={20} />}
                 />
                 <ResultCard
-                  label={t('in')}
-                  value={resultIn}
-                  description={t('in-desc')}
+                  label={t('result-total')}
+                  value={resultTotal}
+                  description={commonT('formula.vol-calc')}
                   color="secondary"
+                  icon={<ArrowRightLeft size={20} />}
                 />
               </div>
             </div>

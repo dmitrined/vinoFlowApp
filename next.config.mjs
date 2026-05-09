@@ -22,7 +22,6 @@ const cspHeader = `
     form-action 'self';
     frame-ancestors 'none';
     connect-src 'self' https://*.sentry.io https://va.vercel-scripts.com;
-    upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim();
 
 /** @type {import('next').NextConfig} */
