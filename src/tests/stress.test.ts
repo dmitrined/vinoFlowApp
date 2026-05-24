@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Нагрузочные и стресс-тесты для интерполяции таблицы Трооста
+ * ЗАВИСИМОСТИ: vitest, @/lib/calculations, @/lib/troostData
+ * ОСОБЕННОСТИ: Проверка граничных условий и замер производительности функции getTroostData
+ */
+
 import { describe, it, expect } from 'vitest';
 import { getTroostData } from '../lib/calculations';
 import { TROOST_TABLE } from '../lib/troostData';

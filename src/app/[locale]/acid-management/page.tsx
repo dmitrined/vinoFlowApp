@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора регулирования кислотности вина
+ * ЗАВИСИМОСТИ: next-intl/server, next, AcidManagementCalc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import AcidManagementCalc from './AcidManagementCalc';

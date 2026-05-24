@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Селектор типа продукта (газ, порошок, жидкость) для SO2
+ * ЗАВИСИМОСТИ: @heroui/react, lucide-react, next-intl
+ * ОСОБЕННОСТИ: Client Component, адаптивный дизайн в стиле Tech SaaS
+ */
+
 'use client';
 
 import React from 'react';

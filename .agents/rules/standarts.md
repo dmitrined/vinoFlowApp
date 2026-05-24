@@ -11,15 +11,6 @@ trigger: always_on
 4. **i18n**: STRICT PROHIBITION on hardcoded text in components. Use `next-intl`. Update `ru.json`, `de.json`, and `en.json` simultaneously and atomically to preserve nested keys.
 5. **Mobile First**: Design for iPhone SE (375px) first using Tailwind CSS 4. Use base classes for mobile; apply `md:`, `lg:`, `xl:` only for larger screens. Use `brand-600` and `bg-tech-gradient`. Interactive elements must inherit from HeroUI.
 
-## 🔄 Data & Sync Pipeline (Chain of Responsibility)
-**Source of Truth:** Local Zustand store synchronized to Turso via tRPC (`protectedProcedure`).
-When adding a new field (e.g., to Barrels, Readings, Additions), update ALL layers:
-1. **DB Layer**: `prisma/schema.prisma`
-2. **Sync Types**: `src/types/sync.ts` (Sync... interfaces)
-3. **Zod Schema**: `src/server/api/routers/sync.ts`
-4. **Mapping Layer**: `src/lib/sync/mapping.ts` (Functions `map...ToSync` - CRITICAL POINT!)
-5. **Store Layer**: `useFermentationStore.ts` (Update interface & `hydrateFromServer`)
-*Rule of "Clean Data"*: Store pure values in DB and Stores (e.g. `42`). Decorative labels (`Бочка №42`) must be added in components via i18n. Do NOT hardcode prefixes in mapping logic.
 
 ## 🏛 Layout Architecture (Next.js 15 App Router)
 - **`src/app/layout.tsx`** (Root): MUST contain `<html>`, `<body>`, `globals.css`, fonts. NO business logic or providers.
@@ -27,16 +18,22 @@ When adding a new field (e.g., to Barrels, Readings, Additions), update ALL laye
 - **`src/app/providers.tsx`**: MUST wrap all providers (including `HeroUIProvider`) in `framer-motion`'s `<LazyMotion features={domAnimation}>` to prevent runtime crashes.
 
 ## 🚀 Performance & UI
-- Maintain UI smoothness for 200+ barrels.
 - Wrap list item components in `React.memo`.
 - Wrap complex calculations and array filtering in `useMemo`.
 - Avoid anonymous functions in props (use `useCallback`) to prevent render cascades.
 - Provide Loading states using HeroUI `Skeleton` or spinners.
 
+## 🧪 Testing
+- **Unit-тесты (Vitest)**: Обязательны для всех математических формул в `src/tests`.
+- **E2E-тесты (Playwright)**: Проверка доступности страниц и базового взаимодействия в `tests/`.
+
+## 📚 Knowledge Hub (MDX)
+- Статьи в `src/content/docs/[locale]/`.
+- Frontmatter: `title`, `excerpt`, `category`, `relatedTools`.
+- Таблицы в MDX: Писать на чистом HTML для стабильности рендеринга.
+
 ## 🛠 Refactoring & Commit Algorithm
-1. Check Prisma schema vs Zustand types.
-2. Update Zod schema in `syncRouter` first.
-3. Extract all strings to `messages/*.json` before committing code.
-4. **Clean up**: Remove all unused imports, variables, and commented code.
-5. **Local Verification**: `npm run typecheck && npm run lint`.
-6. **Commit**: Агент НЕ должен делать коммиты. Вместо этого выведи текст для коммита по стандарту Conventional Commits (например, `feat(fermentation): add new barrel field`), чтобы пользователь закоммитил сам.
+1. Extract all strings to `messages/*.json` before committing code.
+2. **Clean up**: Remove all unused imports, variables, and commented code.
+3. **Local Verification**: `npm run typecheck && npm run lint`.
+4. **Commit**: Use Conventional Commits (e.g., `feat(fermentation): add new barrel field`).

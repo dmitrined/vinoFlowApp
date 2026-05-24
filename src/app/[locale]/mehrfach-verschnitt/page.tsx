@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора множественного купажа (смешивания вин)
+ * ЗАВИСИМОСТИ: next-intl/server, next, FormulMultiBlendCalc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import FormulMultiBlendCalc from './FormulMultiBlendCalc';

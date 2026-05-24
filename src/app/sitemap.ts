@@ -1,8 +1,13 @@
+/**
+ * НАЗНАЧЕНИЕ: Динамическая генерация файла sitemap.xml для SEO индексации
+ * ЗАВИСИМОСТИ: next, @/i18n/routing, @/lib/mdx
+ * ОСОБЕННОСТИ: Включает статические маршруты и динамические статьи базы знаний для всех локалей
+ */
+
 import { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
 import { getDocs } from '@/lib/mdx';
 
-// Fallback to localhost if NEXT_PUBLIC_APP_URL is not set
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vinoflow.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -22,9 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const sitemapEntries: MetadataRoute.Sitemap = [];
 
-    // 1. Add static routes
+    // 1. Статические маршруты
     for (const route of staticRoutes) {
-        // According to next-intl defaults, all routes are prefixed with the locale
         const url = `${baseUrl}/${defaultLocale}${route === '/' ? '' : route}`;
         
         const languages: Record<string, string> = {};
@@ -43,8 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     }
 
-    // 2. Add dynamic docs (Knowledge Hub)
-    // We read the docs from the default locale (they should exist across all locales)
+    // 2. Динамические статьи (Knowledge Hub)
     try {
         const docs = await getDocs(defaultLocale);
         

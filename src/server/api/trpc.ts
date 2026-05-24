@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Конфигурация контекста и инициализация tRPC сервера
+ * ЗАВИСИМОСТИ: @trpc/server, superjson, zod
+ * ОСОБЕННОСТИ: Форматирование ошибок Zod и экспорт базовых процедур (publicProcedure)
+ */
+
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
