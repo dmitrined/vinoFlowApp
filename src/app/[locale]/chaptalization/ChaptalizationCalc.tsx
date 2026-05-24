@@ -1,7 +1,7 @@
 /**
  * НАЗНАЧЕНИЕ: Калькулятор шаптализации на основе таблицы Трооста
- * ЗАВИСИМОСТИ: useTranslations, useHistoryAutoSave, calcChaptalization
- * ОСОБЕННОСТЬ: 4 единицы измерения, энологическая точность, Mobile-first
+ * ЗАВИСИМОСТИ: next-intl, @heroui/react, lucide-react, framer-motion, @/lib/calculations
+ * ОСОБЕННОСТИ: 4 единицы измерения, энологическая точность, Mobile-first
  */
 
 'use client';

@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Инициализация инструментирования и мониторинга ошибок с помощью Sentry
+ * ЗАВИСИМОСТИ: @sentry/nextjs
+ * ОСОБЕННОСТИ: Инициализация для NodeJS и Edge сред исполнения
+ */
+
 import * as Sentry from "@sentry/nextjs";
 
 export async function register() {

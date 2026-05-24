@@ -1,6 +1,7 @@
 /**
  * НАЗНАЧЕНИЕ: Страница с инструкцией по установке PWA
- * ЗАВИСИМОСТИ: @/components/ui/PwaGuide, next-intl
+ * ЗАВИСИМОСТИ: @/components/ui/PwaGuide, next-intl/server, react
+ * ОСОБЕННОСТИ: Отображение пошагового руководства по установке PWA
  */
 
 import React from 'react';

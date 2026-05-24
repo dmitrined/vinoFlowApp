@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Юнит-тесты для энологических формул и расчетов
+ * ЗАВИСИМОСТИ: vitest, @/lib/calculations
+ * ОСОБЕННОСТИ: Проверка точности расчетов SO2, сахара, спирта и Süßreserve
+ */
+
 import { describe, it, expect } from 'vitest';
 import { 
     convertGLToVol, 

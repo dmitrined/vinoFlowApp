@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора шаптализации
+ * ЗАВИСИМОСТИ: next-intl/server, next, ChaptalizationCalc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import ChaptalizationCalc from './ChaptalizationCalc';

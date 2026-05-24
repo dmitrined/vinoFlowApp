@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница энологического конвертера алкоголя
+ * ЗАВИСИМОСТИ: next-intl/server, next, FormulAlcConverter
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import FormulAlcConverter from './FormulAlcConverter';

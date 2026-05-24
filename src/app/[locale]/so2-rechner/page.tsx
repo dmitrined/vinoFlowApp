@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора диоксида серы (SO2) в вине
+ * ЗАВИСИМОСТИ: next-intl/server, next, FormulSo2Calc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import FormulSo2Calc from './FormulSo2Calc';

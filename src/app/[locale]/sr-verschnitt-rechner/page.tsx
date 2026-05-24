@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора купажирования Süßreserve (расчет по сахару)
+ * ЗАВИСИМОСТИ: next-intl/server, next, FormulSR_VerschnittCalc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import FormulSR_VerschnittCalc from './FormulSR_VerschnittCalc';

@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Страница калькулятора Süßreserve (пропорции Auf и In)
+ * ЗАВИСИМОСТИ: next-intl/server, next, FormulSR_AufInCalc
+ * ОСОБЕННОСТИ: Серверный компонент с поддержкой метаданных и JSON-LD разметки
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import FormulSR_AufInCalc from './FormulSR_AufInCalc';

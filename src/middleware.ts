@@ -1,13 +1,14 @@
+/**
+ * НАЗНАЧЕНИЕ: Промежуточное ПО (Middleware) для интернационализации (i18n)
+ * ЗАВИСИМОСТИ: next-intl/middleware, @/i18n/routing
+ * ОСОБЕННОСТИ: Маршрутизация на основе поддерживаемых локалей
+ */
+
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 
 export default createMiddleware(routing);
 
 export const config = {
-    // Match all pathnames except for
-    // - API routes
-    // - _next (Next.js internals)
-    // - _vercel (Vercel internals)
-    // - Static files (e.g. favicon.ico, sitemap.xml, etc.)
     matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };

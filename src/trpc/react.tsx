@@ -1,3 +1,9 @@
+/**
+ * НАЗНАЧЕНИЕ: Клиентский tRPC провайдер для React приложений
+ * ЗАВИСИМОСТИ: @tanstack/react-query, @trpc/client, @trpc/react-query, superjson, @/server/api/root
+ * ОСОБЕННОСТИ: Client Component, ленивая инициализация клиентов QueryClient и tRPC
+ */
+
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
